@@ -30,6 +30,6 @@
     "typescript": "4.7.2"
   },
   "dependencies": {
-    "@mantlebee/ts-core": "0.3.0"
+    "@mantlebee/ts-core": "0.4.8"
   }
 }
