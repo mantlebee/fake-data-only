@@ -11,6 +11,7 @@ import {
 
 import {
   FdoColumnBoolean,
+  FdoColumnCustom,
   FdoColumnDate,
   FdoColumnEmail,
   FdoColumnFirstName,
@@ -54,11 +55,12 @@ describe("FdoGenerator", () => {
           rows.every((a) => a.name.length >= 4 && a.name.length <= 12)
         ).toBeTruthy();
       });
-      it("Generates 20 rows of {id: number, name: string, surname: string, age: number, active: boolean, registered: Date}", () => {
+      it("Generates 20 rows of `{id: number, name: string, surname: string, fullname: string, age: number, email: string active: boolean, registered: Date}`", () => {
         type Row = {
           id: number;
           name: string;
           surname: string;
+          fullname: string;
           age: number;
           email: string;
           active: boolean;
@@ -66,13 +68,17 @@ describe("FdoGenerator", () => {
         };
         const rows = FdoGeneratorGenerateDelegate<Row>(
           [
-            new FdoColumnId("id"),
-            new FdoColumnFirstName("name"),
-            new FdoColumnLastName("surname"),
+            new FdoColumnId<Row>("id"),
+            new FdoColumnFirstName<Row>("name"),
+            new FdoColumnLastName<Row>("surname"),
+            new FdoColumnCustom<Row, string>(
+              "fullname",
+              (a) => `${a.name} ${a.surname}`
+            ),
             new FdoColumnNumber<Row>("age", { max: 120 }),
-            new FdoColumnEmail("email"),
-            new FdoColumnBoolean("active"),
-            new FdoColumnDate("registered"),
+            new FdoColumnEmail<Row>("email"),
+            new FdoColumnBoolean<Row>("active"),
+            new FdoColumnDate<Row>("registered"),
           ],
           20
         );
@@ -83,6 +89,8 @@ describe("FdoGenerator", () => {
           expect(isNumber(a.id)).toBeTruthy();
           expect(isString(a.name)).toBeTruthy();
           expect(isString(a.surname)).toBeTruthy();
+          expect(isString(a.fullname)).toBeTruthy();
+          expect(a.fullname).toBe(`${a.name} ${a.surname}`);
           expect(isNumber(a.age)).toBeTruthy();
           expect(isEmail(a.email)).toBeTruthy();
           expect(isBoolean(a.active)).toBeTruthy();
@@ -91,6 +99,7 @@ describe("FdoGenerator", () => {
             "id",
             "name",
             "surname",
+            "fullname",
             "age",
             "email",
             "active",

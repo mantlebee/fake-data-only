@@ -2,7 +2,7 @@ import { Any, Dictionary, KeyOf, List } from "@mantlebee/ts-core";
 
 export interface IFdoColumn<TItem, TValue> {
   readonly name: KeyOf<TItem>;
-  value(): TValue;
+  value(item: TItem): TValue;
 }
 
 export interface IFdoGenerator {
