@@ -11,6 +11,7 @@ import {
 import {
   FdoColumnBoolean,
   FdoColumnDate,
+  FdoColumnFirstName,
   FdoColumnId,
   FdoColumnNumber,
   FdoColumnString,
@@ -62,7 +63,7 @@ describe("FdoGenerator", () => {
         const rows = FdoGeneratorGenerateDelegate<Row>(
           [
             new FdoColumnId("id"),
-            getStringColumn<Row>("name", 12, 4),
+            new FdoColumnFirstName("name"),
             getStringColumn<Row>("surname", 12, 4),
             new FdoColumnNumber<Row>("age", { max: 120 }),
             new FdoColumnBoolean("active"),
