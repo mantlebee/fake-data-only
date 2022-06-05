@@ -2,6 +2,7 @@ import { KeyOf, objectHasKey } from "@mantlebee/ts-core";
 
 import {
   FdoColumnBoolean,
+  FdoColumnDate,
   FdoColumnNumber,
   FdoColumnString,
   FdoColumnStringOptions,
@@ -40,12 +41,13 @@ describe("FdoGenerator", () => {
           rows.every((a) => a.name.length >= 4 && a.name.length <= 12)
         ).toBeTruthy();
       });
-      it("Generates 20 rows of {name: string, surname: string, age: number, active: boolean}", () => {
+      it("Generates 20 rows of {name: string, surname: string, age: number, active: boolean, registered: Date}", () => {
         type Row = {
           name: string;
           surname: string;
           age: number;
           active: boolean;
+          registered: Date;
         };
         const rows = FdoGeneratorGenerateDelegate<Row>(
           [
@@ -53,6 +55,7 @@ describe("FdoGenerator", () => {
             getStringColumn<Row>("surname", 12, 4),
             new FdoColumnNumber<Row>("age", { max: 120 }),
             new FdoColumnBoolean("active"),
+            new FdoColumnDate("registered", {}),
           ],
           20
         );
@@ -62,7 +65,14 @@ describe("FdoGenerator", () => {
           expect(typeof a.surname).toBe("string");
           expect(typeof a.age).toBe("number");
           expect(typeof a.active).toBe("boolean");
-          expect(Object.keys(a)).toEqual(["name", "surname", "age", "active"]);
+          expect(a.registered instanceof Date).toBeTruthy();
+          expect(Object.keys(a)).toEqual([
+            "name",
+            "surname",
+            "age",
+            "active",
+            "registered",
+          ]);
         });
       });
     });
