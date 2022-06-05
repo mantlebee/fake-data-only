@@ -13,6 +13,7 @@ import {
   FdoColumnDate,
   FdoColumnFirstName,
   FdoColumnId,
+  FdoColumnLastName,
   FdoColumnNumber,
   FdoColumnString,
   FdoColumnStringOptions,
@@ -64,7 +65,7 @@ describe("FdoGenerator", () => {
           [
             new FdoColumnId("id"),
             new FdoColumnFirstName("name"),
-            getStringColumn<Row>("surname", 12, 4),
+            new FdoColumnLastName("surname"),
             new FdoColumnNumber<Row>("age", { max: 120 }),
             new FdoColumnBoolean("active"),
             new FdoColumnDate("registered"),
