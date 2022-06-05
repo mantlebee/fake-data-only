@@ -1,5 +1,6 @@
-import { IFdoColumn } from "@/interfaces";
 import { KeyOf } from "@mantlebee/ts-core";
+
+import { IFdoColumn } from "@/interfaces";
 
 import { FdoColumnStringOptions } from "./types";
 import { FdoColumnStringValueDelegate } from "./utils";
