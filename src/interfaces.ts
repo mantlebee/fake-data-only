@@ -1,4 +1,13 @@
-export interface IFdoColumn<TValue> {
-  readonly name: string;
+import { Any, Dictionary, KeyOf, List } from "@mantlebee/ts-core";
+
+export interface IFdoColumn<TItem, TValue> {
+  readonly name: KeyOf<TItem>;
   value(): TValue;
+}
+
+export interface IFdoGenerator {
+  generate<T extends Dictionary<Any>>(
+    columns: List<IFdoColumn<T, Any>>,
+    rowsNumber: number
+  ): List<T>;
 }

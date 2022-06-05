@@ -1,11 +1,11 @@
-import { generateRandomBoolean } from "@mantlebee/ts-core";
+import { generateRandomBoolean, KeyOf } from "@mantlebee/ts-core";
 
 import { IFdoColumn } from "@/interfaces";
 
-export class FdoColumnNumber implements IFdoColumn<boolean> {
-  public readonly name!: string;
+export class FdoColumnBoolean<TItem> implements IFdoColumn<TItem, boolean> {
+  public readonly name!: KeyOf<TItem>;
 
-  public constructor(name: string) {
+  public constructor(name: KeyOf<TItem>) {
     this.name = name;
   }
 
