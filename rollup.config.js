@@ -1,10 +1,16 @@
-import typescript from '@rollup/plugin-typescript';
+import cleaner from "rollup-plugin-cleaner";
+import typescript from "@rollup/plugin-typescript";
+
+const outDir = "dist"
 
 export default {
-    input: 'src/index.ts',
+    input: "src/index.ts",
     output: {
-        dir: 'dist',
-        format: 'es'
+        dir: outDir,
+        format: "cjs",
     },
-    plugins: [typescript()]
+    plugins: [
+        cleaner({ targets: [outDir] }),
+        typescript()
+    ]
 };
