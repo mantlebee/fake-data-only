@@ -1,6 +1,7 @@
 import {
   isBoolean,
   isDate,
+  isEmail,
   isNumber,
   isString,
   KeyOf,
@@ -11,6 +12,7 @@ import {
 import {
   FdoColumnBoolean,
   FdoColumnDate,
+  FdoColumnEmail,
   FdoColumnFirstName,
   FdoColumnId,
   FdoColumnLastName,
@@ -58,6 +60,7 @@ describe("FdoGenerator", () => {
           name: string;
           surname: string;
           age: number;
+          email: string;
           active: boolean;
           registered: Date;
         };
@@ -67,6 +70,7 @@ describe("FdoGenerator", () => {
             new FdoColumnFirstName("name"),
             new FdoColumnLastName("surname"),
             new FdoColumnNumber<Row>("age", { max: 120 }),
+            new FdoColumnEmail("email"),
             new FdoColumnBoolean("active"),
             new FdoColumnDate("registered"),
           ],
@@ -80,6 +84,7 @@ describe("FdoGenerator", () => {
           expect(isString(a.name)).toBeTruthy();
           expect(isString(a.surname)).toBeTruthy();
           expect(isNumber(a.age)).toBeTruthy();
+          expect(isEmail(a.email)).toBeTruthy();
           expect(isBoolean(a.active)).toBeTruthy();
           expect(isDate(a.registered)).toBeTruthy();
           expect(Object.keys(a)).toEqual([
@@ -87,6 +92,7 @@ describe("FdoGenerator", () => {
             "name",
             "surname",
             "age",
+            "email",
             "active",
             "registered",
           ]);
