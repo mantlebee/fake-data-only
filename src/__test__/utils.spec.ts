@@ -66,7 +66,7 @@ describe("FdoGenerator", () => {
             getStringColumn<Row>("surname", 12, 4),
             new FdoColumnNumber<Row>("age", { max: 120 }),
             new FdoColumnBoolean("active"),
-            new FdoColumnDate("registered", {}),
+            new FdoColumnDate("registered"),
           ],
           20
         );
