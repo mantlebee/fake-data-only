@@ -1,4 +1,11 @@
-import { KeyOf, objectHasKey } from "@mantlebee/ts-core";
+import {
+  isBoolean,
+  isDate,
+  isNumber,
+  isString,
+  KeyOf,
+  objectHasKey,
+} from "@mantlebee/ts-core";
 
 import {
   FdoColumnBoolean,
@@ -61,11 +68,11 @@ describe("FdoGenerator", () => {
         );
         expect(rows.length).toBe(20);
         rows.forEach((a) => {
-          expect(typeof a.name).toBe("string");
-          expect(typeof a.surname).toBe("string");
-          expect(typeof a.age).toBe("number");
-          expect(typeof a.active).toBe("boolean");
-          expect(a.registered instanceof Date).toBeTruthy();
+          expect(isString(a.name)).toBeTruthy();
+          expect(isString(a.surname)).toBeTruthy();
+          expect(isNumber(a.age)).toBeTruthy();
+          expect(isBoolean(a.active)).toBeTruthy();
+          expect(isDate(a.registered)).toBeTruthy();
           expect(Object.keys(a)).toEqual([
             "name",
             "surname",
