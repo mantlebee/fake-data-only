@@ -66,17 +66,23 @@ describe("FdoGenerator", () => {
           active: boolean;
           registered: Date;
         };
+        const firstNameColumn = new FdoColumnFirstName<Row>("name");
+        const lastNameColumn = new FdoColumnLastName<Row>("surname");
         const rows = FdoGeneratorGenerateDelegate<Row>(
           [
             new FdoColumnId<Row>("id"),
-            new FdoColumnFirstName<Row>("name"),
-            new FdoColumnLastName<Row>("surname"),
+            firstNameColumn,
+            lastNameColumn,
             new FdoColumnCustom<Row, string>(
               "fullname",
               (a) => `${a.name} ${a.surname}`
             ),
             new FdoColumnNumber<Row>("age", { max: 120 }),
-            new FdoColumnEmail<Row>("email"),
+            new FdoColumnEmail<Row>(
+              "email",
+              {},
+              { firstName: firstNameColumn, lastName: lastNameColumn }
+            ),
             new FdoColumnBoolean<Row>("active"),
             new FdoColumnDate<Row>("registered"),
           ],
@@ -93,6 +99,11 @@ describe("FdoGenerator", () => {
           expect(a.fullname).toBe(`${a.name} ${a.surname}`);
           expect(isNumber(a.age)).toBeTruthy();
           expect(isEmail(a.email)).toBeTruthy();
+          expect(
+            a.email.indexOf(
+              `${a.name.toLowerCase()}.${a.surname.toLowerCase()}`
+            )
+          ).toBe(0);
           expect(isBoolean(a.active)).toBeTruthy();
           expect(isDate(a.registered)).toBeTruthy();
           expect(Object.keys(a)).toEqual([
