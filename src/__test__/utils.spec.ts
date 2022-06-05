@@ -4,12 +4,14 @@ import {
   isNumber,
   isString,
   KeyOf,
+  Nullable,
   objectHasKey,
 } from "@mantlebee/ts-core";
 
 import {
   FdoColumnBoolean,
   FdoColumnDate,
+  FdoColumnId,
   FdoColumnNumber,
   FdoColumnString,
   FdoColumnStringOptions,
@@ -48,8 +50,9 @@ describe("FdoGenerator", () => {
           rows.every((a) => a.name.length >= 4 && a.name.length <= 12)
         ).toBeTruthy();
       });
-      it("Generates 20 rows of {name: string, surname: string, age: number, active: boolean, registered: Date}", () => {
+      it("Generates 20 rows of {id: number, name: string, surname: string, age: number, active: boolean, registered: Date}", () => {
         type Row = {
+          id: number;
           name: string;
           surname: string;
           age: number;
@@ -58,6 +61,7 @@ describe("FdoGenerator", () => {
         };
         const rows = FdoGeneratorGenerateDelegate<Row>(
           [
+            new FdoColumnId("id"),
             getStringColumn<Row>("name", 12, 4),
             getStringColumn<Row>("surname", 12, 4),
             new FdoColumnNumber<Row>("age", { max: 120 }),
@@ -67,19 +71,24 @@ describe("FdoGenerator", () => {
           20
         );
         expect(rows.length).toBe(20);
+        let lastRow: Nullable<Row> = null;
         rows.forEach((a) => {
+          if (lastRow) expect(a.id).toBe(lastRow.id + 1);
+          expect(isNumber(a.id)).toBeTruthy();
           expect(isString(a.name)).toBeTruthy();
           expect(isString(a.surname)).toBeTruthy();
           expect(isNumber(a.age)).toBeTruthy();
           expect(isBoolean(a.active)).toBeTruthy();
           expect(isDate(a.registered)).toBeTruthy();
           expect(Object.keys(a)).toEqual([
+            "id",
             "name",
             "surname",
             "age",
             "active",
             "registered",
           ]);
+          lastRow = a;
         });
       });
     });
