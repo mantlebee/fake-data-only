@@ -55,13 +55,13 @@ describe("FdoGenerator", () => {
           rows.every((a) => a.name.length >= 4 && a.name.length <= 12)
         ).toBeTruthy();
       });
-      it("Generates 20 rows of `{id: number, name: string, surname: string, fullname: string, age: number, email: string active: boolean, registered: Date}`", () => {
+      it("Generates 100 rows of `{id: number, name: string, surname: string, fullname: string, age: Nullable<number>, email: string active: boolean, registered: Date}`", () => {
         type Row = {
           id: number;
           name: string;
           surname: string;
           fullname: string;
-          age: number;
+          age: Nullable<number>;
           email: string;
           active: boolean;
           registered: Date;
@@ -77,7 +77,7 @@ describe("FdoGenerator", () => {
               "fullname",
               (a) => `${a.name} ${a.surname}`
             ),
-            new FdoColumnNumber<Row>("age", { max: 120 }),
+            new FdoColumnNumber<Row>("age", { max: 90 }),
             new FdoColumnEmail<Row>(
               "email",
               {},
@@ -86,9 +86,10 @@ describe("FdoGenerator", () => {
             new FdoColumnBoolean<Row>("active"),
             new FdoColumnDate<Row>("registered"),
           ],
-          20
+          100,
+          { nullables: ["age"] }
         );
-        expect(rows.length).toBe(20);
+        expect(rows.length).toBe(100);
         let lastRow: Nullable<Row> = null;
         rows.forEach((a) => {
           if (lastRow) expect(a.id).toBe(lastRow.id + 1);
@@ -97,7 +98,6 @@ describe("FdoGenerator", () => {
           expect(isString(a.surname)).toBeTruthy();
           expect(isString(a.fullname)).toBeTruthy();
           expect(a.fullname).toBe(`${a.name} ${a.surname}`);
-          expect(isNumber(a.age)).toBeTruthy();
           expect(isEmail(a.email)).toBeTruthy();
           expect(
             a.email.indexOf(
@@ -118,6 +118,8 @@ describe("FdoGenerator", () => {
           ]);
           lastRow = a;
         });
+        expect(rows.some((a) => isNumber(a.age))).toBeTruthy();
+        expect(rows.some((a) => a.age === null)).toBeTruthy();
       });
     });
   });
