@@ -47,3 +47,11 @@ export const FirstLevelDomains: List<string> = [
   "xyz",
   "yt",
 ];
+
+export const SecondLevelDomains: List<string> = [
+  "gmail",
+  "hotmail",
+  "icloud",
+  "live",
+  "outlook",
+];

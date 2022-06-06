@@ -7,10 +7,9 @@ export type FdoColumnEmailDependencies<TItem> = {
   domain?: IFdoColumn<TItem, string>;
   firstName?: IFdoColumn<TItem, string>;
   lastName?: IFdoColumn<TItem, string>;
-  provider?: IFdoColumn<TItem, string>;
 };
 
 export type FdoColumnEmailOptions = {
   gender?: Gender;
-  providers?: List<string>;
+  domains?: List<string>;
 };

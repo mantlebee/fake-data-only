@@ -7,14 +7,12 @@ type Item = {
   domain: string;
   firstName: string;
   lastName: string;
-  provider: string;
 };
 
 const item: Item = {
-  domain: "com",
+  domain: "gmail.com",
   firstName: "John",
   lastName: "Doe",
-  provider: "gmail",
 };
 
 describe("FdoColumnEmail", () => {
@@ -26,11 +24,23 @@ describe("FdoColumnEmail", () => {
           randoms.push(FdoColumnEmailValueDelegate<Item>(item, {}, {}));
         expect(randoms.every(isEmail)).toBeTruthy();
       });
+      it("Generates a random email choosing a domain from the given list", () => {
+        const randoms: List<string> = [];
+        for (let i = 0; i < 100; i++)
+          randoms.push(
+            FdoColumnEmailValueDelegate<Item>(
+              item,
+              { domains: ["outlook.it", "outlook.com"] },
+              {}
+            )
+          );
+        expect(randoms.every(isEmail)).toBeTruthy();
+        expect(randoms.every((a) => /outlook\.(it|com)$/.test(a))).toBeTruthy();
+      });
       it("Generates a random email, taking domain, firstName, lastname and provider from the passed item", () => {
         const domainColumn = { name: "domain" } as FdoColumnString<Item>;
         const firstNameColumn = { name: "firstName" } as FdoColumnString<Item>;
         const lastNameColumn = { name: "lastName" } as FdoColumnString<Item>;
-        const providerColumn = { name: "provider" } as FdoColumnString<Item>;
         const random = FdoColumnEmailValueDelegate<Item>(
           item,
           {},
@@ -38,7 +48,6 @@ describe("FdoColumnEmail", () => {
             domain: domainColumn,
             firstName: firstNameColumn,
             lastName: lastNameColumn,
-            provider: providerColumn,
           }
         );
         expect(random).toBe("john.doe@gmail.com");
