@@ -6,14 +6,14 @@ import {
 } from "@/columns";
 import { FirstLevelDomains, SecondLevelDomains } from "@/constants";
 
-import { FdoColumnEmailDependencies, FdoColumnEmailOptions } from "./types";
+import { FdoColumnEmailOptions } from "./types";
 
 export function FdoColumnEmailValueDelegate<TItem>(
   item: TItem,
-  options: FdoColumnEmailOptions,
-  dependencies: FdoColumnEmailDependencies<TItem>
+  options: FdoColumnEmailOptions<TItem>
 ): string {
   let {
+    dependencies = {},
     domains = [
       `${extractRandomItem(SecondLevelDomains)}.${extractRandomItem(
         FirstLevelDomains

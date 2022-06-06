@@ -78,11 +78,12 @@ describe("FdoGenerator", () => {
               (a) => `${a.name} ${a.surname}`
             ),
             new FdoColumnNumber<Row>("age", { max: 90 }),
-            new FdoColumnEmail<Row>(
-              "email",
-              {},
-              { firstName: firstNameColumn, lastName: lastNameColumn }
-            ),
+            new FdoColumnEmail<Row>("email", {
+              dependencies: {
+                firstName: firstNameColumn,
+                lastName: lastNameColumn,
+              },
+            }),
             new FdoColumnBoolean<Row>("active"),
             new FdoColumnDate<Row>("registered"),
           ],
