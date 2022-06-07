@@ -36,7 +36,7 @@ describe("FdoColumnEmail", () => {
         expect(randoms.every(isEmail)).toBeTruthy();
         expect(randoms.every((a) => /outlook\.(it|com)$/.test(a))).toBeTruthy();
       });
-      it("Generates a random email, taking domain, firstName, lastname and provider from the passed item", () => {
+      it("Generates a random email, taking domain, firstName and lastname from the passed item", () => {
         const domainColumn = { name: "domain" } as FdoColumnString<Item>;
         const firstNameColumn = { name: "firstName" } as FdoColumnString<Item>;
         const lastNameColumn = { name: "lastName" } as FdoColumnString<Item>;
