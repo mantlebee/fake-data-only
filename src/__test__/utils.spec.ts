@@ -14,6 +14,7 @@ import {
   FdoColumnCustom,
   FdoColumnDate,
   FdoColumnEmail,
+  FdoColumnEnum,
   FdoColumnFirstName,
   FdoColumnId,
   FdoColumnLastName,
@@ -55,7 +56,12 @@ describe("FdoGenerator", () => {
           rows.every((a) => a.name.length >= 4 && a.name.length <= 12)
         ).toBeTruthy();
       });
-      it("Generates 100 rows of `{id: number, name: string, surname: string, fullname: string, age: Nullable<number>, email: string active: boolean, registered: Date}`", () => {
+      it("Generates 100 rows of `{id: number, name: string, surname: string, fullname: string, age: Nullable<number>, email: string active: boolean, registered: Date, expires: Date, type: RowType}`", () => {
+        enum RowType {
+          base,
+          standard,
+          advanced,
+        }
         type Row = {
           id: number;
           name: string;
@@ -65,9 +71,12 @@ describe("FdoGenerator", () => {
           email: string;
           active: boolean;
           registered: Date;
+          expires: Date;
+          type: RowType;
         };
         const firstNameColumn = new FdoColumnFirstName<Row>("name");
         const lastNameColumn = new FdoColumnLastName<Row>("surname");
+        const registeredColumn = new FdoColumnDate<Row>("registered");
         const rows = FdoGeneratorGenerateDelegate<Row>(
           [
             new FdoColumnId<Row>("id"),
@@ -85,7 +94,13 @@ describe("FdoGenerator", () => {
               },
             }),
             new FdoColumnBoolean<Row>("active"),
-            new FdoColumnDate<Row>("registered"),
+            registeredColumn,
+            new FdoColumnDate<Row>("expires", {
+              dependencies: { dateFrom: registeredColumn },
+            }),
+            new FdoColumnEnum<Row, RowType>("type", {
+              enumerative: Object(RowType),
+            }),
           ],
           100,
           { nullables: ["age"] }
@@ -107,6 +122,11 @@ describe("FdoGenerator", () => {
           ).toBe(0);
           expect(isBoolean(a.active)).toBeTruthy();
           expect(isDate(a.registered)).toBeTruthy();
+          expect(isDate(a.expires)).toBeTruthy();
+          expect(a.expires.getTime()).toBeGreaterThanOrEqual(
+            a.registered.getTime()
+          );
+          expect(a.type in RowType).toBeTruthy();
           expect(Object.keys(a)).toEqual([
             "id",
             "name",
@@ -116,6 +136,8 @@ describe("FdoGenerator", () => {
             "email",
             "active",
             "registered",
+            "expires",
+            "type",
           ]);
           lastRow = a;
         });

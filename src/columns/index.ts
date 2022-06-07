@@ -2,6 +2,7 @@ export * from "./boolean";
 export * from "./custom";
 export * from "./date";
 export * from "./email";
+export * from "./enum";
 export * from "./first-name";
 export * from "./id";
 export * from "./last-name";
