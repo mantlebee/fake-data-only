@@ -1,3 +1,4 @@
+import { List } from "@mantlebee/ts-core";
 import { FdoColumnEnumValueDelegate } from "../utils";
 
 enum Enumerative {
@@ -10,10 +11,16 @@ describe("FdoColumnEnum", () => {
   describe("utils", () => {
     describe("FdoColumnEnumValueDelegate", () => {
       it("Generates a random enumerative value", () => {
-        const random = FdoColumnEnumValueDelegate({
-          enumerative: Enumerative,
+        const randoms: List<Enumerative> = [];
+        for (let i = 0; i < 100; ++i)
+          randoms.push(
+            FdoColumnEnumValueDelegate({
+              enumerative: Object(Enumerative),
+            })
+          );
+        randoms.forEach((a) => {
+          expect([0, 1, 2]).toContain(a);
         });
-        expect(Object.values(Enumerative)).toContain(random);
       });
     });
   });
