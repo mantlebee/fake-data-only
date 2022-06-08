@@ -1,4 +1,4 @@
-import { extractRandomItem, generateRandomNumber } from "@mantlebee/ts-core";
+import { extractRandomItem } from "@mantlebee/ts-core";
 import { FdoColumnEnumOptions } from "./types";
 
 export function FdoColumnEnumValueDelegate<TEnum>(
