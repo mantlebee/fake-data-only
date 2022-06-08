@@ -11,6 +11,7 @@ import {
 
 import {
   FdoColumnBoolean,
+  FdoColumnColor,
   FdoColumnCustom,
   FdoColumnDate,
   FdoColumnEmail,
@@ -56,7 +57,7 @@ describe("FdoGenerator", () => {
           rows.every((a) => a.name.length >= 4 && a.name.length <= 12)
         ).toBeTruthy();
       });
-      it("Generates 100 rows of `{id: number, name: string, surname: string, fullname: string, age: Nullable<number>, email: string active: boolean, registered: Date, expires: Date, type: RowType}`", () => {
+      it("Generates 100 rows of `{id: number, name: string, surname: string, fullname: string, age: Nullable<number>, email: string active: boolean, registered: Date, expires: Date, type: RowType, color: string}`", () => {
         enum RowType {
           base,
           standard,
@@ -73,6 +74,7 @@ describe("FdoGenerator", () => {
           registered: Date;
           expires: Date;
           type: RowType;
+          color: string;
         };
         const firstNameColumn = new FdoColumnFirstName<Row>("name");
         const lastNameColumn = new FdoColumnLastName<Row>("surname");
@@ -101,6 +103,7 @@ describe("FdoGenerator", () => {
             new FdoColumnEnum<Row, RowType>("type", {
               enumerative: Object(RowType),
             }),
+            new FdoColumnColor<Row>("color"),
           ],
           100,
           { nullables: ["age"] }
@@ -127,6 +130,10 @@ describe("FdoGenerator", () => {
             a.registered.getTime()
           );
           expect(a.type in RowType).toBeTruthy();
+
+          expect(
+            /^rgb\([0-9]{1,3}, [0-9]{1,3}, [0-9]{1,3}\)$$/.test(a.color)
+          ).toBeTruthy();
           expect(Object.keys(a)).toEqual([
             "id",
             "name",
@@ -138,6 +145,7 @@ describe("FdoGenerator", () => {
             "registered",
             "expires",
             "type",
+            "color",
           ]);
           lastRow = a;
         });
