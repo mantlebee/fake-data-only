@@ -14,12 +14,14 @@ import {
   FdoColumnColor,
   FdoColumnCustom,
   FdoColumnDate,
+  FdoColumnDateDependency,
   FdoColumnEmail,
   FdoColumnEnum,
   FdoColumnFirstName,
   FdoColumnId,
   FdoColumnLastName,
   FdoColumnNumber,
+  FdoColumnNumberDependency,
   FdoColumnString,
   FdoColumnStringOptions,
 } from "@/columns";
@@ -57,7 +59,7 @@ describe("FdoGenerator", () => {
           rows.every((a) => a.name.length >= 4 && a.name.length <= 12)
         ).toBeTruthy();
       });
-      it("Generates 100 rows of `{id: number, name: string, surname: string, fullname: string, age: Nullable<number>, email: string active: boolean, registered: Date, expires: Date, type: RowType, color: string}`", () => {
+      it("Generates 100 rows of `{id: number, name: string, surname: string, fullname: string, age: Nullable<number>, email: string active: boolean, registered: Date, expires: Date, type: RowType, color: string, scoreMax: number; score: number}`", () => {
         enum RowType {
           base,
           standard,
@@ -75,10 +77,11 @@ describe("FdoGenerator", () => {
           expires: Date;
           type: RowType;
           color: string;
+          scoreMax: number;
+          score: number;
         };
         const firstNameColumn = new FdoColumnFirstName<Row>("name");
         const lastNameColumn = new FdoColumnLastName<Row>("surname");
-        const registeredColumn = new FdoColumnDate<Row>("registered");
         const rows = FdoGeneratorGenerateDelegate<Row>(
           [
             new FdoColumnId<Row>("id"),
@@ -96,12 +99,16 @@ describe("FdoGenerator", () => {
               },
             }),
             new FdoColumnBoolean<Row>("active"),
-            registeredColumn,
-            new FdoColumnDate<Row>("expires", {
-              dependencies: { dateFrom: registeredColumn },
+            new FdoColumnDate<Row>("registered"),
+            new FdoColumnDateDependency<Row>("expires", {
+              dateFrom: (a) => a.registered,
             }),
             new FdoColumnEnum<Row, RowType>("type", Object(RowType)),
             new FdoColumnColor<Row>("color"),
+            new FdoColumnNumber<Row>("scoreMax", { max: 100 }),
+            new FdoColumnNumberDependency<Row>("score", {
+              max: (a) => a.scoreMax,
+            }),
           ],
           100,
           { nullables: ["age"] }
@@ -128,10 +135,12 @@ describe("FdoGenerator", () => {
             a.registered.getTime()
           );
           expect(a.type in RowType).toBeTruthy();
-
           expect(
             /^rgb\([0-9]{1,3}, [0-9]{1,3}, [0-9]{1,3}\)$$/.test(a.color)
           ).toBeTruthy();
+          expect(isNumber(a.scoreMax)).toBeTruthy();
+          expect(isNumber(a.score)).toBeTruthy();
+          expect(a.score).toBeLessThanOrEqual(a.scoreMax);
           expect(Object.keys(a)).toEqual([
             "id",
             "name",
@@ -144,6 +153,8 @@ describe("FdoGenerator", () => {
             "expires",
             "type",
             "color",
+            "scoreMax",
+            "score",
           ]);
           lastRow = a;
         });

@@ -1,6 +1,12 @@
 import { Any, Dictionary, KeyOf, List } from "@mantlebee/ts-core";
 
-export interface IFdoColumn<TItem, TValue, TOptions = Any> {
+import { FdoColumnOptions } from "./types";
+
+export interface IFdoColumn<
+  TItem,
+  TValue,
+  TOptions extends FdoColumnOptions = Any
+> {
   readonly name: KeyOf<TItem>;
   readonly options?: TOptions;
   value(item: TItem): TValue;

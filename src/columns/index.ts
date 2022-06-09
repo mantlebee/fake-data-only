@@ -2,6 +2,7 @@ export * from "./boolean";
 export * from "./color";
 export * from "./custom";
 export * from "./date";
+export * from "./dependency";
 export * from "./email";
 export * from "./enum";
 export * from "./first-name";
