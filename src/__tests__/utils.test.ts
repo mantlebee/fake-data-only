@@ -16,6 +16,7 @@ import {
   FdoColumnDate,
   FdoColumnDateDependency,
   FdoColumnEmail,
+  FdoColumnEmailDependency,
   FdoColumnEnum,
   FdoColumnFirstName,
   FdoColumnId,
@@ -80,23 +81,19 @@ describe("FdoGenerator", () => {
           scoreMax: number;
           score: number;
         };
-        const firstNameColumn = new FdoColumnFirstName<Row>("name");
-        const lastNameColumn = new FdoColumnLastName<Row>("surname");
         const rows = FdoGeneratorGenerateDelegate<Row>(
           [
             new FdoColumnId<Row>("id"),
-            firstNameColumn,
-            lastNameColumn,
+            new FdoColumnFirstName<Row>("name"),
+            new FdoColumnLastName<Row>("surname"),
             new FdoColumnCustom<Row, string>(
               "fullname",
               (a) => `${a.name} ${a.surname}`
             ),
             new FdoColumnNumber<Row>("age", { max: 90 }),
-            new FdoColumnEmail<Row>("email", {
-              dependencies: {
-                firstName: firstNameColumn,
-                lastName: lastNameColumn,
-              },
+            new FdoColumnEmailDependency<Row>("email", {
+              firstNames: (a) => [a.name],
+              lastNames: (a) => [a.surname],
             }),
             new FdoColumnBoolean<Row>("active"),
             new FdoColumnDate<Row>("registered"),
