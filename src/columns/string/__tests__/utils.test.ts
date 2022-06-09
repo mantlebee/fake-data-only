@@ -2,10 +2,10 @@ import { FdoColumnStringOptions } from "../types";
 import { FdoColumnStringValueDelegate } from "../utils";
 
 const options: FdoColumnStringOptions = {
-  includeLowerCase: false,
+  includeLowercase: false,
   includeNumbers: false,
   includeSpecialChars: false,
-  includeUpperCase: false,
+  includeUppercase: false,
   maxLength: 10,
   minLength: 0,
 };
@@ -16,7 +16,7 @@ describe("FdoColumnString", () => {
       it("Generates 5 lowercase chars", () => {
         const random = FdoColumnStringValueDelegate({
           ...options,
-          includeLowerCase: true,
+          includeLowercase: true,
           maxLength: 5,
           minLength: 5,
         });
@@ -25,8 +25,8 @@ describe("FdoColumnString", () => {
       it("Generates a lowercase and uppercase string of length between 10 and 12 chars", () => {
         const random = FdoColumnStringValueDelegate({
           ...options,
-          includeLowerCase: true,
-          includeUpperCase: true,
+          includeLowercase: true,
+          includeUppercase: true,
           maxLength: 12,
           minLength: 10,
         });
@@ -34,9 +34,9 @@ describe("FdoColumnString", () => {
       });
       it("Generates a string of 8 to 16 chars, lower/upper-case alphabet, numbers and special chars", () => {
         const random = FdoColumnStringValueDelegate({
-          includeLowerCase: true,
+          includeLowercase: true,
           includeNumbers: true,
-          includeUpperCase: true,
+          includeUppercase: true,
           includeSpecialChars: true,
           maxLength: 16,
           minLength: 8,

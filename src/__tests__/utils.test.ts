@@ -34,9 +34,9 @@ function getStringColumn<T>(
   options?: FdoColumnStringOptions
 ): FdoColumnString<T> {
   return new FdoColumnString(name, {
-    includeLowerCase: true,
+    includeLowercase: true,
     includeNumbers: false,
-    includeUpperCase: false,
+    includeUppercase: false,
     includeSpecialChars: false,
     maxLength,
     minLength,
@@ -125,7 +125,7 @@ describe("FdoGenerator", () => {
           expect(isEmail(a.email)).toBeTruthy();
           expect(
             a.email.indexOf(
-              `${a.name.toLowerCase()}.${a.surname.toLowerCase()}`
+              `${a.name.toLowercase()}.${a.surname.toLowercase()}`
             )
           ).toBe(0);
           expect(isBoolean(a.active)).toBeTruthy();

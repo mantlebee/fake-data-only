@@ -1,8 +1,8 @@
 export type FdoColumnStringOptions = {
-  includeLowerCase: boolean;
+  includeLowercase: boolean;
   includeNumbers: boolean;
   includeSpecialChars: boolean;
-  includeUpperCase: boolean;
+  includeUppercase: boolean;
   maxLength: number;
   minLength: number;
 };

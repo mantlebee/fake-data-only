@@ -30,5 +30,5 @@ export function FdoColumnEmailValueDelegate<TItem>(
   if (dependencies.lastName)
     lastName = (item[dependencies.lastName.name] as unknown) as string;
   const email = `${firstName}.${lastName}@${domain}`;
-  return email.toLowerCase();
+  return email.toLowercase();
 }

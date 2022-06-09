@@ -14,10 +14,10 @@ export function FdoColumnStringValueDelegate(
   options?: FdoColumnStringOptions
 ): string {
   const {
-    includeLowerCase,
+    includeLowercase,
     includeNumbers,
     includeSpecialChars,
-    includeUpperCase,
+    includeUppercase,
     maxLength,
     minLength,
   } = { ...FdoColumnStringOptionsDefault, ...options };
@@ -25,9 +25,9 @@ export function FdoColumnStringValueDelegate(
   if (maxLength !== minLength)
     length = generateRandomNumber(minLength, maxLength);
   let chars: string = "";
-  if (includeLowerCase) chars += getLowercaseChars();
+  if (includeLowercase) chars += getLowercaseChars();
   if (includeNumbers) chars += getNumberChars();
   if (includeSpecialChars) chars += getSpecialChars();
-  if (includeUpperCase) chars += getUppercaseChars();
+  if (includeUppercase) chars += getUppercaseChars();
   return generateRandomString(chars, length);
 }
