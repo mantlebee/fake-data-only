@@ -1,12 +1,11 @@
 import { generateRandomNumber } from "@mantlebee/ts-core";
-import { FdoColumnColorOptionsDefault } from "./constants";
 
 import { FdoColumnColorOptions } from "./types";
 
 export function FdoColumnColorValueDelegate(
   options?: FdoColumnColorOptions
 ): string {
-  const { includeAlpha } = { ...FdoColumnColorOptionsDefault, ...options };
+  const { includeAlpha } = { ...options };
   let alpha = 255;
   const blue = generateRandomNumber(255);
   const green = generateRandomNumber(255);

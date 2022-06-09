@@ -8,7 +8,7 @@ export interface IFdoColumn<
   TOptions extends FdoColumnOptions = Any
 > {
   readonly name: KeyOf<TItem>;
-  readonly options?: TOptions;
+  readonly options: TOptions;
   value(item: TItem): TValue;
 }
 

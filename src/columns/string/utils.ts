@@ -6,21 +6,20 @@ import {
   getSpecialChars,
   getUppercaseChars,
 } from "@mantlebee/ts-core";
-import { FdoColumnStringOptionsDefault } from "./constants";
 
 import { FdoColumnStringOptions } from "./types";
 
 export function FdoColumnStringValueDelegate(
-  options?: FdoColumnStringOptions
+  options: FdoColumnStringOptions
 ): string {
   const {
-    includeLowercase,
-    includeNumbers,
-    includeSpecialChars,
-    includeUppercase,
+    includeLowercase = true,
+    includeNumbers = true,
+    includeSpecialChars = true,
+    includeUppercase = true,
     maxLength,
-    minLength,
-  } = { ...FdoColumnStringOptionsDefault, ...options };
+    minLength = 0,
+  } = options;
   let length = maxLength;
   if (maxLength !== minLength)
     length = generateRandomNumber(minLength, maxLength);

@@ -10,11 +10,11 @@ export abstract class FdoColumn<
   TOptions extends FdoColumnOptions = Any
 > implements IFdoColumn<TItem, TValue, TOptions> {
   public readonly name!: KeyOf<TItem>;
-  public readonly options?: TOptions;
+  public readonly options!: TOptions;
 
   public constructor(name: KeyOf<TItem>, options?: TOptions) {
     this.name = name;
-    this.options = options;
+    if (options) this.options = options;
   }
 
   public abstract value(item: TItem): TValue;

@@ -1,4 +1,3 @@
-import { IFdoColumn } from "@/interfaces";
 import { FdoColumn } from "@/models";
 
 import { FdoColumnStringOptions } from "./types";
