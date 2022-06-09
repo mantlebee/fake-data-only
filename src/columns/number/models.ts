@@ -1,22 +1,13 @@
-import { KeyOf } from "@mantlebee/ts-core";
-
-import { IFdoColumn } from "@/interfaces";
+import { FdoColumn } from "@/models";
 
 import { FdoColumnNumberOptions } from "./types";
 import { FdoColumnNumberValueDelegate } from "./utils";
 
-export class FdoColumnNumber<TItem> implements IFdoColumn<TItem, number> {
-  public readonly name!: KeyOf<TItem>;
-  public readonly options!: FdoColumnNumberOptions<TItem>;
-
-  public constructor(
-    name: KeyOf<TItem>,
-    options: FdoColumnNumberOptions<TItem>
-  ) {
-    this.name = name;
-    this.options = options;
-  }
-
+export class FdoColumnNumber<TItem> extends FdoColumn<
+  TItem,
+  number,
+  FdoColumnNumberOptions<TItem>
+> {
   public value(item: TItem): number {
     return FdoColumnNumberValueDelegate(item, this.options);
   }

@@ -4,9 +4,9 @@ import { FdoColumnDateOptions } from "./types";
 
 export function FdoColumnDateValueDelegate<TItem>(
   item: TItem,
-  options: FdoColumnDateOptions<TItem>
+  options?: FdoColumnDateOptions<TItem>
 ): Date {
-  let { dateFrom, dateTo, dependencies } = options;
+  let { dateFrom, dateTo, dependencies } = { ...options };
   if (dependencies) {
     if (dependencies.dateFrom)
       dateFrom = (item[dependencies.dateFrom.name] as unknown) as Date;

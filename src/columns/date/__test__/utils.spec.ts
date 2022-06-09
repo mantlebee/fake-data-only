@@ -1,4 +1,4 @@
-import { FdoColumnDate } from "@/columns";
+import { IFdoColumn } from "@/interfaces";
 
 import { FdoColumnDateValueDelegate } from "../utils";
 
@@ -23,8 +23,8 @@ describe("FdoColumnDate", () => {
         expect(random.getTime()).toBeLessThanOrEqual(Date.now());
       });
       it("Generates a random date, using startFrom e startTo from passed item", () => {
-        const dateFromColumn = { name: "dateFrom" } as FdoColumnDate<Item>;
-        const dateToColumn = { name: "dateTo" } as FdoColumnDate<Item>;
+        const dateFromColumn = { name: "dateFrom" } as IFdoColumn<Item, Date>;
+        const dateToColumn = { name: "dateTo" } as IFdoColumn<Item, Date>;
         const random = FdoColumnDateValueDelegate<Item>(item, {
           dependencies: {
             dateFrom: dateFromColumn,

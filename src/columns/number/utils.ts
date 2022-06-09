@@ -1,12 +1,16 @@
 import { generateRandomNumber } from "@mantlebee/ts-core";
 
+import { FdoColumnNumberOptionsDefault } from "./constants";
 import { FdoColumnNumberOptions } from "./types";
 
 export function FdoColumnNumberValueDelegate<TItem>(
   item: TItem,
-  options: FdoColumnNumberOptions<TItem>
+  options?: FdoColumnNumberOptions<TItem>
 ): number {
-  let { decimals = 0, dependencies, max, min = 0 } = options;
+  let { decimals = 0, dependencies, max, min = 0 } = {
+    ...FdoColumnNumberOptionsDefault,
+    ...options,
+  };
   if (dependencies) {
     if (dependencies.decimals)
       decimals = (item[dependencies.decimals.name] as unknown) as number;

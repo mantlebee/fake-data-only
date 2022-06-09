@@ -10,7 +10,7 @@ import { IFdoColumn } from "./interfaces";
 import { FdoGeneratorOptions } from "./types";
 
 function isNullable<T>(
-  column: IFdoColumn<T, Any>,
+  column: IFdoColumn<T, Any, Any>,
   options?: FdoGeneratorOptions<T>
 ): boolean {
   return Boolean(
@@ -19,7 +19,7 @@ function isNullable<T>(
 }
 
 export function FdoGeneratorGenerateDelegate<T extends Dictionary<Any>>(
-  columns: List<IFdoColumn<T, Any>>,
+  columns: List<IFdoColumn<T, Any, Any>>,
   rowsNumber: number,
   options?: FdoGeneratorOptions<T>
 ): List<T> {

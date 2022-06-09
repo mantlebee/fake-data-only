@@ -1,20 +1,18 @@
-import { Dictionary, KeyOf } from "@mantlebee/ts-core";
+import { KeyOf } from "@mantlebee/ts-core";
 
-import { IFdoColumn } from "@/interfaces";
+import { FdoColumn } from "@/models";
 
-import { FdoColumnEnumOptions } from "./types";
 import { FdoColumnEnumValueDelegate } from "./utils";
 
-export class FdoColumnEnum<TItem, TEnum> implements IFdoColumn<TItem, TEnum> {
-  public readonly name!: KeyOf<TItem>;
-  public readonly options!: FdoColumnEnumOptions<TEnum>;
+export class FdoColumnEnum<TItem, TEnum> extends FdoColumn<TItem, TEnum> {
+  public readonly enumerative!: TEnum;
 
-  public constructor(name: KeyOf<TItem>, options: FdoColumnEnumOptions<TEnum>) {
-    this.name = name;
-    this.options = options;
+  public constructor(name: KeyOf<TItem>, enumerative: TEnum) {
+    super(name);
+    this.enumerative = enumerative;
   }
 
   public value(): TEnum {
-    return FdoColumnEnumValueDelegate(this.options);
+    return FdoColumnEnumValueDelegate(this.enumerative);
   }
 }

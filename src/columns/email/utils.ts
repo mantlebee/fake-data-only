@@ -10,7 +10,7 @@ import { FdoColumnEmailOptions } from "./types";
 
 export function FdoColumnEmailValueDelegate<TItem>(
   item: TItem,
-  options: FdoColumnEmailOptions<TItem>
+  options?: FdoColumnEmailOptions<TItem>
 ): string {
   let {
     dependencies = {},
@@ -19,7 +19,7 @@ export function FdoColumnEmailValueDelegate<TItem>(
         FirstLevelDomains
       )}`,
     ],
-  } = options;
+  } = { ...options };
   let domain = extractRandomItem(domains);
   let firstName = FdoColumnFirstNameValueDelegate(options);
   let lastName = FdoColumnLastNameValueDelegate();

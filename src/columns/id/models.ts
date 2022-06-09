@@ -1,18 +1,21 @@
 import { KeyOf, NumericIdentityManager } from "@mantlebee/ts-core";
 
-import { IFdoColumn } from "@/interfaces";
+import { FdoColumn } from "@/models";
 
 import { FdoColumnIdOptions } from "./types";
+import { FdoColumnIdStartsFrom } from "./constants";
 
-export class FdoColumnId<TItem> implements IFdoColumn<TItem, number> {
+export class FdoColumnId<TItem> extends FdoColumn<
+  TItem,
+  number,
+  FdoColumnIdOptions
+> {
   private readonly identityManager!: NumericIdentityManager;
-  public readonly name!: KeyOf<TItem>;
-  public readonly options!: FdoColumnIdOptions;
 
-  public constructor(name: KeyOf<TItem>, options: FdoColumnIdOptions = {}) {
-    this.name = name;
-    this.options = options;
-    const { startsFrom = 1 } = options;
+  public constructor(name: KeyOf<TItem>, options?: FdoColumnIdOptions) {
+    super(name, options);
+    let startsFrom = FdoColumnIdStartsFrom;
+    if (options && options.startsFrom) startsFrom = options.startsFrom;
     const lastValue = startsFrom - 1;
     this.identityManager = new NumericIdentityManager(lastValue);
   }

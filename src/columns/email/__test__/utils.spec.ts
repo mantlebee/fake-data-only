@@ -1,6 +1,6 @@
 import { isEmail, List } from "@mantlebee/ts-core";
 
-import { FdoColumnString } from "@/columns";
+import { IFdoColumn } from "@/interfaces";
 
 import { FdoColumnEmailValueDelegate } from "../utils";
 
@@ -37,9 +37,12 @@ describe("FdoColumnEmail", () => {
         expect(randoms.every((a) => /outlook\.(it|com)$/.test(a))).toBeTruthy();
       });
       it("Generates a random email, taking domain, firstName and lastname from the passed item", () => {
-        const domainColumn = { name: "domain" } as FdoColumnString<Item>;
-        const firstNameColumn = { name: "firstName" } as FdoColumnString<Item>;
-        const lastNameColumn = { name: "lastName" } as FdoColumnString<Item>;
+        const domainColumn = { name: "domain" } as IFdoColumn<Item, string>;
+        const firstNameColumn = { name: "firstName" } as IFdoColumn<
+          Item,
+          string
+        >;
+        const lastNameColumn = { name: "lastName" } as IFdoColumn<Item, string>;
         const random = FdoColumnEmailValueDelegate<Item>(item, {
           dependencies: {
             domain: domainColumn,

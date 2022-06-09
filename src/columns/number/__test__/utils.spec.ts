@@ -1,6 +1,6 @@
 import { numberIsInteger } from "@mantlebee/ts-core";
 
-import { FdoColumnNumber } from "@/columns";
+import { IFdoColumn } from "@/interfaces";
 
 import { FdoColumnNumberValueDelegate } from "../utils";
 
@@ -46,9 +46,9 @@ describe("FdoColumnNumber", () => {
         expect(random).toBeLessThanOrEqual(10);
       });
       it("Generates a random number, taking decimals, max and min from the passed item", () => {
-        const decimalsColumn = { name: "decimals" } as FdoColumnNumber<Item>;
-        const maxColumn = { name: "max" } as FdoColumnNumber<Item>;
-        const minColumn = { name: "min" } as FdoColumnNumber<Item>;
+        const decimalsColumn = { name: "decimals" } as IFdoColumn<Item, number>;
+        const maxColumn = { name: "max" } as IFdoColumn<Item, number>;
+        const minColumn = { name: "min" } as IFdoColumn<Item, number>;
         const random = FdoColumnNumberValueDelegate<Item>(item, {
           max: 0,
           dependencies: {

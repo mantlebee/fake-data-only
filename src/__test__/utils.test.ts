@@ -100,9 +100,7 @@ describe("FdoGenerator", () => {
             new FdoColumnDate<Row>("expires", {
               dependencies: { dateFrom: registeredColumn },
             }),
-            new FdoColumnEnum<Row, RowType>("type", {
-              enumerative: Object(RowType),
-            }),
+            new FdoColumnEnum<Row, RowType>("type", Object(RowType)),
             new FdoColumnColor<Row>("color"),
           ],
           100,

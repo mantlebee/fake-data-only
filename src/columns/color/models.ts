@@ -1,19 +1,13 @@
-import { KeyOf } from "@mantlebee/ts-core";
-
-import { IFdoColumn } from "@/interfaces";
+import { FdoColumn } from "@/models";
 
 import { FdoColumnColorOptions } from "./types";
 import { FdoColumnColorValueDelegate } from "./utils";
 
-export class FdoColumnColor<TItem> implements IFdoColumn<TItem, string> {
-  public readonly name!: KeyOf<TItem>;
-  public readonly options!: FdoColumnColorOptions;
-
-  public constructor(name: KeyOf<TItem>, options: FdoColumnColorOptions = {}) {
-    this.name = name;
-    this.options = options;
-  }
-
+export class FdoColumnColor<TItem> extends FdoColumn<
+  TItem,
+  string,
+  FdoColumnColorOptions
+> {
   public value(): string {
     return FdoColumnColorValueDelegate(this.options);
   }

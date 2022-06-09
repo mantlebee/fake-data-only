@@ -1,10 +1,6 @@
 import { extractRandomItem } from "@mantlebee/ts-core";
-import { FdoColumnEnumOptions } from "./types";
 
-export function FdoColumnEnumValueDelegate<TEnum>(
-  options: FdoColumnEnumOptions<TEnum>
-): TEnum {
-  const { enumerative } = options;
+export function FdoColumnEnumValueDelegate<TEnum>(enumerative: TEnum): TEnum {
   const keysAndValues = Object.keys(enumerative);
   const keys = keysAndValues.splice(keysAndValues.length / 2);
   const randomKey = extractRandomItem(keys);
