@@ -125,7 +125,7 @@ describe("FdoGenerator", () => {
           expect(isEmail(a.email)).toBeTruthy();
           expect(
             a.email.indexOf(
-              `${a.name.toLowercase()}.${a.surname.toLowercase()}`
+              `${a.name.toLowerCase()}.${a.surname.toLowerCase()}`
             )
           ).toBe(0);
           expect(isBoolean(a.active)).toBeTruthy();
