@@ -1,11 +1,13 @@
 import {
-  generateRandomNumber,
-  generateRandomString,
   getLowercaseChars,
   getNumberChars,
   getSpecialChars,
   getUppercaseChars,
 } from "@mantlebee/ts-core";
+import {
+  generateRandomNumber,
+  generateRandomString,
+} from "@mantlebee/ts-random";
 
 import { FdoColumnStringOptions } from "./types";
 

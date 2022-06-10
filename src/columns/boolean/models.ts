@@ -1,4 +1,4 @@
-import { generateRandomBoolean } from "@mantlebee/ts-core";
+import { generateRandomBoolean } from "@mantlebee/ts-random";
 
 import { FdoColumn } from "@/models";
 

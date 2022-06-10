@@ -1,4 +1,4 @@
-import { extractRandomItem } from "@mantlebee/ts-core";
+import { extractRandomItem } from "@mantlebee/ts-random";
 
 import {
   FdoColumnFirstNameValueDelegate,

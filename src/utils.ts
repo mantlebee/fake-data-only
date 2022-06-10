@@ -1,10 +1,5 @@
-import {
-  Dictionary,
-  Any,
-  List,
-  KeyOf,
-  generateRandomBoolean,
-} from "@mantlebee/ts-core";
+import { Dictionary, Any, List, KeyOf } from "@mantlebee/ts-core";
+import { generateRandomBoolean } from "@mantlebee/ts-random";
 
 import { IFdoColumn } from "./interfaces";
 import { FdoGeneratorOptions } from "./types";

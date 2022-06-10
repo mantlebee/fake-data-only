@@ -1,4 +1,4 @@
-import { generateRandomNumber } from "@mantlebee/ts-core";
+import { generateRandomNumber } from "@mantlebee/ts-random";
 
 import { FdoColumnColorOptions } from "./types";
 

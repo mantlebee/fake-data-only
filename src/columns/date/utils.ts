@@ -1,4 +1,4 @@
-import { generateRandomDate } from "@mantlebee/ts-core";
+import { generateRandomDate } from "@mantlebee/ts-random";
 
 import { FdoColumnDateOptions } from "./types";
 

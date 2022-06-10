@@ -1,4 +1,4 @@
-import { extractRandomItem } from "@mantlebee/ts-core";
+import { extractRandomItem } from "@mantlebee/ts-random";
 
 import { FemaleFirstNames, Gender, MaleFirstNames } from "@/constants";
 
