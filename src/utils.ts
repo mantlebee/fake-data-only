@@ -1,8 +1,8 @@
-import { Dictionary, Any, List, KeyOf } from "@mantlebee/ts-core";
+import { Dictionary, Any, List, KeyOf, KeysOf } from "@mantlebee/ts-core";
 import { generateRandomBoolean } from "@mantlebee/ts-random";
 
-import { IFdoColumn } from "./interfaces";
-import { FdoTableOptions } from "./types";
+import { IFdoColumn, IFdoTable } from "./interfaces";
+import { FdoMatrixTable, FdoTableOptions } from "./types";
 
 function isNullable<T>(
   column: IFdoColumn<T, Any, Any>,
@@ -11,6 +11,17 @@ function isNullable<T>(
   return Boolean(
     options && options.nullables && options.nullables.includes(column.name)
   );
+}
+
+export function FdoMatrixGenerateDelegate<
+  TTablesMap extends Dictionary<FdoMatrixTable<Any>>
+>(tablesMap: TTablesMap): KeysOf<TTablesMap, List<Any>> {
+  const matrix = Object.keys(tablesMap).reduce((result, current) => {
+    const { table, rowsNumber } = tablesMap[current];
+    result[current as keyof TTablesMap] = table.generate(rowsNumber);
+    return result;
+  }, {} as KeysOf<TTablesMap, List<Any>>);
+  return matrix;
 }
 
 export function FdoTableGenerateDelegate<T extends Dictionary<Any>>(

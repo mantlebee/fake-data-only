@@ -15,10 +15,10 @@ export function FdoColumnStringValueDelegate(
   options: FdoColumnStringOptions
 ): string {
   const {
-    includeLowercase = true,
-    includeNumbers = true,
-    includeSpecialChars = true,
-    includeUppercase = true,
+    includeLowercase = false,
+    includeNumbers = false,
+    includeSpecialChars = false,
+    includeUppercase = false,
     maxLength,
     minLength = 0,
   } = options;

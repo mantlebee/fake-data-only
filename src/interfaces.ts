@@ -1,6 +1,6 @@
-import { Any, Dictionary, KeyOf, List } from "@mantlebee/ts-core";
+import { Any, Dictionary, KeyOf, KeysOf, List } from "@mantlebee/ts-core";
 
-import { FdoColumnOptions, FdoTableOptions } from "./types";
+import { FdoColumnOptions, FdoMatrixTable, FdoTableOptions } from "./types";
 
 export interface IFdoColumn<
   TRow,
@@ -10,6 +10,13 @@ export interface IFdoColumn<
   readonly name: KeyOf<TRow>;
   readonly options: TOptions;
   value(item: TRow): TValue;
+}
+
+export interface IFdoMatrix<
+  TTablesMap extends Dictionary<FdoMatrixTable<Any>>
+> {
+  readonly tablesMap: TTablesMap;
+  generate(): KeysOf<TTablesMap, List<Any>>;
 }
 
 export interface IFdoTable<TRow> {

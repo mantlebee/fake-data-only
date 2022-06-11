@@ -1,4 +1,6 @@
 import {
+  Any,
+  Dictionary,
   isBoolean,
   isDate,
   isEmail,
@@ -28,6 +30,10 @@ import {
 } from "@/columns";
 import { FdoTableGenerateDelegate } from "@/utils";
 
+import { FdoTable } from "../models";
+import { FdoMatrixTable } from "../types";
+import { FdoMatrixGenerateDelegate } from "..";
+
 function getStringColumn<T>(
   name: KeyOf<T>,
   maxLength: number,
@@ -47,6 +53,44 @@ function getStringColumn<T>(
 
 describe("FdoTable", () => {
   describe("utils", () => {
+    describe("FdoMatrixGeneratorDelegate", () => {
+      it("Generates a map of lists, the map as the same keys of the given tablesMap param.", () => {
+        type Address = { city: string; street: string };
+        type Contact = { phone: string; email: string };
+        type Person = { name: string; surname: string };
+        const AddressTable = new FdoTable<Address>([
+          new FdoColumnString("city", { maxLength: 20 }),
+          new FdoColumnString("street", { maxLength: 20 }),
+        ]);
+        const ContactTable = new FdoTable<Contact>([
+          new FdoColumnString("phone", {
+            includeLowercase: false,
+            includeNumbers: true,
+            maxLength: 10,
+            minLength: 10,
+          }),
+          new FdoColumnEmail("email"),
+        ]);
+        const PersonTable = new FdoTable<Person>([
+          new FdoColumnFirstName("name"),
+          new FdoColumnLastName("surname"),
+        ]);
+        const tablesMap: Dictionary<FdoMatrixTable<Any>> = {
+          addresses: { rowsNumber: 10, table: AddressTable },
+          contacts: { rowsNumber: 25, table: ContactTable },
+          people: { rowsNumber: 20, table: PersonTable },
+        };
+        const matrix = FdoMatrixGenerateDelegate(tablesMap);
+        expect(Object.keys(matrix)).toEqual([
+          "addresses",
+          "contacts",
+          "people",
+        ]);
+        expect(matrix.addresses.length).toBe(tablesMap.addresses.rowsNumber);
+        expect(matrix.contacts.length).toBe(tablesMap.contacts.rowsNumber);
+        expect(matrix.people.length).toBe(tablesMap.people.rowsNumber);
+      });
+    });
     describe("FdoTableGenerateDelegate", () => {
       it("Generates 5 rows of {name: string}", () => {
         type Row = { name: string };
