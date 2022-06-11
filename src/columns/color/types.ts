@@ -1,3 +1,7 @@
+import { IColor } from "@mantlebee/ts-core";
+
 export type FdoColumnColorOptions = {
-  includeAlpha?: boolean;
+  from?: IColor;
+  to?: IColor;
+  transparent?: boolean;
 };

@@ -1,7 +1,8 @@
+import { generateRandomColor } from "@mantlebee/ts-random";
+
 import { FdoColumn } from "@/models";
 
 import { FdoColumnColorOptions } from "./types";
-import { FdoColumnColorValueDelegate } from "./utils";
 
 export class FdoColumnColor<TItem> extends FdoColumn<
   TItem,
@@ -9,6 +10,7 @@ export class FdoColumnColor<TItem> extends FdoColumn<
   FdoColumnColorOptions
 > {
   public value(): string {
-    return FdoColumnColorValueDelegate(this.options);
+    const { from, to, transparent } = { ...this.options };
+    return generateRandomColor(transparent, from, to).rgba();
   }
 }

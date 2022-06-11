@@ -133,7 +133,7 @@ describe("FdoGenerator", () => {
           );
           expect(a.type in RowType).toBeTruthy();
           expect(
-            /^rgb\([0-9]{1,3}, [0-9]{1,3}, [0-9]{1,3}\)$$/.test(a.color)
+            /^rgba\([0-9]{1,3},[0-9]{1,3},[0-9]{1,3},[0-9]\)$$/.test(a.color)
           ).toBeTruthy();
           expect(isNumber(a.scoreMax)).toBeTruthy();
           expect(isNumber(a.score)).toBeTruthy();
