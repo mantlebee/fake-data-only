@@ -6,7 +6,6 @@ import {
   isEmail,
   isNumber,
   isString,
-  KeyOf,
   Nullable,
   objectHasKey,
 } from "@mantlebee/ts-core";
@@ -26,30 +25,12 @@ import {
   FdoColumnNumber,
   FdoColumnNumberDependency,
   FdoColumnString,
-  FdoColumnStringOptions,
 } from "@/columns";
 import { FdoTableGenerateDelegate } from "@/utils";
 
 import { FdoTable } from "../models";
 import { FdoMatrixTable } from "../types";
-import { FdoMatrixGenerateDelegate } from "..";
-
-function getStringColumn<T>(
-  name: KeyOf<T>,
-  maxLength: number,
-  minLength = 0,
-  options?: FdoColumnStringOptions
-): FdoColumnString<T> {
-  return new FdoColumnString(name, {
-    includeLowercase: true,
-    includeNumbers: false,
-    includeUppercase: false,
-    includeSpecialChars: false,
-    maxLength,
-    minLength,
-    ...options,
-  });
-}
+import { FdoMatrixGenerateDelegate } from "../utils";
 
 describe("FdoTable", () => {
   describe("utils", () => {
@@ -95,7 +76,13 @@ describe("FdoTable", () => {
       it("Generates 5 rows of {name: string}", () => {
         type Row = { name: string };
         const rows = FdoTableGenerateDelegate<Row>(
-          [getStringColumn<Row>("name", 12, 4)],
+          [
+            new FdoColumnString<Row>("name", {
+              includeLowercase: true,
+              maxLength: 12,
+              minLength: 4,
+            }),
+          ],
           5
         );
         expect(rows.length).toBe(5);
