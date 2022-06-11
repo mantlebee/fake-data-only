@@ -4,8 +4,8 @@ import { FdoColumn } from "@/models";
 
 import { FdoColumnColorOptions } from "./types";
 
-export class FdoColumnColor<TItem> extends FdoColumn<
-  TItem,
+export class FdoColumnColor<TRow> extends FdoColumn<
+  TRow,
   string,
   FdoColumnColorOptions
 > {

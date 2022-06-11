@@ -6,8 +6,8 @@ import { FdoColumn } from "@/models";
 import { FdoColumnNumberOptions } from "./types";
 import { FdoColumnNumberValueDelegate } from "./utils";
 
-export class FdoColumnNumber<TItem> extends FdoColumn<
-  TItem,
+export class FdoColumnNumber<TRow> extends FdoColumn<
+  TRow,
   number,
   FdoColumnNumberOptions
 > {
@@ -17,14 +17,14 @@ export class FdoColumnNumber<TItem> extends FdoColumn<
 }
 
 export class FdoColumnNumberDependency<
-  TItem
+  TRow
 > extends FdoColumnDependencyAbstract<
-  TItem,
+  TRow,
   number,
   FdoColumnNumberOptions,
-  FdoColumnConstructor<TItem, number, FdoColumnNumberOptions>
+  FdoColumnConstructor<TRow, number, FdoColumnNumberOptions>
 > {
   public readonly columnConstructor: ConstructorOf<
-    FdoColumnNumber<TItem>
+    FdoColumnNumber<TRow>
   > = FdoColumnNumber;
 }

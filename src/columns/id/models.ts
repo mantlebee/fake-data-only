@@ -5,14 +5,14 @@ import { FdoColumn } from "@/models";
 import { FdoColumnIdOptions } from "./types";
 import { FdoColumnIdStartsFrom } from "./constants";
 
-export class FdoColumnId<TItem> extends FdoColumn<
-  TItem,
+export class FdoColumnId<TRow> extends FdoColumn<
+  TRow,
   number,
   FdoColumnIdOptions
 > {
   private readonly identityManager!: NumericIdentityManager;
 
-  public constructor(name: KeyOf<TItem>, options?: FdoColumnIdOptions) {
+  public constructor(name: KeyOf<TRow>, options?: FdoColumnIdOptions) {
     super(name, options);
     let startsFrom = FdoColumnIdStartsFrom;
     if (options && options.startsFrom) startsFrom = options.startsFrom;

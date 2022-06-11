@@ -1,20 +1,19 @@
 import { Any, Dictionary, KeyOf, List } from "@mantlebee/ts-core";
 
-import { FdoColumnOptions } from "./types";
+import { FdoColumnOptions, FdoTableOptions } from "./types";
 
 export interface IFdoColumn<
-  TItem,
+  TRow,
   TValue,
   TOptions extends FdoColumnOptions = Any
 > {
-  readonly name: KeyOf<TItem>;
+  readonly name: KeyOf<TRow>;
   readonly options: TOptions;
-  value(item: TItem): TValue;
+  value(item: TRow): TValue;
 }
 
-export interface IFdoGenerator {
-  generate<T extends Dictionary<Any>>(
-    columns: List<IFdoColumn<T, Any, Any>>,
-    rowsNumber: number
-  ): List<T>;
+export interface IFdoTable<TRow> {
+  readonly columns: List<IFdoColumn<TRow, Any, Any>>;
+  readonly options?: FdoTableOptions<TRow>;
+  generate(rowsNumber: number): List<TRow>;
 }

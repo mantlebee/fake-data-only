@@ -4,15 +4,15 @@ import { IFdoColumn } from "@/interfaces";
 import { FdoColumnOptions } from "@/types";
 
 export type FdoColumnConstructor<
-  TItem,
+  TRow,
   TValue,
   TOptions extends FdoColumnOptions
 > = new (name: string, options?: TOptions) => IFdoColumn<
-  TItem,
+  TRow,
   TValue,
   TOptions
 >;
 export type FdoColumnOptionsValueGettersMap<
-  TItem,
+  TRow,
   TOptions extends FdoColumnOptions
-> = KeysOf<TOptions, (item: TItem) => TOptions[KeyOf<TOptions>]>;
+> = KeysOf<TOptions, (item: TRow) => TOptions[KeyOf<TOptions>]>;

@@ -3,8 +3,8 @@ import { FdoColumn } from "@/models";
 import { FdoColumnStringOptions } from "./types";
 import { FdoColumnStringValueDelegate } from "./utils";
 
-export class FdoColumnString<TItem> extends FdoColumn<
-  TItem,
+export class FdoColumnString<TRow> extends FdoColumn<
+  TRow,
   string,
   FdoColumnStringOptions
 > {

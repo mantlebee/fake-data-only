@@ -6,8 +6,8 @@ import { FdoColumn } from "@/models";
 import { FdoColumnEmailOptions } from "./types";
 import { FdoColumnEmailValueDelegate } from "./utils";
 
-export class FdoColumnEmail<TItem> extends FdoColumn<
-  TItem,
+export class FdoColumnEmail<TRow> extends FdoColumn<
+  TRow,
   string,
   FdoColumnEmailOptions
 > {
@@ -16,15 +16,13 @@ export class FdoColumnEmail<TItem> extends FdoColumn<
   }
 }
 
-export class FdoColumnEmailDependency<
-  TItem
-> extends FdoColumnDependencyAbstract<
-  TItem,
+export class FdoColumnEmailDependency<TRow> extends FdoColumnDependencyAbstract<
+  TRow,
   string,
   FdoColumnEmailOptions,
-  FdoColumnConstructor<TItem, string, FdoColumnEmailOptions>
+  FdoColumnConstructor<TRow, string, FdoColumnEmailOptions>
 > {
   public readonly columnConstructor: ConstructorOf<
-    FdoColumnEmail<TItem>
+    FdoColumnEmail<TRow>
   > = FdoColumnEmail;
 }

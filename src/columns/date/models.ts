@@ -7,8 +7,8 @@ import { FdoColumnDateOptions } from "./types";
 import { FdoColumnDateValueDelegate } from "./utils";
 import { FdoColumnDependencyAbstract } from "../dependency";
 
-export class FdoColumnDate<TItem> extends FdoColumn<
-  TItem,
+export class FdoColumnDate<TRow> extends FdoColumn<
+  TRow,
   Date,
   FdoColumnDateOptions
 > {
@@ -17,13 +17,13 @@ export class FdoColumnDate<TItem> extends FdoColumn<
   }
 }
 
-export class FdoColumnDateDependency<TItem> extends FdoColumnDependencyAbstract<
-  TItem,
+export class FdoColumnDateDependency<TRow> extends FdoColumnDependencyAbstract<
+  TRow,
   Date,
   FdoColumnDateOptions,
-  FdoColumnConstructor<TItem, Date, FdoColumnDateOptions>
+  FdoColumnConstructor<TRow, Date, FdoColumnDateOptions>
 > {
   public readonly columnConstructor: ConstructorOf<
-    FdoColumnDate<TItem>
+    FdoColumnDate<TRow>
   > = FdoColumnDate;
 }

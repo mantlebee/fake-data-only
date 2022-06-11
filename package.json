@@ -1,6 +1,6 @@
 {
   "name": "@mantlebee/fake-data-only",
-  "version": "0.5.1",
+  "version": "0.6.0",
   "description": "Configurable and advanced fake data generator.",
   "main": "dist/index.js",
   "types": "dist/src/index.d.ts",

@@ -1,31 +1,39 @@
 import { Any, Dictionary, KeyOf, List } from "@mantlebee/ts-core";
 
-import { IFdoColumn, IFdoGenerator } from "./interfaces";
-import { FdoColumnOptions, FdoGeneratorOptions } from "./types";
-import { FdoGeneratorGenerateDelegate } from "./utils";
+import { IFdoColumn, IFdoTable } from "./interfaces";
+import { FdoColumnOptions, FdoTableOptions } from "./types";
+import { FdoTableGenerateDelegate } from "./utils";
 
 export abstract class FdoColumn<
-  TItem,
+  TRow,
   TValue,
   TOptions extends FdoColumnOptions = Any
-> implements IFdoColumn<TItem, TValue, TOptions> {
-  public readonly name!: KeyOf<TItem>;
+> implements IFdoColumn<TRow, TValue, TOptions> {
+  public readonly name!: KeyOf<TRow>;
   public readonly options!: TOptions;
 
-  public constructor(name: KeyOf<TItem>, options?: TOptions) {
+  public constructor(name: KeyOf<TRow>, options?: TOptions) {
     this.name = name;
     if (options) this.options = options;
   }
 
-  public abstract value(item: TItem): TValue;
+  public abstract value(item: TRow): TValue;
 }
 
-export class FdoGenerator implements IFdoGenerator {
-  public generate<T extends Dictionary<Any>>(
-    columns: List<IFdoColumn<T, Any, any>>,
-    rowsNumber: number,
-    options?: FdoGeneratorOptions<T>
-  ): List<T> {
-    return FdoGeneratorGenerateDelegate(columns, rowsNumber, options);
+export class FdoTable<TRow> implements IFdoTable<TRow> {
+  public readonly columns: List<IFdoColumn<TRow, Any, any>>;
+  public readonly options?: FdoTableOptions<TRow>;
+
+  public constructor(
+    columns: List<IFdoColumn<TRow, Any, any>>,
+    options?: FdoTableOptions<TRow>
+  ) {
+    this.columns = columns;
+    this.options = options;
+  }
+
+  public generate(rowsNumber: number): List<TRow> {
+    const { columns, options } = this;
+    return FdoTableGenerateDelegate(columns, rowsNumber, options);
   }
 }

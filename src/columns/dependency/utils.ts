@@ -3,20 +3,20 @@ import { FdoColumnOptions } from "@/types";
 import { FdoColumnConstructor, FdoColumnOptionsValueGettersMap } from "./types";
 
 export function FdoColumnDependencyValueDelegate<
-  TItem,
+  TRow,
   TValue,
   TOptions extends FdoColumnOptions,
-  TConstructor extends FdoColumnConstructor<TItem, TValue, TOptions>
+  TConstructor extends FdoColumnConstructor<TRow, TValue, TOptions>
 >(
-  item: TItem,
+  item: TRow,
   columnConstructor: TConstructor,
-  optionsValuesGetters: FdoColumnOptionsValueGettersMap<TItem, TOptions>
+  optionsValuesGetters: FdoColumnOptionsValueGettersMap<TRow, TOptions>
 ): TValue {
   const options = {} as TOptions;
   Object.keys(optionsValuesGetters).forEach((key) => {
     const valueGetter =
       optionsValuesGetters[
-        key as keyof FdoColumnOptionsValueGettersMap<TItem, TOptions>
+        key as keyof FdoColumnOptionsValueGettersMap<TRow, TOptions>
       ];
     options[key as keyof TOptions] = valueGetter(item);
   });

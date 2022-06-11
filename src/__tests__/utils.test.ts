@@ -26,7 +26,7 @@ import {
   FdoColumnString,
   FdoColumnStringOptions,
 } from "@/columns";
-import { FdoGeneratorGenerateDelegate } from "@/utils";
+import { FdoTableGenerateDelegate } from "@/utils";
 
 function getStringColumn<T>(
   name: KeyOf<T>,
@@ -45,12 +45,12 @@ function getStringColumn<T>(
   });
 }
 
-describe("FdoGenerator", () => {
+describe("FdoTable", () => {
   describe("utils", () => {
-    describe("FdoGeneratorGenerateDelegate", () => {
+    describe("FdoTableGenerateDelegate", () => {
       it("Generates 5 rows of {name: string}", () => {
         type Row = { name: string };
-        const rows = FdoGeneratorGenerateDelegate<Row>(
+        const rows = FdoTableGenerateDelegate<Row>(
           [getStringColumn<Row>("name", 12, 4)],
           5
         );
@@ -81,7 +81,7 @@ describe("FdoGenerator", () => {
           scoreMax: number;
           score: number;
         };
-        const rows = FdoGeneratorGenerateDelegate<Row>(
+        const rows = FdoTableGenerateDelegate<Row>(
           [
             new FdoColumnId<Row>("id"),
             new FdoColumnFirstName<Row>("name"),
