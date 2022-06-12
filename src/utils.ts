@@ -1,8 +1,8 @@
-import { Dictionary, Any, List, KeyOf, KeysOf } from "@mantlebee/ts-core";
+import { Dictionary, Any, List, KeyOf } from "@mantlebee/ts-core";
 import { generateRandomBoolean } from "@mantlebee/ts-random";
 
-import { IFdoColumn } from "./interfaces";
-import { FdoMatrixTable, FdoTableOptions } from "./types";
+import { IFdoColumn, IFdoTable } from "./interfaces";
+import { FdoMatrix, FdoTableOptions } from "./types";
 
 function shouldBeNull<T>(
   column: IFdoColumn<T, Any, Any>,
@@ -16,14 +16,16 @@ function shouldBeNull<T>(
   );
 }
 
-export function FdoMatrixGetMatrixDelegate<
-  TTablesMap extends Dictionary<FdoMatrixTable<Any>>
->(tablesMap: TTablesMap): KeysOf<TTablesMap, List<Any>> {
-  const matrix = Object.keys(tablesMap).reduce((result, current) => {
-    const { table, rowsNumber } = tablesMap[current];
-    result[current as keyof TTablesMap] = table.getRows(rowsNumber);
+export function FdoGeneratorGetMatrixDelegate(
+  tables: List<IFdoTable<Any>>,
+  rowsNumberMap: Dictionary<number>
+): FdoMatrix {
+  const matrix = tables.reduce((result, current) => {
+    const { name } = current;
+    const rowsNumber = rowsNumberMap[name];
+    result.push({ table: current, rows: current.getRows(rowsNumber) });
     return result;
-  }, {} as KeysOf<TTablesMap, List<Any>>);
+  }, [] as FdoMatrix);
   return matrix;
 }
 

@@ -1,11 +1,6 @@
 import { Any, Dictionary, KeyOf, List } from "@mantlebee/ts-core";
 
-import {
-  FdoColumnOptions,
-  FdoMatrixResult,
-  FdoMatrixTable,
-  FdoTableOptions,
-} from "./types";
+import { FdoColumnOptions, FdoMatrix, FdoTableOptions } from "./types";
 
 export interface IFdoColumn<
   TRow,
@@ -17,22 +12,21 @@ export interface IFdoColumn<
   getValue(row: TRow): TValue;
 }
 
-export interface IFdoMatrix<
-  TTablesMap extends Dictionary<FdoMatrixTable<Any>>
-> {
-  readonly tablesMap: TTablesMap;
-  getMatrix(): FdoMatrixResult<TTablesMap>;
+export interface IFdoGenerator<> {
+  readonly tables: List<IFdoTable<Any>>;
+  getMatrix(rowsNumberMap: Dictionary<number>): FdoMatrix;
 }
 
 export interface IFdoRelation<TSourceRow, TTargetRow> {
   readonly sourceColumnName: KeyOf<TSourceRow>;
   readonly sourceTable: IFdoTable<TSourceRow>;
   readonly tagetTable: IFdoTable<TTargetRow>;
-  setValues<TTablesMap>(matrixResult: FdoMatrixResult<TTablesMap>): void;
+  setValues(matrix: FdoMatrix): void;
 }
 
 export interface IFdoTable<TRow> {
   readonly columns: List<IFdoColumn<TRow, Any, Any>>;
+  readonly name: string;
   readonly options?: FdoTableOptions<TRow>;
   getRows(rowsNumber: number): List<TRow>;
 }

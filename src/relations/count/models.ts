@@ -1,13 +1,11 @@
 import { FdoRelation } from "@/models";
-import { FdoMatrixResult } from "@/types";
+import { FdoMatrix } from "@/types";
 
 export class FdoRelationCount<TSourceRow, TTargetRow> extends FdoRelation<
   TSourceRow,
   TTargetRow
 > {
-  public setValues<TTablesMap>(
-    matrixResult: FdoMatrixResult<TTablesMap>
-  ): void {
+  public setValues(matrix: FdoMatrix): void {
     // const { sourceColumnName, sourceTable, tagetTable } = this;
   }
 }

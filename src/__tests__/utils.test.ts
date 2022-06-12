@@ -29,21 +29,20 @@ import {
 import { FdoTableGetRowsDelegate } from "@/utils";
 
 import { FdoTable } from "../models";
-import { FdoMatrixTable } from "../types";
-import { FdoMatrixGetMatrixDelegate } from "../utils";
+import { FdoGeneratorGetMatrixDelegate } from "../utils";
 
 describe("FdoTable", () => {
   describe("utils", () => {
-    describe("FdoMatrixGeneratorDelegate", () => {
+    describe("FdoGeneratorGetMatrixDelegate", () => {
       it("Generates a map of lists, the map as the same keys of the given tablesMap param.", () => {
         type Address = { city: string; street: string };
         type Contact = { phone: string; email: string };
         type Person = { name: string; surname: string };
-        const AddressTable = new FdoTable<Address>([
+        const AddressTable = new FdoTable<Address>("addresses", [
           new FdoColumnString("city", { maxLength: 20 }),
           new FdoColumnString("street", { maxLength: 20 }),
         ]);
-        const ContactTable = new FdoTable<Contact>([
+        const ContactTable = new FdoTable<Contact>("contacts", [
           new FdoColumnString("phone", {
             includeLowercase: false,
             includeNumbers: true,
@@ -52,24 +51,24 @@ describe("FdoTable", () => {
           }),
           new FdoColumnEmail("email"),
         ]);
-        const PersonTable = new FdoTable<Person>([
+        const PersonTable = new FdoTable<Person>("people", [
           new FdoColumnFirstName("name"),
           new FdoColumnLastName("surname"),
         ]);
-        const tablesMap: Dictionary<FdoMatrixTable<Any>> = {
-          addresses: { rowsNumber: 10, table: AddressTable },
-          contacts: { rowsNumber: 25, table: ContactTable },
-          people: { rowsNumber: 20, table: PersonTable },
+        const rowsNumberMap: Dictionary<number> = {
+          [AddressTable.name]: 10,
+          [ContactTable.name]: 25,
+          [PersonTable.name]: 20,
         };
-        const matrix = FdoMatrixGetMatrixDelegate(tablesMap);
-        expect(Object.keys(matrix)).toEqual([
-          "addresses",
-          "contacts",
-          "people",
-        ]);
-        expect(matrix.addresses.length).toBe(tablesMap.addresses.rowsNumber);
-        expect(matrix.contacts.length).toBe(tablesMap.contacts.rowsNumber);
-        expect(matrix.people.length).toBe(tablesMap.people.rowsNumber);
+        const tables = [AddressTable, ContactTable, PersonTable];
+        const matrix = FdoGeneratorGetMatrixDelegate(tables, rowsNumberMap);
+        expect(matrix.length).toBe(3);
+        matrix.forEach((matrixItem, index) => {
+          expect(matrixItem.table).toBe(tables[index]);
+          expect(matrixItem.rows.length).toBe(
+            rowsNumberMap[matrixItem.table.name]
+          );
+        });
       });
     });
     describe("FdoTableGetRowsDelegate", () => {

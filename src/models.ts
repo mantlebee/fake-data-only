@@ -1,13 +1,16 @@
 import { Any, Dictionary, KeyOf, List } from "@mantlebee/ts-core";
 
-import { IFdoColumn, IFdoMatrix, IFdoRelation, IFdoTable } from "./interfaces";
 import {
-  FdoColumnOptions,
-  FdoMatrixResult,
-  FdoMatrixTable,
-  FdoTableOptions,
-} from "./types";
-import { FdoMatrixGetMatrixDelegate, FdoTableGetRowsDelegate } from "./utils";
+  IFdoColumn,
+  IFdoGenerator,
+  IFdoRelation,
+  IFdoTable,
+} from "./interfaces";
+import { FdoColumnOptions, FdoMatrix, FdoTableOptions } from "./types";
+import {
+  FdoGeneratorGetMatrixDelegate,
+  FdoTableGetRowsDelegate,
+} from "./utils";
 
 export abstract class FdoColumn<
   TRow,
@@ -25,17 +28,16 @@ export abstract class FdoColumn<
   public abstract getValue(row: TRow): TValue;
 }
 
-export class FdoMatrix<TTablesMap extends Dictionary<FdoMatrixTable<Any>>>
-  implements IFdoMatrix<TTablesMap> {
-  public readonly tablesMap: TTablesMap;
+export class FdoGenerator implements IFdoGenerator {
+  public readonly tables: List<IFdoTable<Any>>;
 
-  public constructor(tablesMap: TTablesMap) {
-    this.tablesMap = tablesMap;
+  public constructor(tables: List<IFdoTable<Any>>) {
+    this.tables = tables;
   }
 
-  public getMatrix(): FdoMatrixResult<TTablesMap> {
-    const { tablesMap } = this;
-    return FdoMatrixGetMatrixDelegate(tablesMap);
+  public getMatrix(rowsNumberMap: Dictionary<number>): FdoMatrix {
+    const { tables } = this;
+    return FdoGeneratorGetMatrixDelegate(tables, rowsNumberMap);
   }
 }
 
@@ -55,23 +57,24 @@ export abstract class FdoRelation<TSourceRow, TTargetRow>
     this.tagetTable = tagetTable;
   }
 
-  // protected getTableRows<TRow, TTablesMap>(table: IFdoTable<TRow>, matrixResult: FdoMatrixResult<TTablesMap>): List<TRow> {
+  // protected getTableRows<TRow, TTablesMap>(table: IFdoTable<TRow>, matrixResult: FdoMatrix): List<TRow> {
   // }
 
-  public abstract setValues<TTablesMap>(
-    matrixResult: FdoMatrixResult<TTablesMap>
-  ): void;
+  public abstract setValues(matrix: FdoMatrix): void;
 }
 
 export class FdoTable<TRow> implements IFdoTable<TRow> {
   public readonly columns: List<IFdoColumn<TRow, Any, Any>>;
+  public readonly name: string;
   public readonly options?: FdoTableOptions<TRow>;
 
   public constructor(
+    name: string,
     columns: List<IFdoColumn<TRow, Any, Any>>,
     options?: FdoTableOptions<TRow>
   ) {
     this.columns = columns;
+    this.name = name;
     this.options = options;
   }
 
