@@ -2,13 +2,13 @@ import { FdoColumnOptions } from "@/types";
 
 import { FdoColumnConstructor, FdoColumnOptionsValueGettersMap } from "./types";
 
-export function FdoColumnDependencyValueDelegate<
+export function FdoColumnDependencyGetValueDelegate<
   TRow,
   TValue,
   TOptions extends FdoColumnOptions,
   TConstructor extends FdoColumnConstructor<TRow, TValue, TOptions>
 >(
-  item: TRow,
+  row: TRow,
   columnConstructor: TConstructor,
   optionsValuesGetters: FdoColumnOptionsValueGettersMap<TRow, TOptions>
 ): TValue {
@@ -18,8 +18,8 @@ export function FdoColumnDependencyValueDelegate<
       optionsValuesGetters[
         key as keyof FdoColumnOptionsValueGettersMap<TRow, TOptions>
       ];
-    options[key as keyof TOptions] = valueGetter(item);
+    options[key as keyof TOptions] = valueGetter(row);
   });
   const column = new columnConstructor("", options);
-  return column.value(item);
+  return column.getValue(row);
 }

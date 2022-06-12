@@ -1,14 +1,14 @@
 import { numberIsInteger } from "@mantlebee/ts-core";
 
-import { FdoColumnNumberValueDelegate } from "../utils";
+import { FdoColumnNumberGetValueDelegate } from "../utils";
 
-type Item = {
+type Row = {
   decimals: number;
   max: number;
   min: number;
 };
 
-const item: Item = {
+const row: Row = {
   decimals: 2,
   max: 12,
   min: 5,
@@ -16,15 +16,15 @@ const item: Item = {
 
 describe("FdoColumnNumber", () => {
   describe("utils", () => {
-    describe("FdoColumnNumberValueDelegate", () => {
+    describe("FdoColumnNumberGetValueDelegate", () => {
       it("Generates an integer number between 0 and 10", () => {
-        const random = FdoColumnNumberValueDelegate({ max: 10 });
+        const random = FdoColumnNumberGetValueDelegate({ max: 10 });
         expect(numberIsInteger(random)).toBeTruthy();
         expect(random).toBeGreaterThanOrEqual(0);
         expect(random).toBeLessThanOrEqual(10);
       });
       it("Generates an integer number between 5 and 10", () => {
-        const random = FdoColumnNumberValueDelegate({
+        const random = FdoColumnNumberGetValueDelegate({
           max: 10,
           min: 5,
         });
@@ -33,7 +33,7 @@ describe("FdoColumnNumber", () => {
         expect(random).toBeLessThanOrEqual(10);
       });
       it("Generates a float number between 5 and 10, with 2 digits after the decimals point", () => {
-        const random = FdoColumnNumberValueDelegate({
+        const random = FdoColumnNumberGetValueDelegate({
           decimals: 2,
           max: 10,
           min: 5,

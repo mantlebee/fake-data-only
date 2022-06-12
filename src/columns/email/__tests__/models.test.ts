@@ -1,12 +1,12 @@
 import { FdoColumnEmailDependency } from "../models";
 
-type Item = {
+type Row = {
   domain: string;
   firstName: string;
   lastName: string;
 };
 
-const item: Item = {
+const row: Row = {
   domain: "gmail.com",
   firstName: "John",
   lastName: "Doe",
@@ -15,13 +15,13 @@ const item: Item = {
 describe("FdoColumnEmail", () => {
   describe("models", () => {
     describe("FdoColumnEmailDependency", () => {
-      it("Generates a random email, taking domain, firstName and lastname from the passed item", () => {
-        const dependantColumn = new FdoColumnEmailDependency<Item>("domain", {
+      it("Generates a random email, taking domain, firstName and lastname from the passed row", () => {
+        const dependantColumn = new FdoColumnEmailDependency<Row>("domain", {
           domains: (a) => [a.domain],
           firstNames: (a) => [a.firstName],
           lastNames: (a) => [a.lastName],
         });
-        const random = dependantColumn.value(item);
+        const random = dependantColumn.getValue(row);
         expect(random).toBe("john.doe@gmail.com");
       });
     });

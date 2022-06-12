@@ -4,7 +4,7 @@ import { FdoColumn } from "@/models";
 import { FdoColumnConstructor } from "@/columns";
 
 import { FdoColumnDateOptions } from "./types";
-import { FdoColumnDateValueDelegate } from "./utils";
+import { FdoColumnDateGetValueDelegate } from "./utils";
 import { FdoColumnDependencyAbstract } from "../dependency";
 
 export class FdoColumnDate<TRow> extends FdoColumn<
@@ -12,8 +12,8 @@ export class FdoColumnDate<TRow> extends FdoColumn<
   Date,
   FdoColumnDateOptions
 > {
-  public value(): Date {
-    return FdoColumnDateValueDelegate(this.options);
+  public getValue(): Date {
+    return FdoColumnDateGetValueDelegate(this.options);
   }
 }
 

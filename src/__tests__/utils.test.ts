@@ -26,11 +26,11 @@ import {
   FdoColumnNumberDependency,
   FdoColumnString,
 } from "@/columns";
-import { FdoTableGenerateDelegate } from "@/utils";
+import { FdoTableGetRowsDelegate } from "@/utils";
 
 import { FdoTable } from "../models";
 import { FdoMatrixTable } from "../types";
-import { FdoMatrixGenerateDelegate } from "../utils";
+import { FdoMatrixGetMatrixDelegate } from "../utils";
 
 describe("FdoTable", () => {
   describe("utils", () => {
@@ -61,7 +61,7 @@ describe("FdoTable", () => {
           contacts: { rowsNumber: 25, table: ContactTable },
           people: { rowsNumber: 20, table: PersonTable },
         };
-        const matrix = FdoMatrixGenerateDelegate(tablesMap);
+        const matrix = FdoMatrixGetMatrixDelegate(tablesMap);
         expect(Object.keys(matrix)).toEqual([
           "addresses",
           "contacts",
@@ -72,10 +72,10 @@ describe("FdoTable", () => {
         expect(matrix.people.length).toBe(tablesMap.people.rowsNumber);
       });
     });
-    describe("FdoTableGenerateDelegate", () => {
+    describe("FdoTableGetRowsDelegate", () => {
       it("Generates 5 rows of {name: string}", () => {
         type Row = { name: string };
-        const rows = FdoTableGenerateDelegate<Row>(
+        const rows = FdoTableGetRowsDelegate<Row>(
           [
             new FdoColumnString<Row>("name", {
               includeLowercase: true,
@@ -112,7 +112,7 @@ describe("FdoTable", () => {
           scoreMax: number;
           score: number;
         };
-        const rows = FdoTableGenerateDelegate<Row>(
+        const rows = FdoTableGetRowsDelegate<Row>(
           [
             new FdoColumnId<Row>("id"),
             new FdoColumnFirstName<Row>("name"),

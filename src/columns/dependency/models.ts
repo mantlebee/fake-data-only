@@ -3,7 +3,7 @@ import { KeyOf } from "@mantlebee/ts-core";
 import { FdoColumn } from "@/models";
 import { FdoColumnOptions } from "@/types";
 
-import { FdoColumnDependencyValueDelegate } from "./utils";
+import { FdoColumnDependencyGetValueDelegate } from "./utils";
 import { FdoColumnConstructor, FdoColumnOptionsValueGettersMap } from "./types";
 
 export abstract class FdoColumnDependencyAbstract<
@@ -26,9 +26,9 @@ export abstract class FdoColumnDependencyAbstract<
     this.optionsValuesGetters = optionsValuesGetters;
   }
 
-  public value(item: TRow): TValue {
-    return FdoColumnDependencyValueDelegate(
-      item,
+  public getValue(row: TRow): TValue {
+    return FdoColumnDependencyGetValueDelegate(
+      row,
       this.columnConstructor,
       this.optionsValuesGetters
     );

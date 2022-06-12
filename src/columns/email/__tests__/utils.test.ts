@@ -1,21 +1,21 @@
 import { isEmail, List } from "@mantlebee/ts-core";
 
-import { FdoColumnEmailValueDelegate } from "../utils";
+import { FdoColumnEmailGetValueDelegate } from "../utils";
 
 describe("FdoColumnEmail", () => {
   describe("utils", () => {
-    describe("FdoColumnEmailValueDelegate", () => {
+    describe("FdoColumnEmailGetValueDelegate", () => {
       it("Generates a random email", () => {
         const randoms: List<string> = [];
         for (let i = 0; i < 100; i++)
-          randoms.push(FdoColumnEmailValueDelegate());
+          randoms.push(FdoColumnEmailGetValueDelegate());
         expect(randoms.every(isEmail)).toBeTruthy();
       });
       it("Generates a random email choosing a domain from the given list", () => {
         const randoms: List<string> = [];
         for (let i = 0; i < 100; i++)
           randoms.push(
-            FdoColumnEmailValueDelegate({
+            FdoColumnEmailGetValueDelegate({
               domains: ["outlook.it", "outlook.com"],
             })
           );

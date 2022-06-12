@@ -20,7 +20,7 @@ export class FdoColumnId<TRow> extends FdoColumn<
     this.identityManager = new NumericIdentityManager(lastValue);
   }
 
-  public value(): number {
+  public getValue(): number {
     return this.identityManager.newValue();
   }
 }

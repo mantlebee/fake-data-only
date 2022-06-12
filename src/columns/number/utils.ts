@@ -3,7 +3,7 @@ import { generateRandomNumber } from "@mantlebee/ts-random";
 import { FdoColumnNumberOptionsDefault } from "./constants";
 import { FdoColumnNumberOptions } from "./types";
 
-export function FdoColumnNumberValueDelegate(
+export function FdoColumnNumberGetValueDelegate(
   options?: FdoColumnNumberOptions
 ): number {
   let { decimals = 0, max, min = 0 } = {

@@ -15,4 +15,4 @@ export type FdoColumnConstructor<
 export type FdoColumnOptionsValueGettersMap<
   TRow,
   TOptions extends FdoColumnOptions
-> = KeysOf<TOptions, (item: TRow) => TOptions[KeyOf<TOptions>]>;
+> = KeysOf<TOptions, (row: TRow) => TOptions[KeyOf<TOptions>]>;

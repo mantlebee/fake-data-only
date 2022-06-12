@@ -1,8 +1,8 @@
 import { extractRandomItem } from "@mantlebee/ts-random";
 
 import {
-  FdoColumnFirstNameValueDelegate,
-  FdoColumnLastNameValueDelegate,
+  FdoColumnFirstNameGetValueDelegate,
+  FdoColumnLastNameGetValueDelegate,
 } from "@/columns";
 import { FirstLevelDomains, SecondLevelDomains } from "@/constants";
 
@@ -14,13 +14,13 @@ function generateRandomDomain(): string {
   return `${randomSecondLevel}.${randomFirstLevel}`;
 }
 
-export function FdoColumnEmailValueDelegate(
+export function FdoColumnEmailGetValueDelegate(
   options?: FdoColumnEmailOptions
 ): string {
   const {
     domains = [generateRandomDomain()],
-    firstNames = [FdoColumnFirstNameValueDelegate()],
-    lastNames = [FdoColumnLastNameValueDelegate()],
+    firstNames = [FdoColumnFirstNameGetValueDelegate()],
+    lastNames = [FdoColumnLastNameGetValueDelegate()],
   } = { ...options };
   const domain = extractRandomItem(domains);
   const firstName = extractRandomItem(firstNames);

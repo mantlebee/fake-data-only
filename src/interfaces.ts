@@ -9,18 +9,18 @@ export interface IFdoColumn<
 > {
   readonly name: KeyOf<TRow>;
   readonly options: TOptions;
-  value(item: TRow): TValue;
+  getValue(row: TRow): TValue;
 }
 
 export interface IFdoMatrix<
   TTablesMap extends Dictionary<FdoMatrixTable<Any>>
 > {
   readonly tablesMap: TTablesMap;
-  generate(): KeysOf<TTablesMap, List<Any>>;
+  getMatrix(): KeysOf<TTablesMap, List<Any>>;
 }
 
 export interface IFdoTable<TRow> {
   readonly columns: List<IFdoColumn<TRow, Any, Any>>;
   readonly options?: FdoTableOptions<TRow>;
-  generate(rowsNumber: number): List<TRow>;
+  getRows(rowsNumber: number): List<TRow>;
 }

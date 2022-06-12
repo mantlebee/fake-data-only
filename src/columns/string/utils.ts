@@ -11,7 +11,7 @@ import {
 
 import { FdoColumnStringOptions } from "./types";
 
-export function FdoColumnStringValueDelegate(
+export function FdoColumnStringGetValueDelegate(
   options: FdoColumnStringOptions
 ): string {
   const {

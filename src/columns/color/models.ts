@@ -9,7 +9,7 @@ export class FdoColumnColor<TRow> extends FdoColumn<
   string,
   FdoColumnColorOptions
 > {
-  public value(): string {
+  public getValue(): string {
     const { from, to, transparent } = { ...this.options };
     return generateRandomColor(transparent, from, to).rgba();
   }

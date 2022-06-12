@@ -5,7 +5,7 @@ import { FemaleFirstNames, Gender, MaleFirstNames } from "@/constants";
 import { FdoColumnFirstNameOptions } from "./types";
 import { FdoColumnFirstNameOptionsDefault } from "./constants";
 
-export function FdoColumnFirstNameValueDelegate(
+export function FdoColumnFirstNameGetValueDelegate(
   options?: FdoColumnFirstNameOptions
 ): string {
   const { gender } = { ...FdoColumnFirstNameOptionsDefault, ...options };

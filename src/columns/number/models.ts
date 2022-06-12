@@ -4,15 +4,15 @@ import { FdoColumnConstructor, FdoColumnDependencyAbstract } from "@/columns";
 import { FdoColumn } from "@/models";
 
 import { FdoColumnNumberOptions } from "./types";
-import { FdoColumnNumberValueDelegate } from "./utils";
+import { FdoColumnNumberGetValueDelegate } from "./utils";
 
 export class FdoColumnNumber<TRow> extends FdoColumn<
   TRow,
   number,
   FdoColumnNumberOptions
 > {
-  public value(): number {
-    return FdoColumnNumberValueDelegate(this.options);
+  public getValue(): number {
+    return FdoColumnNumberGetValueDelegate(this.options);
   }
 }
 

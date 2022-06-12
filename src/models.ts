@@ -2,7 +2,7 @@ import { Any, Dictionary, KeyOf, KeysOf, List } from "@mantlebee/ts-core";
 
 import { IFdoColumn, IFdoMatrix, IFdoTable } from "./interfaces";
 import { FdoColumnOptions, FdoMatrixTable, FdoTableOptions } from "./types";
-import { FdoMatrixGenerateDelegate, FdoTableGenerateDelegate } from "./utils";
+import { FdoMatrixGetMatrixDelegate, FdoTableGetRowsDelegate } from "./utils";
 
 export abstract class FdoColumn<
   TRow,
@@ -17,7 +17,7 @@ export abstract class FdoColumn<
     if (options) this.options = options;
   }
 
-  public abstract value(item: TRow): TValue;
+  public abstract getValue(row: TRow): TValue;
 }
 
 export class FdoMatrix<TTablesMap extends Dictionary<FdoMatrixTable<Any>>>
@@ -28,9 +28,9 @@ export class FdoMatrix<TTablesMap extends Dictionary<FdoMatrixTable<Any>>>
     this.tablesMap = tablesMap;
   }
 
-  public generate(): KeysOf<TTablesMap, List<any>> {
+  public getMatrix(): KeysOf<TTablesMap, List<any>> {
     const { tablesMap } = this;
-    return FdoMatrixGenerateDelegate(tablesMap);
+    return FdoMatrixGetMatrixDelegate(tablesMap);
   }
 }
 
@@ -46,8 +46,8 @@ export class FdoTable<TRow> implements IFdoTable<TRow> {
     this.options = options;
   }
 
-  public generate(rowsNumber: number): List<TRow> {
+  public getRows(rowsNumber: number): List<TRow> {
     const { columns, options } = this;
-    return FdoTableGenerateDelegate(columns, rowsNumber, options);
+    return FdoTableGetRowsDelegate(columns, rowsNumber, options);
   }
 }

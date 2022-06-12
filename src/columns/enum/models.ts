@@ -2,7 +2,7 @@ import { KeyOf } from "@mantlebee/ts-core";
 
 import { FdoColumn } from "@/models";
 
-import { FdoColumnEnumValueDelegate } from "./utils";
+import { FdoColumnEnumGetValueDelegate } from "./utils";
 
 export class FdoColumnEnum<TRow, TEnum> extends FdoColumn<TRow, TEnum> {
   public readonly enumerative!: TEnum;
@@ -12,7 +12,7 @@ export class FdoColumnEnum<TRow, TEnum> extends FdoColumn<TRow, TEnum> {
     this.enumerative = enumerative;
   }
 
-  public value(): TEnum {
-    return FdoColumnEnumValueDelegate(this.enumerative);
+  public getValue(): TEnum {
+    return FdoColumnEnumGetValueDelegate(this.enumerative);
   }
 }
