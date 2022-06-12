@@ -1,6 +1,6 @@
 import { List } from "@mantlebee/ts-core";
 
-import { FdoRelationCountCoundition } from "../types";
+import { FdoRelationCountCondition } from "../types";
 import { FdoRelationCountSetValuesDelegate } from "../utils";
 
 describe("FdoRelationCount", () => {
@@ -17,7 +17,7 @@ describe("FdoRelationCount", () => {
           { contactsCount: -1, id: 1 },
           { contactsCount: -1, id: 2 },
         ];
-        const condition: FdoRelationCountCoundition<Person, Contact> = (s, t) =>
+        const condition: FdoRelationCountCondition<Person, Contact> = (s, t) =>
           t.personId === s.id;
         FdoRelationCountSetValuesDelegate(
           condition,

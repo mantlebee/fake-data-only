@@ -4,14 +4,14 @@ import { IFdoTable } from "@/interfaces";
 import { FdoRelation } from "@/models";
 import { FdoMatrix } from "@/types";
 
-import { FdoRelationCountCoundition } from "./types";
+import { FdoRelationCountCondition } from "./types";
 import { FdoRelationCountSetValuesDelegate } from "./utils";
 
 export class FdoRelationCount<TSourceRow, TTargetRow> extends FdoRelation<
   TSourceRow,
   TTargetRow
 > {
-  private readonly countConditionDelegate: FdoRelationCountCoundition<
+  private readonly countConditionDelegate: FdoRelationCountCondition<
     TSourceRow,
     TTargetRow
   >;
@@ -20,7 +20,7 @@ export class FdoRelationCount<TSourceRow, TTargetRow> extends FdoRelation<
     sourceColumnName: KeyOf<TSourceRow>,
     sourceTable: IFdoTable<TSourceRow>,
     targetTable: IFdoTable<TTargetRow>,
-    countConditionDelegate: FdoRelationCountCoundition<TSourceRow, TTargetRow>
+    countConditionDelegate: FdoRelationCountCondition<TSourceRow, TTargetRow>
   ) {
     super(sourceColumnName, sourceTable, targetTable);
     this.countConditionDelegate = countConditionDelegate;

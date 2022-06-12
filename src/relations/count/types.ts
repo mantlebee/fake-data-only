@@ -1,4 +1,6 @@
-export type FdoRelationCountCoundition<TSourceRow, TTargetRow> = (
+import { List } from "@mantlebee/ts-core";
+
+export type FdoRelationCustomCondition<TSourceRow, TTargetRow> = (
   sourceRow: TSourceRow,
-  targetRow: TTargetRow
-) => boolean;
+  targetRows: List<TTargetRow>
+) => void;
