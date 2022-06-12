@@ -24,16 +24,20 @@ import {
   FdoColumnNumberDependency,
   FdoColumnString,
 } from "@/columns";
+import {
+  FdoRelationCount,
+  FdoRelationCustom,
+  FdoRelationValue,
+} from "@/relations";
+import { FdoMatrixRow } from "@/types";
 import { FdoTableGetRowsDelegate } from "@/utils";
 
 import { FdoTable } from "../models";
 import { FdoGeneratorGetMatrixDelegate } from "../utils";
-import { FdoRelationValue } from "@/relations/value";
-import { FdoRelationCount } from "@/relations/count";
 
 type Product = { categoryId: number; id: number; name: string };
 type ProductCategory = { id: number; name: string };
-type Order = { id: number; productsCount: number };
+type Order = { categoriesCount: number; id: number; productsCount: number };
 type OrderProduct = { orderId: number; productId: number };
 
 const productCategoriesTable = new FdoTable<ProductCategory>(
@@ -71,6 +75,33 @@ const orderProductsCountRelation = new FdoRelationCount<Order, OrderProduct>(
   orderProductsTable,
   (o, op) => op.orderId === o.id
 );
+const orderCategoriesCountRelations = new FdoRelationCustom<
+  Order,
+  OrderProduct,
+  number
+>(
+  "categoriesCount",
+  ordersTable,
+  orderProductsTable,
+  (order, orderProducts, matrix) => {
+    // Product ids of the order
+    const productsIds = orderProducts
+      .filter((a) => a.orderId === order.id)
+      .map((a) => a.productId);
+    // Products of the order
+    const products = (matrix.find(
+      (a) => a.table === productsTable
+    ) as FdoMatrixRow<Product>).rows;
+    // Categories ids list with duplicate values
+    const fullCategoriesIds = products
+      .filter((a) => productsIds.includes(a.id))
+      .map((a) => a.categoryId);
+    // Distinct of categories ids
+    const categoriesIds = new Set(fullCategoriesIds).values;
+    // Count of the categories of the order
+    return categoriesIds.length;
+  }
+);
 
 const tables = [
   productCategoriesTable,
@@ -83,6 +114,7 @@ const relations = [
   orderProductOrderRelation,
   orderProductProductRelation,
   orderProductsCountRelation,
+  orderCategoriesCountRelations,
 ];
 
 describe("FdoTable", () => {
