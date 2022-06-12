@@ -1,5 +1,4 @@
 import {
-  Any,
   Dictionary,
   isBoolean,
   isDate,
@@ -16,7 +15,6 @@ import {
   FdoColumnCustom,
   FdoColumnDate,
   FdoColumnDateDependency,
-  FdoColumnEmail,
   FdoColumnEmailDependency,
   FdoColumnEnum,
   FdoColumnFirstName,
@@ -30,46 +28,99 @@ import { FdoTableGetRowsDelegate } from "@/utils";
 
 import { FdoTable } from "../models";
 import { FdoGeneratorGetMatrixDelegate } from "../utils";
+import { FdoRelationValue } from "@/relations/value";
+import { FdoRelationCount } from "@/relations/count";
 
-type Address = { city: string; street: string };
-type Contact = { personId: number; phone: string; email: string };
-type Person = { id: number; name: string; surname: string };
-const addressTable = new FdoTable<Address>("addresses", [
-  new FdoColumnString("city", { maxLength: 20 }),
-  new FdoColumnString("street", { maxLength: 20 }),
-]);
-const contactTable = new FdoTable<Contact>("contacts", [
-  new FdoColumnString("phone", {
-    includeLowercase: false,
-    includeNumbers: true,
-    maxLength: 10,
-    minLength: 10,
-  }),
-  new FdoColumnEmail("email"),
-]);
-const personTable = new FdoTable<Person>("people", [
+type Product = { categoryId: number; id: number; name: string };
+type ProductCategory = { id: number; name: string };
+type Order = { id: number; productsCount: number };
+type OrderProduct = { orderId: number; productId: number };
+
+const productCategoriesTable = new FdoTable<ProductCategory>(
+  "product-categories",
+  [new FdoColumnId("id"), new FdoColumnString("name", { maxLength: 20 })]
+);
+const productsTable = new FdoTable<Product>("products", [
   new FdoColumnId("id"),
-  new FdoColumnFirstName("name"),
-  new FdoColumnLastName("surname"),
+  new FdoColumnString("name", { maxLength: 20 }),
 ]);
+const orderProductsTable = new FdoTable<OrderProduct>("order-products", []);
+const ordersTable = new FdoTable<Order>("orders", [new FdoColumnId("id")]);
+
+const productCategoryRelation = new FdoRelationValue<Product, ProductCategory>(
+  "categoryId",
+  productsTable,
+  productCategoriesTable,
+  "id"
+);
+const orderProductOrderRelation = new FdoRelationValue<OrderProduct, Order>(
+  "orderId",
+  orderProductsTable,
+  ordersTable,
+  "id"
+);
+const orderProductProductRelation = new FdoRelationValue<OrderProduct, Product>(
+  "productId",
+  orderProductsTable,
+  productsTable,
+  "id"
+);
+const orderProductsCountRelation = new FdoRelationCount<Order, OrderProduct>(
+  "productsCount",
+  ordersTable,
+  orderProductsTable,
+  (o, op) => op.orderId === o.id
+);
+
+const tables = [
+  productCategoriesTable,
+  productsTable,
+  orderProductsTable,
+  ordersTable,
+];
+const relations = [
+  productCategoryRelation,
+  orderProductOrderRelation,
+  orderProductProductRelation,
+  orderProductsCountRelation,
+];
 
 describe("FdoTable", () => {
   describe("utils", () => {
     describe("FdoGeneratorGetMatrixDelegate", () => {
       it("Generates a map of lists, the map as the same keys of the given tablesMap param.", () => {
         const rowsNumberMap: Dictionary<number> = {
-          [addressTable.name]: 10,
-          [contactTable.name]: 25,
-          [personTable.name]: 20,
+          [productCategoriesTable.name]: 10,
+          [productsTable.name]: 50,
+          [orderProductsTable.name]: 5,
+          [ordersTable.name]: 1,
         };
-        const tables = [addressTable, contactTable, personTable];
-        const matrix = FdoGeneratorGetMatrixDelegate(tables, rowsNumberMap);
-        expect(matrix.length).toBe(3);
+        const matrix = FdoGeneratorGetMatrixDelegate(
+          tables,
+          rowsNumberMap,
+          relations
+        );
+        expect(matrix.length).toBe(4);
         matrix.forEach((matrixItem, index) => {
           expect(matrixItem.table).toBe(tables[index]);
           expect(matrixItem.rows.length).toBe(
             rowsNumberMap[matrixItem.table.name]
           );
+        });
+        const productCategories = matrix[0].rows;
+        const products = matrix[1].rows;
+        const orderProducts = matrix[2].rows;
+        const orders = matrix[3].rows;
+        const categoriesIds = productCategories.map((a) => a.id);
+        products.forEach((a) => {
+          expect(categoriesIds).toContain(a.categoryId);
+        });
+        const ordersIds = orders.map((a) => a.id);
+        orderProducts.forEach((a) => {
+          expect(ordersIds).toContain(a.orderId);
+        });
+        orders.forEach((a) => {
+          expect(a.productsCount).toBeLessThanOrEqual(orderProducts.length);
         });
       });
     });

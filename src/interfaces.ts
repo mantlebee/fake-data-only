@@ -13,6 +13,7 @@ export interface IFdoColumn<
 }
 
 export interface IFdoGenerator<> {
+  readonly relations?: List<IFdoRelation<Any, Any>>;
   readonly tables: List<IFdoTable<Any>>;
   getMatrix(rowsNumberMap: Dictionary<number>): FdoMatrix;
 }

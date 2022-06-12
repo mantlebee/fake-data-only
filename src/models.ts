@@ -34,15 +34,20 @@ export abstract class FdoColumn<
 }
 
 export class FdoGenerator implements IFdoGenerator {
+  public readonly relations?: List<IFdoRelation<Any, Any>>;
   public readonly tables: List<IFdoTable<Any>>;
 
-  public constructor(tables: List<IFdoTable<Any>>) {
+  public constructor(
+    tables: List<IFdoTable<Any>>,
+    relations?: List<IFdoRelation<Any, Any>>
+  ) {
+    this.relations = relations;
     this.tables = tables;
   }
 
   public getMatrix(rowsNumberMap: Dictionary<number>): FdoMatrix {
-    const { tables } = this;
-    return FdoGeneratorGetMatrixDelegate(tables, rowsNumberMap);
+    const { relations, tables } = this;
+    return FdoGeneratorGetMatrixDelegate(tables, rowsNumberMap, relations);
   }
 }
 

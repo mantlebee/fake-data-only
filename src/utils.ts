@@ -1,7 +1,7 @@
 import { Dictionary, Any, List, KeyOf } from "@mantlebee/ts-core";
 import { generateRandomBoolean } from "@mantlebee/ts-random";
 
-import { IFdoColumn, IFdoTable } from "./interfaces";
+import { IFdoColumn, IFdoRelation, IFdoTable } from "./interfaces";
 import { FdoMatrix, FdoTableOptions } from "./types";
 
 function shouldBeNull<T>(
@@ -18,7 +18,8 @@ function shouldBeNull<T>(
 
 export function FdoGeneratorGetMatrixDelegate(
   tables: List<IFdoTable<Any>>,
-  rowsNumberMap: Dictionary<number>
+  rowsNumberMap: Dictionary<number>,
+  relations?: List<IFdoRelation<Any, Any>>
 ): FdoMatrix {
   const matrix = tables.reduce((result, current) => {
     const { name } = current;
@@ -26,6 +27,7 @@ export function FdoGeneratorGetMatrixDelegate(
     result.push({ table: current, rows: current.getRows(rowsNumber) });
     return result;
   }, [] as FdoMatrix);
+  if (relations) relations.forEach((a) => a.setValues(matrix));
   return matrix;
 }
 
