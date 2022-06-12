@@ -1,5 +1,3 @@
-import { FdoColumnEmail, FdoColumnId } from "@/columns";
-import { FdoTable } from "@/models";
 import { List } from "@mantlebee/ts-core";
 
 import { FdoRelationCountCoundition } from "../types";
