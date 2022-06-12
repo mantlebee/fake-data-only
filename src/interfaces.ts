@@ -20,7 +20,7 @@ export interface IFdoGenerator<> {
 export interface IFdoRelation<TSourceRow, TTargetRow> {
   readonly sourceColumnName: KeyOf<TSourceRow>;
   readonly sourceTable: IFdoTable<TSourceRow>;
-  readonly tagetTable: IFdoTable<TTargetRow>;
+  readonly targetTable: IFdoTable<TTargetRow>;
   setValues(matrix: FdoMatrix): void;
 }
 

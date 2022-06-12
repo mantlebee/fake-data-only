@@ -31,36 +31,38 @@ import { FdoTableGetRowsDelegate } from "@/utils";
 import { FdoTable } from "../models";
 import { FdoGeneratorGetMatrixDelegate } from "../utils";
 
+type Address = { city: string; street: string };
+type Contact = { personId: number; phone: string; email: string };
+type Person = { id: number; name: string; surname: string };
+const addressTable = new FdoTable<Address>("addresses", [
+  new FdoColumnString("city", { maxLength: 20 }),
+  new FdoColumnString("street", { maxLength: 20 }),
+]);
+const contactTable = new FdoTable<Contact>("contacts", [
+  new FdoColumnString("phone", {
+    includeLowercase: false,
+    includeNumbers: true,
+    maxLength: 10,
+    minLength: 10,
+  }),
+  new FdoColumnEmail("email"),
+]);
+const personTable = new FdoTable<Person>("people", [
+  new FdoColumnId("id"),
+  new FdoColumnFirstName("name"),
+  new FdoColumnLastName("surname"),
+]);
+
 describe("FdoTable", () => {
   describe("utils", () => {
     describe("FdoGeneratorGetMatrixDelegate", () => {
       it("Generates a map of lists, the map as the same keys of the given tablesMap param.", () => {
-        type Address = { city: string; street: string };
-        type Contact = { phone: string; email: string };
-        type Person = { name: string; surname: string };
-        const AddressTable = new FdoTable<Address>("addresses", [
-          new FdoColumnString("city", { maxLength: 20 }),
-          new FdoColumnString("street", { maxLength: 20 }),
-        ]);
-        const ContactTable = new FdoTable<Contact>("contacts", [
-          new FdoColumnString("phone", {
-            includeLowercase: false,
-            includeNumbers: true,
-            maxLength: 10,
-            minLength: 10,
-          }),
-          new FdoColumnEmail("email"),
-        ]);
-        const PersonTable = new FdoTable<Person>("people", [
-          new FdoColumnFirstName("name"),
-          new FdoColumnLastName("surname"),
-        ]);
         const rowsNumberMap: Dictionary<number> = {
-          [AddressTable.name]: 10,
-          [ContactTable.name]: 25,
-          [PersonTable.name]: 20,
+          [addressTable.name]: 10,
+          [contactTable.name]: 25,
+          [personTable.name]: 20,
         };
-        const tables = [AddressTable, ContactTable, PersonTable];
+        const tables = [addressTable, contactTable, personTable];
         const matrix = FdoGeneratorGetMatrixDelegate(tables, rowsNumberMap);
         expect(matrix.length).toBe(3);
         matrix.forEach((matrixItem, index) => {

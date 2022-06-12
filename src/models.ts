@@ -6,7 +6,12 @@ import {
   IFdoRelation,
   IFdoTable,
 } from "./interfaces";
-import { FdoColumnOptions, FdoMatrix, FdoTableOptions } from "./types";
+import {
+  FdoColumnOptions,
+  FdoMatrix,
+  FdoMatrixRow,
+  FdoTableOptions,
+} from "./types";
 import {
   FdoGeneratorGetMatrixDelegate,
   FdoTableGetRowsDelegate,
@@ -45,20 +50,24 @@ export abstract class FdoRelation<TSourceRow, TTargetRow>
   implements IFdoRelation<TSourceRow, TTargetRow> {
   public readonly sourceColumnName: KeyOf<TSourceRow>;
   public readonly sourceTable: IFdoTable<TSourceRow>;
-  public readonly tagetTable: IFdoTable<TTargetRow>;
+  public readonly targetTable: IFdoTable<TTargetRow>;
 
   public constructor(
     sourceColumnName: KeyOf<TSourceRow>,
     sourceTable: IFdoTable<TSourceRow>,
-    tagetTable: IFdoTable<TTargetRow>
+    targetTable: IFdoTable<TTargetRow>
   ) {
     this.sourceColumnName = sourceColumnName;
     this.sourceTable = sourceTable;
-    this.tagetTable = tagetTable;
+    this.targetTable = targetTable;
   }
 
-  // protected getTableRows<TRow, TTablesMap>(table: IFdoTable<TRow>, matrixResult: FdoMatrix): List<TRow> {
-  // }
+  protected getTableRows<TRow>(
+    table: IFdoTable<TRow>,
+    matrix: FdoMatrix
+  ): List<TRow> {
+    return (matrix.find((a) => a.table === table) as FdoMatrixRow<TRow>).rows;
+  }
 
   public abstract setValues(matrix: FdoMatrix): void;
 }
