@@ -6,7 +6,7 @@ import { FdoRelationCountSetValuesDelegate } from "../utils";
 describe("FdoRelationCount", () => {
   describe("utils", () => {
     describe("FdoRelationCountSetValueDelegate", () => {
-      it("Correct count", () => {
+      it("Set the correct count.", () => {
         type Contact = { email: string; personId: number };
         type Person = { contactsCount: number; id: number };
         const contacts: List<Contact> = [
