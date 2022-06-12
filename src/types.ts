@@ -1,7 +1,9 @@
-import { KeyOf, List } from "@mantlebee/ts-core";
+import { Any, KeyOf, KeysOf, List } from "@mantlebee/ts-core";
 import { IFdoTable } from "./interfaces";
 
 export type FdoColumnOptions = {};
+
+export type FdoMatrixResult<TTablesMap> = KeysOf<TTablesMap, List<Any>>;
 
 export type FdoMatrixTable<TRow> = {
   rowsNumber: number;

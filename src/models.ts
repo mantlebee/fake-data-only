@@ -1,7 +1,12 @@
-import { Any, Dictionary, KeyOf, KeysOf, List } from "@mantlebee/ts-core";
+import { Any, Dictionary, KeyOf, List } from "@mantlebee/ts-core";
 
-import { IFdoColumn, IFdoMatrix, IFdoTable } from "./interfaces";
-import { FdoColumnOptions, FdoMatrixTable, FdoTableOptions } from "./types";
+import { IFdoColumn, IFdoMatrix, IFdoRelation, IFdoTable } from "./interfaces";
+import {
+  FdoColumnOptions,
+  FdoMatrixResult,
+  FdoMatrixTable,
+  FdoTableOptions,
+} from "./types";
 import { FdoMatrixGetMatrixDelegate, FdoTableGetRowsDelegate } from "./utils";
 
 export abstract class FdoColumn<
@@ -28,10 +33,34 @@ export class FdoMatrix<TTablesMap extends Dictionary<FdoMatrixTable<Any>>>
     this.tablesMap = tablesMap;
   }
 
-  public getMatrix(): KeysOf<TTablesMap, List<any>> {
+  public getMatrix(): FdoMatrixResult<TTablesMap> {
     const { tablesMap } = this;
     return FdoMatrixGetMatrixDelegate(tablesMap);
   }
+}
+
+export abstract class FdoRelation<TSourceRow, TTargetRow>
+  implements IFdoRelation<TSourceRow, TTargetRow> {
+  public readonly sourceColumnName: KeyOf<TSourceRow>;
+  public readonly sourceTable: IFdoTable<TSourceRow>;
+  public readonly tagetTable: IFdoTable<TTargetRow>;
+
+  public constructor(
+    sourceColumnName: KeyOf<TSourceRow>,
+    sourceTable: IFdoTable<TSourceRow>,
+    tagetTable: IFdoTable<TTargetRow>
+  ) {
+    this.sourceColumnName = sourceColumnName;
+    this.sourceTable = sourceTable;
+    this.tagetTable = tagetTable;
+  }
+
+  // protected getTableRows<TRow, TTablesMap>(table: IFdoTable<TRow>, matrixResult: FdoMatrixResult<TTablesMap>): List<TRow> {
+  // }
+
+  public abstract setValues<TTablesMap>(
+    matrixResult: FdoMatrixResult<TTablesMap>
+  ): void;
 }
 
 export class FdoTable<TRow> implements IFdoTable<TRow> {
