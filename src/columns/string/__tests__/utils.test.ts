@@ -1,22 +1,17 @@
-import { FdoColumnStringOptions } from "../types";
 import { FdoColumnStringGetValueDelegate } from "../utils";
-
-const options: FdoColumnStringOptions = {
-  includeLowercase: false,
-  includeNumbers: false,
-  includeSpecialChars: false,
-  includeUppercase: false,
-  maxLength: 10,
-  minLength: 0,
-};
 
 describe("FdoColumnString", () => {
   describe("utils", () => {
     describe("FdoColumnStringGetValueDelegate", () => {
+      it("Generates a random string up to 10 chars", () => {
+        const random = FdoColumnStringGetValueDelegate({
+          maxLength: 10,
+        });
+        expect(/^.{0,10}$/.test(random)).toBeTruthy();
+      });
       it("Generates 5 lowercase chars", () => {
         const random = FdoColumnStringGetValueDelegate({
-          ...options,
-          includeLowercase: true,
+          include: { lowercase: true },
           maxLength: 5,
           minLength: 5,
         });
@@ -24,24 +19,11 @@ describe("FdoColumnString", () => {
       });
       it("Generates a lowercase and uppercase string of length between 10 and 12 chars", () => {
         const random = FdoColumnStringGetValueDelegate({
-          ...options,
-          includeLowercase: true,
-          includeUppercase: true,
+          include: { lowercase: true, uppercase: true },
           maxLength: 12,
           minLength: 10,
         });
         expect(/^([a-z]|[A-Z]){10,12}$/.test(random)).toBeTruthy();
-      });
-      it("Generates a string of 8 to 16 chars, lower/upper-case alphabet, numbers and special chars", () => {
-        const random = FdoColumnStringGetValueDelegate({
-          includeLowercase: true,
-          includeNumbers: true,
-          includeUppercase: true,
-          includeSpecialChars: true,
-          maxLength: 16,
-          minLength: 8,
-        });
-        expect(/^.{8,16}$/.test(random)).toBeTruthy();
       });
     });
   });
