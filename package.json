@@ -39,6 +39,6 @@
   },
   "dependencies": {
     "@mantlebee/ts-core": "0.13.0",
-    "@mantlebee/ts-random": "0.2.0"
+    "@mantlebee/ts-random": "0.3.0"
   }
 }

@@ -3,6 +3,7 @@ export type FdoColumnStringOptions = {
   includeNumbers?: boolean;
   includeSpecialChars?: boolean;
   includeUppercase?: boolean;
+  includeWhitespace?: boolean;
   maxLength: number;
   minLength?: number;
 };

@@ -42,11 +42,14 @@ type OrderProduct = { orderId: number; productId: number };
 
 const productCategoriesTable = new FdoTable<ProductCategory>(
   "product-categories",
-  [new FdoColumnId("id"), new FdoColumnString("name", { maxLength: 20 })]
+  [
+    new FdoColumnId("id"),
+    new FdoColumnString("name", { includeLowercase: true, maxLength: 20 }),
+  ]
 );
 const productsTable = new FdoTable<Product>("products", [
   new FdoColumnId("id"),
-  new FdoColumnString("name", { maxLength: 20 }),
+  new FdoColumnString("name", { includeLowercase: true, maxLength: 20 }),
 ]);
 const orderProductsTable = new FdoTable<OrderProduct>("order-products", []);
 const ordersTable = new FdoTable<Order>("orders", [new FdoColumnId("id")]);

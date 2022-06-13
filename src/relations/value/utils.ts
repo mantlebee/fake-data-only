@@ -1,22 +1,13 @@
 import { KeyOf, List } from "@mantlebee/ts-core";
-import { generateRandomNumber } from "@mantlebee/ts-random";
+import { extractRandomItems, generateRandomNumber } from "@mantlebee/ts-random";
 
 function createChunks<T>(list: List<T>, size: number): List<List<T>> {
   const chunks: List<List<T>> = [];
   const listClone = [...list];
   while (chunks.length < size) {
     // last run
-    if (chunks.length === size - 1) {
-      chunks.push(listClone);
-    } else {
-      const chunkItems: List<T> = [];
-      const maxChunkItemsCount = listClone.length - size + 1;
-      const chunkItemsCount = generateRandomNumber(maxChunkItemsCount);
-      for (var i = 0; i < chunkItemsCount; ++i) {
-        chunkItems.push(listClone.pop() as T);
-      }
-      chunks.push(chunkItems);
-    }
+    if (chunks.length === size - 1) chunks.push(listClone);
+    else chunks.push(extractRandomItems(listClone, true));
   }
   return chunks;
 }
