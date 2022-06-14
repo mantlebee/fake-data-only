@@ -175,7 +175,7 @@ describe("FdoTable", () => {
           rows.every((a) => a.name.length >= 4 && a.name.length <= 12)
         ).toBeTruthy();
       });
-      it("Generates 100 rows of `{id: number, name: string, surname: string, fullname: string, age: Nullable<number>, email: string active: boolean, registered: Date, expires: Date, type: RowType, color: string, scoreMax: number; score: number, phone: string}`", () => {
+      it("Generates 100 rows of `{id: number, name: string, surname: string, fullname: string, age: Nullable<number>, email: string active: boolean, registered: Date, expires: Date, type: RowType, color: string, scoreMax: number; score: number, phone: string, username: string}`", () => {
         enum RowType {
           base,
           standard,
@@ -196,6 +196,7 @@ describe("FdoTable", () => {
           scoreMax: number;
           score: number;
           phone: string;
+          username: string;
         };
         const rows = FdoTableGetRowsDelegate<Row>(
           [
@@ -223,6 +224,7 @@ describe("FdoTable", () => {
               max: (a) => a.scoreMax,
             }),
             new FdoColumnPattern<Row>("phone", "+000-00000"),
+            new FdoColumnPattern<Row>("username", "a{8,12}"),
           ],
           100,
           { nullables: ["age"] }
@@ -257,6 +259,8 @@ describe("FdoTable", () => {
           expect(a.score).toBeLessThanOrEqual(a.scoreMax);
           expect(isString(a.phone)).toBeTruthy();
           expect(a.phone).toMatch(/^\+[0-9]{3}-[0-9]{5}$/);
+          expect(isString(a.username)).toBeTruthy();
+          expect(a.username).toMatch(/^[a-z]{8,12}$/);
           expect(Object.keys(a)).toEqual([
             "id",
             "name",
@@ -272,6 +276,7 @@ describe("FdoTable", () => {
             "scoreMax",
             "score",
             "phone",
+            "username",
           ]);
           lastRow = a;
         });
