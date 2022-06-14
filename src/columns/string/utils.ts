@@ -6,7 +6,7 @@ import {
 } from "@mantlebee/ts-core";
 import {
   generateRandomNumber,
-  generateRandomString,
+  generateRandomStringFromChars,
 } from "@mantlebee/ts-random";
 
 import { FdoColumnStringOptions } from "./types";
@@ -34,5 +34,5 @@ export function FdoColumnStringGetValueDelegate(
   if (include.special) chars += getSpecialChars();
   if (include.uppercase) chars += getUppercaseChars();
   if (include.whitespace) chars += " ";
-  return generateRandomString(chars, length);
+  return generateRandomStringFromChars(chars, length);
 }
