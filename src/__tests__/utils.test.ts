@@ -22,6 +22,7 @@ import {
   FdoColumnLastName,
   FdoColumnNumber,
   FdoColumnNumberDependency,
+  FdoColumnPattern,
   FdoColumnString,
 } from "@/columns";
 import {
@@ -174,7 +175,7 @@ describe("FdoTable", () => {
           rows.every((a) => a.name.length >= 4 && a.name.length <= 12)
         ).toBeTruthy();
       });
-      it("Generates 100 rows of `{id: number, name: string, surname: string, fullname: string, age: Nullable<number>, email: string active: boolean, registered: Date, expires: Date, type: RowType, color: string, scoreMax: number; score: number}`", () => {
+      it("Generates 100 rows of `{id: number, name: string, surname: string, fullname: string, age: Nullable<number>, email: string active: boolean, registered: Date, expires: Date, type: RowType, color: string, scoreMax: number; score: number, phone: string}`", () => {
         enum RowType {
           base,
           standard,
@@ -194,6 +195,7 @@ describe("FdoTable", () => {
           color: string;
           scoreMax: number;
           score: number;
+          phone: string;
         };
         const rows = FdoTableGetRowsDelegate<Row>(
           [
@@ -220,6 +222,7 @@ describe("FdoTable", () => {
             new FdoColumnNumberDependency<Row>("score", {
               max: (a) => a.scoreMax,
             }),
+            new FdoColumnPattern<Row>("phone", "+000-00000"),
           ],
           100,
           { nullables: ["age"] }
@@ -246,12 +249,14 @@ describe("FdoTable", () => {
             a.registered.getTime()
           );
           expect(a.type in RowType).toBeTruthy();
-          expect(
-            /^rgba\([0-9]{1,3},[0-9]{1,3},[0-9]{1,3},[0-9]\)$$/.test(a.color)
-          ).toBeTruthy();
+          expect(a.color).toMatch(
+            /^rgba\([0-9]{1,3},[0-9]{1,3},[0-9]{1,3},[0-9]\)$$/
+          );
           expect(isNumber(a.scoreMax)).toBeTruthy();
           expect(isNumber(a.score)).toBeTruthy();
           expect(a.score).toBeLessThanOrEqual(a.scoreMax);
+          expect(isString(a.phone)).toBeTruthy();
+          expect(a.phone).toMatch(/^\+[0-9]{3}-[0-9]{5}$/);
           expect(Object.keys(a)).toEqual([
             "id",
             "name",
@@ -266,6 +271,7 @@ describe("FdoTable", () => {
             "color",
             "scoreMax",
             "score",
+            "phone",
           ]);
           lastRow = a;
         });
