@@ -1,27 +1,27 @@
 import { Any, Dictionary, KeyOf, List } from "@mantlebee/ts-core";
 
 import {
-  IFdoColumn,
-  IFdoGenerator,
-  IFdoRelation,
-  IFdoTable,
+  IColumn,
+  IGenerator,
+  IRelation,
+  ITable,
 } from "./interfaces";
 import {
-  FdoColumnOptions,
-  FdoMatrix,
-  FdoMatrixRow,
-  FdoTableOptions,
+  ColumnOptions,
+  Matrix,
+  MatrixRow,
+  TableOptions,
 } from "./types";
 import {
-  FdoGeneratorGetMatrixDelegate,
-  FdoTableGetRowsDelegate,
+  GeneratorGetMatrixDelegate,
+  TableGetRowsDelegate,
 } from "./utils";
 
-export abstract class FdoColumn<
+export abstract class Column<
   TRow,
   TValue,
-  TOptions extends FdoColumnOptions = Any
-> implements IFdoColumn<TRow, TValue, TOptions> {
+  TOptions extends ColumnOptions = Any
+> implements IColumn<TRow, TValue, TOptions> {
   public readonly name: KeyOf<TRow>;
   public readonly options!: TOptions;
 
@@ -33,34 +33,34 @@ export abstract class FdoColumn<
   public abstract getValue(row: TRow): TValue;
 }
 
-export class FdoGenerator implements IFdoGenerator {
-  public readonly relations?: List<IFdoRelation<Any, Any>>;
-  public readonly tables: List<IFdoTable<Any>>;
+export class Generator implements IGenerator {
+  public readonly relations?: List<IRelation<Any, Any>>;
+  public readonly tables: List<ITable<Any>>;
 
   public constructor(
-    tables: List<IFdoTable<Any>>,
-    relations?: List<IFdoRelation<Any, Any>>
+    tables: List<ITable<Any>>,
+    relations?: List<IRelation<Any, Any>>
   ) {
     this.relations = relations;
     this.tables = tables;
   }
 
-  public getMatrix(rowsNumberMap: Dictionary<number>): FdoMatrix {
+  public getMatrix(rowsNumberMap: Dictionary<number>): Matrix {
     const { relations, tables } = this;
-    return FdoGeneratorGetMatrixDelegate(tables, rowsNumberMap, relations);
+    return GeneratorGetMatrixDelegate(tables, rowsNumberMap, relations);
   }
 }
 
-export abstract class FdoRelation<TSourceRow, TTargetRow>
-  implements IFdoRelation<TSourceRow, TTargetRow> {
+export abstract class Relation<TSourceRow, TTargetRow>
+  implements IRelation<TSourceRow, TTargetRow> {
   public readonly sourceColumnName: KeyOf<TSourceRow>;
-  public readonly sourceTable: IFdoTable<TSourceRow>;
-  public readonly targetTable: IFdoTable<TTargetRow>;
+  public readonly sourceTable: ITable<TSourceRow>;
+  public readonly targetTable: ITable<TTargetRow>;
 
   public constructor(
     sourceColumnName: KeyOf<TSourceRow>,
-    sourceTable: IFdoTable<TSourceRow>,
-    targetTable: IFdoTable<TTargetRow>
+    sourceTable: ITable<TSourceRow>,
+    targetTable: ITable<TTargetRow>
   ) {
     this.sourceColumnName = sourceColumnName;
     this.sourceTable = sourceTable;
@@ -68,24 +68,24 @@ export abstract class FdoRelation<TSourceRow, TTargetRow>
   }
 
   protected getTableRows<TRow>(
-    table: IFdoTable<TRow>,
-    matrix: FdoMatrix
+    table: ITable<TRow>,
+    matrix: Matrix
   ): List<TRow> {
-    return (matrix.find((a) => a.table === table) as FdoMatrixRow<TRow>).rows;
+    return (matrix.find((a) => a.table === table) as MatrixRow<TRow>).rows;
   }
 
-  public abstract setValues(matrix: FdoMatrix): void;
+  public abstract setValues(matrix: Matrix): void;
 }
 
-export class FdoTable<TRow> implements IFdoTable<TRow> {
-  public readonly columns: List<IFdoColumn<TRow, Any, Any>>;
+export class Table<TRow> implements ITable<TRow> {
+  public readonly columns: List<IColumn<TRow, Any, Any>>;
   public readonly name: string;
-  public readonly options?: FdoTableOptions<TRow>;
+  public readonly options?: TableOptions<TRow>;
 
   public constructor(
     name: string,
-    columns: List<IFdoColumn<TRow, Any, Any>>,
-    options?: FdoTableOptions<TRow>
+    columns: List<IColumn<TRow, Any, Any>>,
+    options?: TableOptions<TRow>
   ) {
     this.columns = columns;
     this.name = name;
@@ -94,6 +94,6 @@ export class FdoTable<TRow> implements IFdoTable<TRow> {
 
   public getRows(rowsNumber: number): List<TRow> {
     const { columns, options } = this;
-    return FdoTableGetRowsDelegate(columns, rowsNumber, options);
+    return TableGetRowsDelegate(columns, rowsNumber, options);
   }
 }

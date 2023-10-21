@@ -1,14 +1,14 @@
-import { FdoColumn } from "@/models";
+import { Column } from "@/models";
 
-import { FdoColumnStringOptions } from "./types";
-import { FdoColumnStringGetValueDelegate } from "./utils";
+import { ColumnStringOptions } from "./types";
+import { ColumnStringGetValueDelegate } from "./utils";
 
-export class FdoColumnString<TRow> extends FdoColumn<
+export class ColumnString<TRow> extends Column<
   TRow,
   string,
-  FdoColumnStringOptions
+  ColumnStringOptions
 > {
   public getValue(): string {
-    return FdoColumnStringGetValueDelegate(this.options);
+    return ColumnStringGetValueDelegate(this.options);
   }
 }

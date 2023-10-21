@@ -1,6 +1,6 @@
 import { List } from "@mantlebee/ts-core";
 
-export type FdoColumnEmailOptions = {
+export type ColumnEmailOptions = {
   domains?: List<string>;
   firstNames?: List<string>;
   lastNames?: List<string>;

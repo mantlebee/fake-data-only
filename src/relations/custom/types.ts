@@ -1,13 +1,13 @@
 import { List } from "@mantlebee/ts-core";
 
-import { FdoMatrix } from "@/types";
+import { Matrix } from "@/types";
 
-export type FdoRelationCustomGetValueDelegate<
+export type RelationCustomGetValueDelegate<
   TSourceRow,
   TTargetRow,
   TValue
 > = (
   sourceRow: TSourceRow,
   targetRows: List<TTargetRow>,
-  matrix: FdoMatrix
+  matrix: Matrix
 ) => TValue;

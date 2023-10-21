@@ -1,4 +1,4 @@
-import { FdoColumnEmailDependency } from "../models";
+import { ColumnEmailDependency } from "../models";
 
 type Row = {
   domain: string;
@@ -12,11 +12,11 @@ const row: Row = {
   lastName: "Doe",
 };
 
-describe("FdoColumnEmail", () => {
+describe("ColumnEmail", () => {
   describe("models", () => {
-    describe("FdoColumnEmailDependency", () => {
+    describe("ColumnEmailDependency", () => {
       it("Generates a random email, taking domain, firstName and lastname from the passed row", () => {
-        const dependantColumn = new FdoColumnEmailDependency<Row>("domain", {
+        const dependantColumn = new ColumnEmailDependency<Row>("domain", {
           domains: (a) => [a.domain],
           firstNames: (a) => [a.firstName],
           lastNames: (a) => [a.lastName],

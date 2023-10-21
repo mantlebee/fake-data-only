@@ -1,10 +1,10 @@
 import { List } from "@mantlebee/ts-core";
 
-import { FdoRelationValueSetValuesDelegate } from "../utils";
+import { RelationValueSetValuesDelegate } from "../utils";
 
-describe("FdoRelationValue", () => {
+describe("RelationValue", () => {
   describe("utils", () => {
-    describe("FdoRelationValueSetValueDelegate", () => {
+    describe("RelationValueSetValueDelegate", () => {
       it("Correct count", () => {
         type Detail = { personId: number };
         type Master = { id: number };
@@ -16,7 +16,7 @@ describe("FdoRelationValue", () => {
           { personId: -1 },
         ];
         const masterRows: List<Master> = [{ id: 1 }, { id: 2 }, { id: 3 }];
-        FdoRelationValueSetValuesDelegate<Detail, Master>(
+        RelationValueSetValuesDelegate<Detail, Master>(
           "personId",
           detailRows,
           masterRows,

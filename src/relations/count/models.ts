@@ -1,32 +1,32 @@
 import { KeyOf } from "@mantlebee/ts-core";
 
-import { IFdoTable } from "@/interfaces";
-import { FdoRelation } from "@/models";
-import { FdoMatrix } from "@/types";
+import { ITable } from "@/interfaces";
+import { Relation } from "@/models";
+import { Matrix } from "@/types";
 
-import { FdoRelationCountCondition } from "./types";
-import { FdoRelationCountSetValuesDelegate } from "./utils";
+import { RelationCountCondition } from "./types";
+import { RelationCountSetValuesDelegate } from "./utils";
 
-export class FdoRelationCount<TSourceRow, TTargetRow> extends FdoRelation<
+export class RelationCount<TSourceRow, TTargetRow> extends Relation<
   TSourceRow,
   TTargetRow
 > {
-  private readonly countConditionDelegate: FdoRelationCountCondition<
+  private readonly countConditionDelegate: RelationCountCondition<
     TSourceRow,
     TTargetRow
   >;
 
   public constructor(
     sourceColumnName: KeyOf<TSourceRow>,
-    sourceTable: IFdoTable<TSourceRow>,
-    targetTable: IFdoTable<TTargetRow>,
-    countConditionDelegate: FdoRelationCountCondition<TSourceRow, TTargetRow>
+    sourceTable: ITable<TSourceRow>,
+    targetTable: ITable<TTargetRow>,
+    countConditionDelegate: RelationCountCondition<TSourceRow, TTargetRow>
   ) {
     super(sourceColumnName, sourceTable, targetTable);
     this.countConditionDelegate = countConditionDelegate;
   }
 
-  public setValues(matrix: FdoMatrix): void {
+  public setValues(matrix: Matrix): void {
     const {
       countConditionDelegate,
       sourceColumnName,
@@ -35,7 +35,7 @@ export class FdoRelationCount<TSourceRow, TTargetRow> extends FdoRelation<
     } = this;
     const sourceRows = this.getTableRows(sourceTable, matrix);
     const targetRows = this.getTableRows(targetTable, matrix);
-    FdoRelationCountSetValuesDelegate(
+    RelationCountSetValuesDelegate(
       countConditionDelegate,
       sourceColumnName,
       sourceRows,

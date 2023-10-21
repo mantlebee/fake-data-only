@@ -1,4 +1,4 @@
-import { FdoColumnDateDependency } from "../models";
+import { ColumnDateDependency } from "../models";
 
 type Row = {
   dateFrom: Date;
@@ -10,11 +10,11 @@ const row: Row = {
   dateTo: new Date(2022, 4, 3, 23, 59, 59),
 };
 
-describe("FdoColumnDate", () => {
+describe("ColumnDate", () => {
   describe("models", () => {
-    describe("FdoColumnDateDependency", () => {
+    describe("ColumnDateDependency", () => {
       it("Generates a random date, using startFrom e startTo from passed row", () => {
-        const dependantColumn = new FdoColumnDateDependency<Row>("dateFrom", {
+        const dependantColumn = new ColumnDateDependency<Row>("dateFrom", {
           dateFrom: (a) => row.dateFrom,
           dateTo: (a) => a.dateTo,
         });

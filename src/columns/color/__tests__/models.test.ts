@@ -1,14 +1,14 @@
-import { FdoColumnColor } from "../models";
+import { ColumnColor } from "../models";
 
 type Row = {
   name: string;
 };
 
-describe("FdoColumnColor", () => {
+describe("ColumnColor", () => {
   describe("models", () => {
-    describe("FdoColumnColor", () => {
+    describe("ColumnColor", () => {
       it("Generates a random color", () => {
-        const colorColumn = new FdoColumnColor<Row>("name");
+        const colorColumn = new ColumnColor<Row>("name");
         const rgba = colorColumn.getValue();
         expect(rgba).toMatch(
           /^rgba\([0-9]{1,3},[0-9]{1,3},[0-9]{1,3},[0-9]\)$$/

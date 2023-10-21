@@ -1,18 +1,18 @@
 import { KeyOf, KeysOf } from "@mantlebee/ts-core";
 
-import { IFdoColumn } from "@/interfaces";
-import { FdoColumnOptions } from "@/types";
+import { IColumn } from "@/interfaces";
+import { ColumnOptions } from "@/types";
 
-export type FdoColumnConstructor<
+export type ColumnConstructor<
   TRow,
   TValue,
-  TOptions extends FdoColumnOptions
-> = new (name: string, options?: TOptions) => IFdoColumn<
+  TOptions extends ColumnOptions
+> = new (name: string, options?: TOptions) => IColumn<
   TRow,
   TValue,
   TOptions
 >;
-export type FdoColumnOptionsValueGettersMap<
+export type ColumnOptionsValueGettersMap<
   TRow,
-  TOptions extends FdoColumnOptions
+  TOptions extends ColumnOptions
 > = KeysOf<TOptions, (row: TRow) => TOptions[KeyOf<TOptions>]>;

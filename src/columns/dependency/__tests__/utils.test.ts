@@ -1,13 +1,13 @@
 import { ConstructorOf, List } from "@mantlebee/ts-core";
 
 import {
-  FdoColumnDate,
-  FdoColumnDateOptions,
-  FdoColumnNumber,
-  FdoColumnNumberOptions,
+  ColumnDate,
+  ColumnDateOptions,
+  ColumnNumber,
+  ColumnNumberOptions,
 } from "@/columns";
 
-import { FdoColumnDependencyGetValueDelegate } from "../utils";
+import { ColumnDependencyGetValueDelegate } from "../utils";
 
 type Row = {
   activatedOn: Date;
@@ -23,19 +23,19 @@ const row: Row = {
   slotsTotal: 10,
 };
 
-describe("FdoColumnDependency", () => {
+describe("ColumnDependency", () => {
   describe("utils", () => {
-    describe("FdoColumnDependencyGetValueDelegate", () => {
+    describe("ColumnDependencyGetValueDelegate", () => {
       it("Generates a random number value, using row.slotsAvailable and row.slotsTotal as range", () => {
         const randoms: List<number> = [];
         for (let i = 0; i < 100; ++i)
           randoms.push(
-            FdoColumnDependencyGetValueDelegate<
+            ColumnDependencyGetValueDelegate<
               Row,
               number,
-              FdoColumnNumberOptions,
-              ConstructorOf<FdoColumnNumber<Row>>
-            >(row, FdoColumnNumber, {
+              ColumnNumberOptions,
+              ConstructorOf<ColumnNumber<Row>>
+            >(row, ColumnNumber, {
               max: (a) => a.slotsTotal,
               min: (a) => a.slotsAvailable,
             })
@@ -49,12 +49,12 @@ describe("FdoColumnDependency", () => {
         const randoms: List<Date> = [];
         for (let i = 0; i < 100; ++i)
           randoms.push(
-            FdoColumnDependencyGetValueDelegate<
+            ColumnDependencyGetValueDelegate<
               Row,
               Date,
-              FdoColumnDateOptions,
-              ConstructorOf<FdoColumnDate<Row>>
-            >(row, FdoColumnDate, {
+              ColumnDateOptions,
+              ConstructorOf<ColumnDate<Row>>
+            >(row, ColumnDate, {
               dateFrom: (a) => a.activatedOn,
               dateTo: (a) => a.exipresOn,
             })

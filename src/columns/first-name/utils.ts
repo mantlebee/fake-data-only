@@ -2,13 +2,13 @@ import { extractRandomItem } from "@mantlebee/ts-random";
 
 import { FemaleFirstNames, Gender, MaleFirstNames } from "@/constants";
 
-import { FdoColumnFirstNameOptions } from "./types";
-import { FdoColumnFirstNameOptionsDefault } from "./constants";
+import { ColumnFirstNameOptions } from "./types";
+import { ColumnFirstNameOptionsDefault } from "./constants";
 
-export function FdoColumnFirstNameGetValueDelegate(
-  options?: FdoColumnFirstNameOptions
+export function ColumnFirstNameGetValueDelegate(
+  options?: ColumnFirstNameOptions
 ): string {
-  const { gender } = { ...FdoColumnFirstNameOptionsDefault, ...options };
+  const { gender } = { ...ColumnFirstNameOptionsDefault, ...options };
   switch (gender) {
     case Gender.female:
       return extractRandomItem(FemaleFirstNames);

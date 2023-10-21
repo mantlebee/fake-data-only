@@ -1,13 +1,13 @@
 import { generateRandomColor } from "@mantlebee/ts-random";
 
-import { FdoColumn } from "@/models";
+import { Column } from "@/models";
 
-import { FdoColumnColorOptions } from "./types";
+import { ColumnColorOptions } from "./types";
 
-export class FdoColumnColor<TRow> extends FdoColumn<
+export class ColumnColor<TRow> extends Column<
   TRow,
   string,
-  FdoColumnColorOptions
+  ColumnColorOptions
 > {
   public getValue(): string {
     const { from, to, transparent } = { ...this.options };

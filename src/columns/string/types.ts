@@ -1,4 +1,4 @@
-export type FdoColumnStringOptions = {
+export type ColumnStringOptions = {
   include?: {
     lowercase?: boolean;
     numbers?: boolean;

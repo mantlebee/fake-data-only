@@ -1,28 +1,28 @@
 import { ConstructorOf } from "@mantlebee/ts-core";
 
-import { FdoColumnConstructor, FdoColumnDependencyAbstract } from "@/columns";
-import { FdoColumn } from "@/models";
+import { ColumnConstructor, ColumnDependencyAbstract } from "@/columns";
+import { Column } from "@/models";
 
-import { FdoColumnEmailOptions } from "./types";
-import { FdoColumnEmailGetValueDelegate } from "./utils";
+import { ColumnEmailOptions } from "./types";
+import { ColumnEmailGetValueDelegate } from "./utils";
 
-export class FdoColumnEmail<TRow> extends FdoColumn<
+export class ColumnEmail<TRow> extends Column<
   TRow,
   string,
-  FdoColumnEmailOptions
+  ColumnEmailOptions
 > {
   public getValue(): string {
-    return FdoColumnEmailGetValueDelegate(this.options);
+    return ColumnEmailGetValueDelegate(this.options);
   }
 }
 
-export class FdoColumnEmailDependency<TRow> extends FdoColumnDependencyAbstract<
+export class ColumnEmailDependency<TRow> extends ColumnDependencyAbstract<
   TRow,
   string,
-  FdoColumnEmailOptions,
-  FdoColumnConstructor<TRow, string, FdoColumnEmailOptions>
+  ColumnEmailOptions,
+  ColumnConstructor<TRow, string, ColumnEmailOptions>
 > {
   public readonly columnConstructor: ConstructorOf<
-    FdoColumnEmail<TRow>
-  > = FdoColumnEmail;
+    ColumnEmail<TRow>
+  > = ColumnEmail;
 }

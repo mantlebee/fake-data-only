@@ -1,8 +1,8 @@
 import { KeyOf } from "@mantlebee/ts-core";
 
-import { FdoColumn } from "@/models";
+import { Column } from "@/models";
 
-export class FdoColumnCustom<TRow, TValue> extends FdoColumn<TRow, TValue> {
+export class ColumnCustom<TRow, TValue> extends Column<TRow, TValue> {
   private readonly getValueDelegate!: (row: TRow) => TValue;
 
   public constructor(

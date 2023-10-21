@@ -1,12 +1,12 @@
 import { Any, KeyOf, List } from "@mantlebee/ts-core";
 
-import { IFdoTable } from "./interfaces";
+import { ITable } from "./interfaces";
 
-export type FdoColumnOptions = {};
+export type ColumnOptions = {};
 
-export type FdoMatrix = List<FdoMatrixRow<Any>>;
-export type FdoMatrixRow<TRow> = { table: IFdoTable<TRow>; rows: List<TRow> };
+export type Matrix = List<MatrixRow<Any>>;
+export type MatrixRow<TRow> = { table: ITable<TRow>; rows: List<TRow> };
 
-export type FdoTableOptions<TRow> = {
+export type TableOptions<TRow> = {
   nullables: List<KeyOf<TRow>>;
 };

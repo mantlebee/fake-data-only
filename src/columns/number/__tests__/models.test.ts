@@ -1,4 +1,4 @@
-import { FdoColumnNumberDependency } from "../models";
+import { ColumnNumberDependency } from "../models";
 
 type Row = {
   decimals: number;
@@ -12,11 +12,11 @@ const row: Row = {
   min: 5,
 };
 
-describe("FdoColumnNumber", () => {
+describe("ColumnNumber", () => {
   describe("models", () => {
-    describe("FdoColumnNumberDependency", () => {
+    describe("ColumnNumberDependency", () => {
       it("Generates a random number, taking decimals, max and min from the passed row", () => {
-        const dependantColumn = new FdoColumnNumberDependency<Row>("max", {
+        const dependantColumn = new ColumnNumberDependency<Row>("max", {
           decimals: (a) => a.decimals,
           max: (a) => a.max,
           min: (a) => a.min,

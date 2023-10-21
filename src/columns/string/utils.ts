@@ -9,10 +9,10 @@ import {
   generateRandomStringFromChars,
 } from "@mantlebee/ts-random";
 
-import { FdoColumnStringOptions } from "./types";
+import { ColumnStringOptions } from "./types";
 
-export function FdoColumnStringGetValueDelegate(
-  options: FdoColumnStringOptions
+export function ColumnStringGetValueDelegate(
+  options: ColumnStringOptions
 ): string {
   const {
     include = {

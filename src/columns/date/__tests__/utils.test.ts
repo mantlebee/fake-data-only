@@ -1,4 +1,4 @@
-import { FdoColumnDateGetValueDelegate } from "../utils";
+import { ColumnDateGetValueDelegate } from "../utils";
 
 type Row = {
   dateFrom: Date;
@@ -12,11 +12,11 @@ const row: Row = {
 
 const firstDate = new Date(1970, 0, 1, 0, 0, 0);
 
-describe("FdoColumnDate", () => {
+describe("ColumnDate", () => {
   describe("utils", () => {
-    describe("FdoColumnDateGetValueDelegate", () => {
+    describe("ColumnDateGetValueDelegate", () => {
       it("Generates a random date", () => {
-        const random = FdoColumnDateGetValueDelegate();
+        const random = ColumnDateGetValueDelegate();
         expect(random.getTime()).toBeGreaterThanOrEqual(firstDate.getTime());
         expect(random.getTime()).toBeLessThanOrEqual(Date.now());
       });

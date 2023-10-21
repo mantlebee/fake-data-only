@@ -12,7 +12,7 @@ function createChunks<T>(list: List<T>, size: number): List<List<T>> {
   return chunks;
 }
 
-export function FdoRelationValueSetValuesDelegate<TSourceRow, TTargetRow>(
+export function RelationValueSetValuesDelegate<TSourceRow, TTargetRow>(
   sourceColumnName: KeyOf<TSourceRow>,
   sourceRows: List<TSourceRow>,
   targetRows: List<TTargetRow>,

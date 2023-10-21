@@ -1,1 +1,1 @@
-export const FdoColumnIdStartsFrom = 1;
+export const ColumnIdStartsFrom = 1;

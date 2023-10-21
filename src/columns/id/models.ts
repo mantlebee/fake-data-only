@@ -1,20 +1,20 @@
 import { KeyOf, NumericIdentityManager } from "@mantlebee/ts-core";
 
-import { FdoColumn } from "@/models";
+import { Column } from "@/models";
 
-import { FdoColumnIdOptions } from "./types";
-import { FdoColumnIdStartsFrom } from "./constants";
+import { ColumnIdOptions } from "./types";
+import { ColumnIdStartsFrom } from "./constants";
 
-export class FdoColumnId<TRow> extends FdoColumn<
+export class ColumnId<TRow> extends Column<
   TRow,
   number,
-  FdoColumnIdOptions
+  ColumnIdOptions
 > {
   private readonly identityManager!: NumericIdentityManager;
 
-  public constructor(name: KeyOf<TRow>, options?: FdoColumnIdOptions) {
+  public constructor(name: KeyOf<TRow>, options?: ColumnIdOptions) {
     super(name, options);
-    let startsFrom = FdoColumnIdStartsFrom;
+    let startsFrom = ColumnIdStartsFrom;
     if (options && options.startsFrom) startsFrom = options.startsFrom;
     const lastValue = startsFrom - 1;
     this.identityManager = new NumericIdentityManager(lastValue);

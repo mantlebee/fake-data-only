@@ -1,6 +1,6 @@
-import { FdoColumnOptions } from "@/types";
+import { ColumnOptions } from "@/types";
 
-export type FdoColumnNumberOptions = FdoColumnOptions & {
+export type ColumnNumberOptions = ColumnOptions & {
   decimals?: number;
   max: number;
   min?: number;

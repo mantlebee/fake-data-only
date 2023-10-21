@@ -1,5 +1,5 @@
 import { Gender } from "@/constants";
 
-export type FdoColumnFirstNameOptions = {
+export type ColumnFirstNameOptions = {
   gender?: Gender;
 };

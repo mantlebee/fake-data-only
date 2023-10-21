@@ -1,11 +1,11 @@
 import { List } from "@mantlebee/ts-core";
 
-import { FdoRelationCountCondition } from "../types";
-import { FdoRelationCountSetValuesDelegate } from "../utils";
+import { RelationCountCondition } from "../types";
+import { RelationCountSetValuesDelegate } from "../utils";
 
-describe("FdoRelationCount", () => {
+describe("RelationCount", () => {
   describe("utils", () => {
-    describe("FdoRelationCountSetValueDelegate", () => {
+    describe("RelationCountSetValueDelegate", () => {
       it("Set the correct count.", () => {
         type Contact = { email: string; personId: number };
         type Person = { contactsCount: number; id: number };
@@ -17,9 +17,9 @@ describe("FdoRelationCount", () => {
           { contactsCount: -1, id: 1 },
           { contactsCount: -1, id: 2 },
         ];
-        const condition: FdoRelationCountCondition<Person, Contact> = (s, t) =>
+        const condition: RelationCountCondition<Person, Contact> = (s, t) =>
           t.personId === s.id;
-        FdoRelationCountSetValuesDelegate(
+        RelationCountSetValuesDelegate(
           condition,
           "contactsCount",
           people,

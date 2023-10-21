@@ -1,18 +1,18 @@
 import { KeyOf } from "@mantlebee/ts-core";
 
-import { IFdoTable } from "@/interfaces";
-import { FdoRelation } from "@/models";
-import { FdoMatrix } from "@/types";
+import { ITable } from "@/interfaces";
+import { Relation } from "@/models";
+import { Matrix } from "@/types";
 
-import { FdoRelationCustomGetValueDelegate } from "./types";
-import { FdoRelationCustomSetValuesDelegate } from "./utils";
+import { RelationCustomGetValueDelegate } from "./types";
+import { RelationCustomSetValuesDelegate } from "./utils";
 
-export class FdoRelationCustom<
+export class RelationCustom<
   TSourceRow,
   TTargetRow,
   TValue
-> extends FdoRelation<TSourceRow, TTargetRow> {
-  private readonly getValueDelegate: FdoRelationCustomGetValueDelegate<
+> extends Relation<TSourceRow, TTargetRow> {
+  private readonly getValueDelegate: RelationCustomGetValueDelegate<
     TSourceRow,
     TTargetRow,
     TValue
@@ -20,9 +20,9 @@ export class FdoRelationCustom<
 
   public constructor(
     sourceColumnName: KeyOf<TSourceRow>,
-    sourceTable: IFdoTable<TSourceRow>,
-    targetTable: IFdoTable<TTargetRow>,
-    getValueDelegate: FdoRelationCustomGetValueDelegate<
+    sourceTable: ITable<TSourceRow>,
+    targetTable: ITable<TTargetRow>,
+    getValueDelegate: RelationCustomGetValueDelegate<
       TSourceRow,
       TTargetRow,
       TValue
@@ -32,7 +32,7 @@ export class FdoRelationCustom<
     this.getValueDelegate = getValueDelegate;
   }
 
-  public setValues(matrix: FdoMatrix): void {
+  public setValues(matrix: Matrix): void {
     const {
       getValueDelegate,
       sourceColumnName,
@@ -41,7 +41,7 @@ export class FdoRelationCustom<
     } = this;
     const sourceRows = this.getTableRows(sourceTable, matrix);
     const targetRows = this.getTableRows(targetTable, matrix);
-    FdoRelationCustomSetValuesDelegate(
+    RelationCustomSetValuesDelegate(
       sourceColumnName,
       sourceRows,
       targetRows,

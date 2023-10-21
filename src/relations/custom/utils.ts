@@ -1,10 +1,10 @@
 import { KeyOf, List } from "@mantlebee/ts-core";
 
-import { FdoMatrix } from "@/types";
+import { Matrix } from "@/types";
 
-import { FdoRelationCustomGetValueDelegate } from "./types";
+import { RelationCustomGetValueDelegate } from "./types";
 
-export function FdoRelationCustomSetValuesDelegate<
+export function RelationCustomSetValuesDelegate<
   TSourceRow,
   TTargetRow,
   TValue
@@ -12,8 +12,8 @@ export function FdoRelationCustomSetValuesDelegate<
   sourceColumnName: KeyOf<TSourceRow>,
   sourceRows: List<TSourceRow>,
   targetRows: List<TTargetRow>,
-  matrix: FdoMatrix,
-  getValueDelegate: FdoRelationCustomGetValueDelegate<
+  matrix: Matrix,
+  getValueDelegate: RelationCustomGetValueDelegate<
     TSourceRow,
     TTargetRow,
     TValue

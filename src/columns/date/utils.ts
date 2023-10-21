@@ -1,9 +1,9 @@
 import { generateRandomDate } from "@mantlebee/ts-random";
 
-import { FdoColumnDateOptions } from "./types";
+import { ColumnDateOptions } from "./types";
 
-export function FdoColumnDateGetValueDelegate(
-  options?: FdoColumnDateOptions
+export function ColumnDateGetValueDelegate(
+  options?: ColumnDateOptions
 ): Date {
   let { dateFrom, dateTo } = { ...options };
   return generateRandomDate(dateTo, dateFrom, options);

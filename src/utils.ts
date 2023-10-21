@@ -1,12 +1,12 @@
 import { Dictionary, Any, List, KeyOf } from "@mantlebee/ts-core";
 import { generateRandomBoolean } from "@mantlebee/ts-random";
 
-import { IFdoColumn, IFdoRelation, IFdoTable } from "./interfaces";
-import { FdoMatrix, FdoTableOptions } from "./types";
+import { IColumn, IRelation, ITable } from "./interfaces";
+import { Matrix, TableOptions } from "./types";
 
 function shouldBeNull<T>(
-  column: IFdoColumn<T, Any, Any>,
-  options?: FdoTableOptions<T>
+  column: IColumn<T, Any, Any>,
+  options?: TableOptions<T>
 ): boolean {
   return Boolean(
     options &&
@@ -16,25 +16,25 @@ function shouldBeNull<T>(
   );
 }
 
-export function FdoGeneratorGetMatrixDelegate(
-  tables: List<IFdoTable<Any>>,
+export function GeneratorGetMatrixDelegate(
+  tables: List<ITable<Any>>,
   rowsNumberMap: Dictionary<number>,
-  relations?: List<IFdoRelation<Any, Any>>
-): FdoMatrix {
+  relations?: List<IRelation<Any, Any>>
+): Matrix {
   const matrix = tables.reduce((result, current) => {
     const { name } = current;
     const rowsNumber = rowsNumberMap[name];
     result.push({ table: current, rows: current.getRows(rowsNumber) });
     return result;
-  }, [] as FdoMatrix);
+  }, [] as Matrix);
   if (relations) relations.forEach((a) => a.setValues(matrix));
   return matrix;
 }
 
-export function FdoTableGetRowsDelegate<T extends Dictionary<Any>>(
-  columns: List<IFdoColumn<T, Any, Any>>,
+export function TableGetRowsDelegate<T extends Dictionary<Any>>(
+  columns: List<IColumn<T, Any, Any>>,
   rowsNumber: number,
-  options?: FdoTableOptions<T>
+  options?: TableOptions<T>
 ): List<T> {
   const items: List<T> = [];
   for (let i = 0; i < rowsNumber; ++i) {

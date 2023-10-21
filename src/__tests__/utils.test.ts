@@ -10,73 +10,73 @@ import {
 } from "@mantlebee/ts-core";
 
 import {
-  FdoColumnBoolean,
-  FdoColumnColor,
-  FdoColumnCustom,
-  FdoColumnDate,
-  FdoColumnDateDependency,
-  FdoColumnEmailDependency,
-  FdoColumnEnum,
-  FdoColumnFirstName,
-  FdoColumnId,
-  FdoColumnLastName,
-  FdoColumnNumber,
-  FdoColumnNumberDependency,
-  FdoColumnPattern,
-  FdoColumnString,
+  ColumnBoolean,
+  ColumnColor,
+  ColumnCustom,
+  ColumnDate,
+  ColumnDateDependency,
+  ColumnEmailDependency,
+  ColumnEnum,
+  ColumnFirstName,
+  ColumnId,
+  ColumnLastName,
+  ColumnNumber,
+  ColumnNumberDependency,
+  ColumnPattern,
+  ColumnString,
 } from "@/columns";
 import {
-  FdoRelationCount,
-  FdoRelationCustom,
-  FdoRelationValue,
+  RelationCount,
+  RelationCustom,
+  RelationValue,
 } from "@/relations";
-import { FdoMatrixRow } from "@/types";
-import { FdoTableGetRowsDelegate } from "@/utils";
+import { MatrixRow } from "@/types";
+import { TableGetRowsDelegate } from "@/utils";
 
-import { FdoTable } from "../models";
-import { FdoGeneratorGetMatrixDelegate } from "../utils";
+import { Table } from "../models";
+import { GeneratorGetMatrixDelegate } from "../utils";
 
 type Product = { categoryId: number; id: number; name: string };
 type ProductCategory = { id: number; name: string };
 type Order = { categoriesCount: number; id: number; productsCount: number };
 type OrderProduct = { orderId: number; productId: number };
 
-const productCategoriesTable = new FdoTable<ProductCategory>(
+const productCategoriesTable = new Table<ProductCategory>(
   "product-categories",
-  [new FdoColumnId("id"), new FdoColumnString("name", { maxLength: 20 })]
+  [new ColumnId("id"), new ColumnString("name", { maxLength: 20 })]
 );
-const productsTable = new FdoTable<Product>("products", [
-  new FdoColumnId("id"),
-  new FdoColumnString("name", { maxLength: 20 }),
+const productsTable = new Table<Product>("products", [
+  new ColumnId("id"),
+  new ColumnString("name", { maxLength: 20 }),
 ]);
-const orderProductsTable = new FdoTable<OrderProduct>("order-products", []);
-const ordersTable = new FdoTable<Order>("orders", [new FdoColumnId("id")]);
+const orderProductsTable = new Table<OrderProduct>("order-products", []);
+const ordersTable = new Table<Order>("orders", [new ColumnId("id")]);
 
-const productCategoryRelation = new FdoRelationValue<Product, ProductCategory>(
+const productCategoryRelation = new RelationValue<Product, ProductCategory>(
   "categoryId",
   productsTable,
   productCategoriesTable,
   "id"
 );
-const orderProductOrderRelation = new FdoRelationValue<OrderProduct, Order>(
+const orderProductOrderRelation = new RelationValue<OrderProduct, Order>(
   "orderId",
   orderProductsTable,
   ordersTable,
   "id"
 );
-const orderProductProductRelation = new FdoRelationValue<OrderProduct, Product>(
+const orderProductProductRelation = new RelationValue<OrderProduct, Product>(
   "productId",
   orderProductsTable,
   productsTable,
   "id"
 );
-const orderProductsCountRelation = new FdoRelationCount<Order, OrderProduct>(
+const orderProductsCountRelation = new RelationCount<Order, OrderProduct>(
   "productsCount",
   ordersTable,
   orderProductsTable,
   (o, op) => op.orderId === o.id
 );
-const orderCategoriesCountRelations = new FdoRelationCustom<
+const orderCategoriesCountRelations = new RelationCustom<
   Order,
   OrderProduct,
   number
@@ -92,7 +92,7 @@ const orderCategoriesCountRelations = new FdoRelationCustom<
     // Products of the order
     const products = (matrix.find(
       (a) => a.table === productsTable
-    ) as FdoMatrixRow<Product>).rows;
+    ) as MatrixRow<Product>).rows;
     // Categories ids list with duplicate values
     const fullCategoriesIds = products
       .filter((a) => productsIds.includes(a.id))
@@ -118,9 +118,9 @@ const relations = [
   orderCategoriesCountRelations,
 ];
 
-describe("FdoTable", () => {
+describe("Table", () => {
   describe("utils", () => {
-    describe("FdoGeneratorGetMatrixDelegate", () => {
+    describe("GeneratorGetMatrixDelegate", () => {
       it("Generates a map of lists, the map as the same keys of the given tablesMap param.", () => {
         const rowsNumberMap: Dictionary<number> = {
           [productCategoriesTable.name]: 10,
@@ -128,7 +128,7 @@ describe("FdoTable", () => {
           [orderProductsTable.name]: 5,
           [ordersTable.name]: 1,
         };
-        const matrix = FdoGeneratorGetMatrixDelegate(
+        const matrix = GeneratorGetMatrixDelegate(
           tables,
           rowsNumberMap,
           relations
@@ -157,12 +157,12 @@ describe("FdoTable", () => {
         });
       });
     });
-    describe("FdoTableGetRowsDelegate", () => {
+    describe("TableGetRowsDelegate", () => {
       it("Generates 5 rows of {name: string}", () => {
         type Row = { name: string };
-        const rows = FdoTableGetRowsDelegate<Row>(
+        const rows = TableGetRowsDelegate<Row>(
           [
-            new FdoColumnString<Row>("name", {
+            new ColumnString<Row>("name", {
               maxLength: 12,
               minLength: 4,
             }),
@@ -198,33 +198,33 @@ describe("FdoTable", () => {
           phone: string;
           username: string;
         };
-        const rows = FdoTableGetRowsDelegate<Row>(
+        const rows = TableGetRowsDelegate<Row>(
           [
-            new FdoColumnId<Row>("id"),
-            new FdoColumnFirstName<Row>("name"),
-            new FdoColumnLastName<Row>("surname"),
-            new FdoColumnCustom<Row, string>(
+            new ColumnId<Row>("id"),
+            new ColumnFirstName<Row>("name"),
+            new ColumnLastName<Row>("surname"),
+            new ColumnCustom<Row, string>(
               "fullname",
               (a) => `${a.name} ${a.surname}`
             ),
-            new FdoColumnNumber<Row>("age", { max: 90 }),
-            new FdoColumnEmailDependency<Row>("email", {
+            new ColumnNumber<Row>("age", { max: 90 }),
+            new ColumnEmailDependency<Row>("email", {
               firstNames: (a) => [a.name],
               lastNames: (a) => [a.surname],
             }),
-            new FdoColumnBoolean<Row>("active"),
-            new FdoColumnDate<Row>("registered"),
-            new FdoColumnDateDependency<Row>("expires", {
+            new ColumnBoolean<Row>("active"),
+            new ColumnDate<Row>("registered"),
+            new ColumnDateDependency<Row>("expires", {
               dateFrom: (a) => a.registered,
             }),
-            new FdoColumnEnum<Row, RowType>("type", Object(RowType)),
-            new FdoColumnColor<Row>("color"),
-            new FdoColumnNumber<Row>("scoreMax", { max: 100 }),
-            new FdoColumnNumberDependency<Row>("score", {
+            new ColumnEnum<Row, RowType>("type", Object(RowType)),
+            new ColumnColor<Row>("color"),
+            new ColumnNumber<Row>("scoreMax", { max: 100 }),
+            new ColumnNumberDependency<Row>("score", {
               max: (a) => a.scoreMax,
             }),
-            new FdoColumnPattern<Row>("phone", "+000-00000"),
-            new FdoColumnPattern<Row>("username", "a{8,12}"),
+            new ColumnPattern<Row>("phone", "+000-00000"),
+            new ColumnPattern<Row>("username", "a{8,12}"),
           ],
           100,
           { nullables: ["age"] }

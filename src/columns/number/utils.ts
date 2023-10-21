@@ -1,13 +1,13 @@
 import { generateRandomNumber } from "@mantlebee/ts-random";
 
-import { FdoColumnNumberOptionsDefault } from "./constants";
-import { FdoColumnNumberOptions } from "./types";
+import { ColumnNumberOptionsDefault } from "./constants";
+import { ColumnNumberOptions } from "./types";
 
-export function FdoColumnNumberGetValueDelegate(
-  options?: FdoColumnNumberOptions
+export function ColumnNumberGetValueDelegate(
+  options?: ColumnNumberOptions
 ): number {
   let { decimals = 0, max, min = 0 } = {
-    ...FdoColumnNumberOptionsDefault,
+    ...ColumnNumberOptionsDefault,
     ...options,
   };
   return generateRandomNumber(max, min, decimals);

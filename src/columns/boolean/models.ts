@@ -1,8 +1,8 @@
 import { generateRandomBoolean } from "@mantlebee/ts-random";
 
-import { FdoColumn } from "@/models";
+import { Column } from "@/models";
 
-export class FdoColumnBoolean<TRow> extends FdoColumn<TRow, boolean> {
+export class ColumnBoolean<TRow> extends Column<TRow, boolean> {
   public getValue(): boolean {
     return generateRandomBoolean();
   }

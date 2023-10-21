@@ -1,8 +1,8 @@
 import { Any } from "@mantlebee/ts-core";
 
-import { FdoColumnNumberOptions } from "./types";
+import { ColumnNumberOptions } from "./types";
 
-export const FdoColumnNumberOptionsDefault: FdoColumnNumberOptions = {
+export const ColumnNumberOptionsDefault: ColumnNumberOptions = {
   decimals: 0,
   max: 0,
   min: 0,

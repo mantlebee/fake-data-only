@@ -1,9 +1,9 @@
 import { KeyOf, List } from "@mantlebee/ts-core";
 
-import { FdoRelationCountCondition } from "./types";
+import { RelationCountCondition } from "./types";
 
-export function FdoRelationCountSetValuesDelegate<TSourceRow, TTargetRow>(
-  countConditionDelegate: FdoRelationCountCondition<TSourceRow, TTargetRow>,
+export function RelationCountSetValuesDelegate<TSourceRow, TTargetRow>(
+  countConditionDelegate: RelationCountCondition<TSourceRow, TTargetRow>,
   sourceColumnName: KeyOf<TSourceRow>,
   sourceRows: List<TSourceRow>,
   targetRows: List<TTargetRow>

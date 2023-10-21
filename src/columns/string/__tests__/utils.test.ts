@@ -1,16 +1,16 @@
-import { FdoColumnStringGetValueDelegate } from "../utils";
+import { ColumnStringGetValueDelegate } from "../utils";
 
-describe("FdoColumnString", () => {
+describe("ColumnString", () => {
   describe("utils", () => {
-    describe("FdoColumnStringGetValueDelegate", () => {
+    describe("ColumnStringGetValueDelegate", () => {
       it("Generates a random string up to 10 chars", () => {
-        const random = FdoColumnStringGetValueDelegate({
+        const random = ColumnStringGetValueDelegate({
           maxLength: 10,
         });
         expect(/^.{0,10}$/.test(random)).toBeTruthy();
       });
       it("Generates 5 lowercase chars", () => {
-        const random = FdoColumnStringGetValueDelegate({
+        const random = ColumnStringGetValueDelegate({
           include: { lowercase: true },
           maxLength: 5,
           minLength: 5,
@@ -18,7 +18,7 @@ describe("FdoColumnString", () => {
         expect(/^[a-z]{5}$/.test(random)).toBeTruthy();
       });
       it("Generates a lowercase and uppercase string of length between 10 and 12 chars", () => {
-        const random = FdoColumnStringGetValueDelegate({
+        const random = ColumnStringGetValueDelegate({
           include: { lowercase: true, uppercase: true },
           maxLength: 12,
           minLength: 10,

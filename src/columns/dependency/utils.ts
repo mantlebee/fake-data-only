@@ -1,22 +1,22 @@
-import { FdoColumnOptions } from "@/types";
+import { ColumnOptions } from "@/types";
 
-import { FdoColumnConstructor, FdoColumnOptionsValueGettersMap } from "./types";
+import { ColumnConstructor, ColumnOptionsValueGettersMap } from "./types";
 
-export function FdoColumnDependencyGetValueDelegate<
+export function ColumnDependencyGetValueDelegate<
   TRow,
   TValue,
-  TOptions extends FdoColumnOptions,
-  TConstructor extends FdoColumnConstructor<TRow, TValue, TOptions>
+  TOptions extends ColumnOptions,
+  TConstructor extends ColumnConstructor<TRow, TValue, TOptions>
 >(
   row: TRow,
   columnConstructor: TConstructor,
-  optionsValuesGetters: FdoColumnOptionsValueGettersMap<TRow, TOptions>
+  optionsValuesGetters: ColumnOptionsValueGettersMap<TRow, TOptions>
 ): TValue {
   const options = {} as TOptions;
   Object.keys(optionsValuesGetters).forEach((key) => {
     const valueGetter =
       optionsValuesGetters[
-        key as keyof FdoColumnOptionsValueGettersMap<TRow, TOptions>
+        key as keyof ColumnOptionsValueGettersMap<TRow, TOptions>
       ];
     options[key as keyof TOptions] = valueGetter(row);
   });

@@ -1,6 +1,6 @@
 import { IColor } from "@mantlebee/ts-core";
 
-export type FdoColumnColorOptions = {
+export type ColumnColorOptions = {
   from?: IColor;
   to?: IColor;
   transparent?: boolean;

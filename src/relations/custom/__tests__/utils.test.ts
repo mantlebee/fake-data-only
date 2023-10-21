@@ -1,11 +1,11 @@
 import { List } from "@mantlebee/ts-core";
 
-import { FdoRelationCustomGetValueDelegate } from "../types";
-import { FdoRelationCustomSetValuesDelegate } from "../utils";
+import { RelationCustomGetValueDelegate } from "../types";
+import { RelationCustomSetValuesDelegate } from "../utils";
 
-describe("FdoRelationCustom", () => {
+describe("RelationCustom", () => {
   describe("utils", () => {
-    describe("FdoRelationCustomSetValueDelegate", () => {
+    describe("RelationCustomSetValueDelegate", () => {
       it("Set the value resulting from the delegate", () => {
         type To = { email: string };
         type From = { emailsWithCCount: number };
@@ -19,11 +19,11 @@ describe("FdoRelationCustom", () => {
           { emailsWithCCount: -1 },
           { emailsWithCCount: -1 },
         ];
-        const delegate: FdoRelationCustomGetValueDelegate<From, To, number> = (
+        const delegate: RelationCustomGetValueDelegate<From, To, number> = (
           s,
           t
         ) => t.filter((a) => /x/.test(a.email)).length;
-        FdoRelationCustomSetValuesDelegate<From, To, number>(
+        RelationCustomSetValuesDelegate<From, To, number>(
           "emailsWithCCount",
           people,
           contacts,

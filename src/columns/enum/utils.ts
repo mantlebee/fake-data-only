@@ -1,6 +1,6 @@
 import { extractRandomItem } from "@mantlebee/ts-random";
 
-export function FdoColumnEnumGetValueDelegate<TEnum>(
+export function ColumnEnumGetValueDelegate<TEnum>(
   enumerative: TEnum
 ): TEnum {
   const keysAndValues = Object.keys(enumerative);

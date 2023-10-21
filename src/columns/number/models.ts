@@ -1,30 +1,30 @@
 import { ConstructorOf } from "@mantlebee/ts-core";
 
-import { FdoColumnConstructor, FdoColumnDependencyAbstract } from "@/columns";
-import { FdoColumn } from "@/models";
+import { ColumnConstructor, ColumnDependencyAbstract } from "@/columns";
+import { Column } from "@/models";
 
-import { FdoColumnNumberOptions } from "./types";
-import { FdoColumnNumberGetValueDelegate } from "./utils";
+import { ColumnNumberOptions } from "./types";
+import { ColumnNumberGetValueDelegate } from "./utils";
 
-export class FdoColumnNumber<TRow> extends FdoColumn<
+export class ColumnNumber<TRow> extends Column<
   TRow,
   number,
-  FdoColumnNumberOptions
+  ColumnNumberOptions
 > {
   public getValue(): number {
-    return FdoColumnNumberGetValueDelegate(this.options);
+    return ColumnNumberGetValueDelegate(this.options);
   }
 }
 
-export class FdoColumnNumberDependency<
+export class ColumnNumberDependency<
   TRow
-> extends FdoColumnDependencyAbstract<
+> extends ColumnDependencyAbstract<
   TRow,
   number,
-  FdoColumnNumberOptions,
-  FdoColumnConstructor<TRow, number, FdoColumnNumberOptions>
+  ColumnNumberOptions,
+  ColumnConstructor<TRow, number, ColumnNumberOptions>
 > {
   public readonly columnConstructor: ConstructorOf<
-    FdoColumnNumber<TRow>
-  > = FdoColumnNumber;
+    ColumnNumber<TRow>
+  > = ColumnNumber;
 }

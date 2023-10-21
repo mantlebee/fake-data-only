@@ -1,4 +1,4 @@
-export type FdoRelationCountCondition<TSourceRow, TTargetRow> = (
+export type RelationCountCondition<TSourceRow, TTargetRow> = (
   sourceRow: TSourceRow,
   targetRow: TTargetRow
 ) => boolean;

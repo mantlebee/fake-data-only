@@ -1,29 +1,29 @@
 import { ConstructorOf } from "@mantlebee/ts-core";
 
-import { FdoColumn } from "@/models";
-import { FdoColumnConstructor } from "@/columns";
+import { Column } from "@/models";
+import { ColumnConstructor } from "@/columns";
 
-import { FdoColumnDateOptions } from "./types";
-import { FdoColumnDateGetValueDelegate } from "./utils";
-import { FdoColumnDependencyAbstract } from "../dependency";
+import { ColumnDateOptions } from "./types";
+import { ColumnDateGetValueDelegate } from "./utils";
+import { ColumnDependencyAbstract } from "../dependency";
 
-export class FdoColumnDate<TRow> extends FdoColumn<
+export class ColumnDate<TRow> extends Column<
   TRow,
   Date,
-  FdoColumnDateOptions
+  ColumnDateOptions
 > {
   public getValue(): Date {
-    return FdoColumnDateGetValueDelegate(this.options);
+    return ColumnDateGetValueDelegate(this.options);
   }
 }
 
-export class FdoColumnDateDependency<TRow> extends FdoColumnDependencyAbstract<
+export class ColumnDateDependency<TRow> extends ColumnDependencyAbstract<
   TRow,
   Date,
-  FdoColumnDateOptions,
-  FdoColumnConstructor<TRow, Date, FdoColumnDateOptions>
+  ColumnDateOptions,
+  ColumnConstructor<TRow, Date, ColumnDateOptions>
 > {
   public readonly columnConstructor: ConstructorOf<
-    FdoColumnDate<TRow>
-  > = FdoColumnDate;
+    ColumnDate<TRow>
+  > = ColumnDate;
 }

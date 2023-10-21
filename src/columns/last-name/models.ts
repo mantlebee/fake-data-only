@@ -1,9 +1,9 @@
-import { FdoColumn } from "@/models";
+import { Column } from "@/models";
 
-import { FdoColumnLastNameGetValueDelegate } from "./utils";
+import { ColumnLastNameGetValueDelegate } from "./utils";
 
-export class FdoColumnLastName<TRow> extends FdoColumn<TRow, string> {
+export class ColumnLastName<TRow> extends Column<TRow, string> {
   public getValue(): string {
-    return FdoColumnLastNameGetValueDelegate();
+    return ColumnLastNameGetValueDelegate();
   }
 }

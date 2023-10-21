@@ -1,3 +1,3 @@
-export type FdoColumnIdOptions = {
+export type ColumnIdOptions = {
   startsFrom?: number;
 };

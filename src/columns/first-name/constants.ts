@@ -1,7 +1,7 @@
 import { Gender } from "@/constants";
 
-import { FdoColumnFirstNameOptions } from "./types";
+import { ColumnFirstNameOptions } from "./types";
 
-export const FdoColumnFirstNameOptionsDefault: FdoColumnFirstNameOptions = {
+export const ColumnFirstNameOptionsDefault: ColumnFirstNameOptions = {
   gender: Gender.unspecified,
 };
