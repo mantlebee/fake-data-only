@@ -25,7 +25,7 @@ export class RelationValue<TSourceRow, TTargetRow> extends Relation<
   public setValues(matrix: Matrix): void {
     const {
       targetColumnName,
-      sourceColumnName,
+      sourceColumn: sourceColumnName,
       sourceTable,
       targetTable,
     } = this;

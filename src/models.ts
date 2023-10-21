@@ -1,6 +1,6 @@
 import { Any, Dictionary, KeyOf, List } from "@mantlebee/ts-core";
 
-import { IColumn, IGenerator, IRelation, ITable } from "./interfaces";
+import { IColumn, IDatabase, IRelation, ITable } from "./interfaces";
 import { ColumnOptions, Matrix, MatrixRow, Row } from "./types";
 import { GeneratorGetMatrixDelegate, TableGetRowsDelegate } from "./utils";
 
@@ -21,7 +21,7 @@ export abstract class Column<
   public abstract getValue(row: TRow): TValue;
 }
 
-export class Generator implements IGenerator {
+export class Generator implements IDatabase {
   public readonly relations?: List<IRelation<Any, Any>>;
   public readonly tables: List<ITable<Any>>;
 
@@ -33,7 +33,7 @@ export class Generator implements IGenerator {
     this.tables = tables;
   }
 
-  public getMatrix(rowsNumberMap: Dictionary<number>): Matrix {
+  public getData(rowsNumberMap: Dictionary<number>): Matrix {
     const { relations, tables } = this;
     return GeneratorGetMatrixDelegate(tables, rowsNumberMap, relations);
   }
@@ -42,7 +42,7 @@ export class Generator implements IGenerator {
 export abstract class Relation<TSourceRow extends Row, TTargetRow extends Row>
   implements IRelation<TSourceRow, TTargetRow>
 {
-  public readonly sourceColumnName: KeyOf<TSourceRow>;
+  public readonly sourceColumn: KeyOf<TSourceRow>;
   public readonly sourceTable: ITable<TSourceRow>;
   public readonly targetTable: ITable<TTargetRow>;
 
@@ -51,7 +51,7 @@ export abstract class Relation<TSourceRow extends Row, TTargetRow extends Row>
     sourceTable: ITable<TSourceRow>,
     targetTable: ITable<TTargetRow>
   ) {
-    this.sourceColumnName = sourceColumnName;
+    this.sourceColumn = sourceColumnName;
     this.sourceTable = sourceTable;
     this.targetTable = targetTable;
   }

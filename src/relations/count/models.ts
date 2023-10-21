@@ -29,7 +29,7 @@ export class RelationCount<TSourceRow, TTargetRow> extends Relation<
   public setValues(matrix: Matrix): void {
     const {
       countConditionDelegate,
-      sourceColumnName,
+      sourceColumn: sourceColumnName,
       sourceTable,
       targetTable,
     } = this;

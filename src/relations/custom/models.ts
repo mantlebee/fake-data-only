@@ -7,11 +7,10 @@ import { Matrix } from "@/types";
 import { RelationCustomGetValueDelegate } from "./types";
 import { RelationCustomSetValuesDelegate } from "./utils";
 
-export class RelationCustom<
+export class RelationCustom<TSourceRow, TTargetRow, TValue> extends Relation<
   TSourceRow,
-  TTargetRow,
-  TValue
-> extends Relation<TSourceRow, TTargetRow> {
+  TTargetRow
+> {
   private readonly getValueDelegate: RelationCustomGetValueDelegate<
     TSourceRow,
     TTargetRow,
@@ -35,7 +34,7 @@ export class RelationCustom<
   public setValues(matrix: Matrix): void {
     const {
       getValueDelegate,
-      sourceColumnName,
+      sourceColumn: sourceColumnName,
       sourceTable,
       targetTable,
     } = this;
