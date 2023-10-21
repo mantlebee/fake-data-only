@@ -1,12 +1,13 @@
-import { Any, KeyOf, List } from "@mantlebee/ts-core";
+import { Any, Dictionary, List } from "@mantlebee/ts-core";
 
 import { ITable } from "./interfaces";
 
-export type ColumnOptions = {};
+export type ColumnOptions = { nullable?: boolean };
 
 export type Matrix = List<MatrixRow<Any>>;
-export type MatrixRow<TRow> = { table: ITable<TRow>; rows: List<TRow> };
-
-export type TableOptions<TRow> = {
-  nullables: List<KeyOf<TRow>>;
+export type MatrixRow<TRow extends Row> = {
+  table: ITable<TRow>;
+  rows: List<TRow>;
 };
+
+export type Row = Dictionary<Any>;

@@ -2,13 +2,13 @@ import { numberIsInteger } from "@mantlebee/ts-core";
 
 import { ColumnNumberGetValueDelegate } from "../utils";
 
-type Row = {
+type RowTest = {
   decimals: number;
   max: number;
   min: number;
 };
 
-const row: Row = {
+const row: RowTest = {
   decimals: 2,
   max: 12,
   min: 5,

@@ -1,11 +1,11 @@
 import { Any, Dictionary, KeyOf, List } from "@mantlebee/ts-core";
 
-import { ColumnOptions, Matrix, TableOptions } from "./types";
+import { ColumnOptions, Matrix, Row } from "./types";
 
 export interface IColumn<
-  TRow,
-  TValue,
-  TOptions extends ColumnOptions = Any
+  TRow extends Row,
+  TValue = Any,
+  TOptions extends ColumnOptions = ColumnOptions
 > {
   readonly name: KeyOf<TRow>;
   readonly options: TOptions;
@@ -18,16 +18,15 @@ export interface IGenerator<> {
   getMatrix(rowsNumberMap: Dictionary<number>): Matrix;
 }
 
-export interface IRelation<TSourceRow, TTargetRow> {
+export interface IRelation<TSourceRow extends Row, TTargetRow extends Row> {
   readonly sourceColumnName: KeyOf<TSourceRow>;
   readonly sourceTable: ITable<TSourceRow>;
   readonly targetTable: ITable<TTargetRow>;
   setValues(matrix: Matrix): void;
 }
 
-export interface ITable<TRow> {
-  readonly columns: List<IColumn<TRow, Any, Any>>;
+export interface ITable<TRow extends Row> {
+  readonly columns: List<IColumn<TRow>>;
   readonly name: string;
-  readonly options?: TableOptions<TRow>;
-  getRows(rowsNumber: number): List<TRow>;
+  getRows(count: number): List<TRow>;
 }

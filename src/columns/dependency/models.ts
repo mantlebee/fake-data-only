@@ -1,13 +1,13 @@
 import { KeyOf } from "@mantlebee/ts-core";
 
 import { Column } from "@/models";
-import { ColumnOptions } from "@/types";
+import { ColumnOptions, Row } from "@/types";
 
 import { ColumnDependencyGetValueDelegate } from "./utils";
 import { ColumnConstructor, ColumnOptionsValueGettersMap } from "./types";
 
 export abstract class ColumnDependencyAbstract<
-  TRow,
+  TRow extends Row,
   TValue,
   TOptions extends ColumnOptions,
   TConstructor extends ColumnConstructor<TRow, TValue, TOptions>

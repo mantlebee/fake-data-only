@@ -1,12 +1,12 @@
 import { ColumnNumberDependency } from "../models";
 
-type Row = {
+type RowTest = {
   decimals: number;
   max: number;
   min: number;
 };
 
-const row: Row = {
+const row: RowTest = {
   decimals: 2,
   max: 12,
   min: 5,
@@ -16,7 +16,7 @@ describe("ColumnNumber", () => {
   describe("models", () => {
     describe("ColumnNumberDependency", () => {
       it("Generates a random number, taking decimals, max and min from the passed row", () => {
-        const dependantColumn = new ColumnNumberDependency<Row>("max", {
+        const dependantColumn = new ColumnNumberDependency<RowTest>("max", {
           decimals: (a) => a.decimals,
           max: (a) => a.max,
           min: (a) => a.min,

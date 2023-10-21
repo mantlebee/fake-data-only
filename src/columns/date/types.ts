@@ -1,6 +1,9 @@
 import { GenerateRandomDateOptions } from "@mantlebee/ts-random";
 
-export type ColumnDateOptions = GenerateRandomDateOptions & {
-  dateFrom?: Date;
-  dateTo?: Date;
-};
+import { ColumnOptions } from "@/types";
+
+export type ColumnDateOptions = ColumnOptions &
+  GenerateRandomDateOptions & {
+    dateFrom?: Date;
+    dateTo?: Date;
+  };

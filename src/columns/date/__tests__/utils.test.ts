@@ -1,11 +1,11 @@
 import { ColumnDateGetValueDelegate } from "../utils";
 
-type Row = {
+type RowTest = {
   dateFrom: Date;
   dateTo: Date;
 };
 
-const row: Row = {
+const row: RowTest = {
   dateFrom: new Date(2022, 4, 3, 0, 0, 0),
   dateTo: new Date(2022, 4, 3, 23, 59, 59),
 };

@@ -25,11 +25,7 @@ import {
   ColumnPattern,
   ColumnString,
 } from "@/columns";
-import {
-  RelationCount,
-  RelationCustom,
-  RelationValue,
-} from "@/relations";
+import { RelationCount, RelationCustom, RelationValue } from "@/relations";
 import { MatrixRow } from "@/types";
 import { TableGetRowsDelegate } from "@/utils";
 
@@ -90,9 +86,9 @@ const orderCategoriesCountRelations = new RelationCustom<
       .filter((a) => a.orderId === order.id)
       .map((a) => a.productId);
     // Products of the order
-    const products = (matrix.find(
-      (a) => a.table === productsTable
-    ) as MatrixRow<Product>).rows;
+    const products = (
+      matrix.find((a) => a.table === productsTable) as MatrixRow<Product>
+    ).rows;
     // Categories ids list with duplicate values
     const fullCategoriesIds = products
       .filter((a) => productsIds.includes(a.id))
@@ -159,10 +155,10 @@ describe("Table", () => {
     });
     describe("TableGetRowsDelegate", () => {
       it("Generates 5 rows of {name: string}", () => {
-        type Row = { name: string };
-        const rows = TableGetRowsDelegate<Row>(
+        type RowTest = { name: string };
+        const rows = TableGetRowsDelegate<RowTest>(
           [
-            new ColumnString<Row>("name", {
+            new ColumnString<RowTest>("name", {
               maxLength: 12,
               minLength: 4,
             }),
@@ -181,7 +177,7 @@ describe("Table", () => {
           standard,
           advanced,
         }
-        type Row = {
+        type RowTest = {
           id: number;
           name: string;
           surname: string;
@@ -198,39 +194,38 @@ describe("Table", () => {
           phone: string;
           username: string;
         };
-        const rows = TableGetRowsDelegate<Row>(
+        const rows = TableGetRowsDelegate<RowTest>(
           [
-            new ColumnId<Row>("id"),
-            new ColumnFirstName<Row>("name"),
-            new ColumnLastName<Row>("surname"),
-            new ColumnCustom<Row, string>(
+            new ColumnId<RowTest>("id"),
+            new ColumnFirstName<RowTest>("name"),
+            new ColumnLastName<RowTest>("surname"),
+            new ColumnCustom<RowTest, string>(
               "fullname",
               (a) => `${a.name} ${a.surname}`
             ),
-            new ColumnNumber<Row>("age", { max: 90 }),
-            new ColumnEmailDependency<Row>("email", {
+            new ColumnNumber<RowTest>("age", { max: 90, nullable: true }),
+            new ColumnEmailDependency<RowTest>("email", {
               firstNames: (a) => [a.name],
               lastNames: (a) => [a.surname],
             }),
-            new ColumnBoolean<Row>("active"),
-            new ColumnDate<Row>("registered"),
-            new ColumnDateDependency<Row>("expires", {
+            new ColumnBoolean<RowTest>("active"),
+            new ColumnDate<RowTest>("registered"),
+            new ColumnDateDependency<RowTest>("expires", {
               dateFrom: (a) => a.registered,
             }),
-            new ColumnEnum<Row, RowType>("type", Object(RowType)),
-            new ColumnColor<Row>("color"),
-            new ColumnNumber<Row>("scoreMax", { max: 100 }),
-            new ColumnNumberDependency<Row>("score", {
+            new ColumnEnum<RowTest, RowType>("type", Object(RowType)),
+            new ColumnColor<RowTest>("color"),
+            new ColumnNumber<RowTest>("scoreMax", { max: 100 }),
+            new ColumnNumberDependency<RowTest>("score", {
               max: (a) => a.scoreMax,
             }),
-            new ColumnPattern<Row>("phone", "+000-00000"),
-            new ColumnPattern<Row>("username", "a{8,12}"),
+            new ColumnPattern<RowTest>("phone", "+000-00000"),
+            new ColumnPattern<RowTest>("username", "a{8,12}"),
           ],
-          100,
-          { nullables: ["age"] }
+          100
         );
         expect(rows.length).toBe(100);
-        let lastRow: Nullable<Row> = null;
+        let lastRow: Nullable<RowTest> = null;
         rows.forEach((a) => {
           if (lastRow) expect(a.id).toBe(lastRow.id + 1);
           expect(isNumber(a.id)).toBeTruthy();

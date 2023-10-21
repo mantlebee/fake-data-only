@@ -2,18 +2,10 @@ import { Dictionary, Any, List, KeyOf } from "@mantlebee/ts-core";
 import { generateRandomBoolean } from "@mantlebee/ts-random";
 
 import { IColumn, IRelation, ITable } from "./interfaces";
-import { Matrix, TableOptions } from "./types";
+import { Matrix, Row } from "./types";
 
-function shouldBeNull<T>(
-  column: IColumn<T, Any, Any>,
-  options?: TableOptions<T>
-): boolean {
-  return Boolean(
-    options &&
-      options.nullables &&
-      options.nullables.includes(column.name) &&
-      generateRandomBoolean()
-  );
+function shouldBeNull<TRow extends Row>(column: IColumn<TRow>): boolean {
+  return Boolean(column.options.nullable && generateRandomBoolean());
 }
 
 export function GeneratorGetMatrixDelegate(
@@ -31,16 +23,15 @@ export function GeneratorGetMatrixDelegate(
   return matrix;
 }
 
-export function TableGetRowsDelegate<T extends Dictionary<Any>>(
-  columns: List<IColumn<T, Any, Any>>,
-  rowsNumber: number,
-  options?: TableOptions<T>
-): List<T> {
-  const items: List<T> = [];
-  for (let i = 0; i < rowsNumber; ++i) {
-    const row: T = {} as T;
+export function TableGetRowsDelegate<TRow extends Row>(
+  columns: List<IColumn<TRow>>,
+  count: number
+): List<TRow> {
+  const items: List<TRow> = [];
+  for (let i = 0; i < count; i++) {
+    const row: TRow = {} as TRow;
     columns.forEach((a) => {
-      if (shouldBeNull(a, options)) row[a.name] = null as T[KeyOf<T>];
+      if (shouldBeNull(a)) row[a.name] = null as TRow[KeyOf<TRow>];
       else row[a.name] = a.getValue({ ...row });
     });
     items.push(row);

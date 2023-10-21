@@ -9,14 +9,14 @@ import {
 
 import { ColumnDependencyGetValueDelegate } from "../utils";
 
-type Row = {
+type RowTest = {
   activatedOn: Date;
   exipresOn: Date;
   slotsTotal: number;
   slotsAvailable: number;
 };
 
-const row: Row = {
+const row: RowTest = {
   activatedOn: new Date(2022, 0, 1, 0, 0, 0),
   exipresOn: new Date(2022, 11, 31, 23, 59, 59),
   slotsAvailable: 2,
@@ -31,10 +31,10 @@ describe("ColumnDependency", () => {
         for (let i = 0; i < 100; ++i)
           randoms.push(
             ColumnDependencyGetValueDelegate<
-              Row,
+              RowTest,
               number,
               ColumnNumberOptions,
-              ConstructorOf<ColumnNumber<Row>>
+              ConstructorOf<ColumnNumber<RowTest>>
             >(row, ColumnNumber, {
               max: (a) => a.slotsTotal,
               min: (a) => a.slotsAvailable,
@@ -50,10 +50,10 @@ describe("ColumnDependency", () => {
         for (let i = 0; i < 100; ++i)
           randoms.push(
             ColumnDependencyGetValueDelegate<
-              Row,
+              RowTest,
               Date,
               ColumnDateOptions,
-              ConstructorOf<ColumnDate<Row>>
+              ConstructorOf<ColumnDate<RowTest>>
             >(row, ColumnDate, {
               dateFrom: (a) => a.activatedOn,
               dateTo: (a) => a.exipresOn,

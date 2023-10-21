@@ -1,4 +1,6 @@
-export type ColumnStringOptions = {
+import { ColumnOptions } from "@/types";
+
+export type ColumnStringOptions = ColumnOptions & {
   include?: {
     lowercase?: boolean;
     numbers?: boolean;

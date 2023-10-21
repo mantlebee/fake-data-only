@@ -1,11 +1,12 @@
 import { KeyOf, NumericIdentityManager } from "@mantlebee/ts-core";
 
 import { Column } from "@/models";
+import { Row } from "@/types";
 
 import { ColumnIdOptions } from "./types";
 import { ColumnIdStartsFrom } from "./constants";
 
-export class ColumnId<TRow> extends Column<
+export class ColumnId<TRow extends Row> extends Column<
   TRow,
   number,
   ColumnIdOptions

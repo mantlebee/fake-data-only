@@ -1,33 +1,21 @@
 import { Any, Dictionary, KeyOf, List } from "@mantlebee/ts-core";
 
-import {
-  IColumn,
-  IGenerator,
-  IRelation,
-  ITable,
-} from "./interfaces";
-import {
-  ColumnOptions,
-  Matrix,
-  MatrixRow,
-  TableOptions,
-} from "./types";
-import {
-  GeneratorGetMatrixDelegate,
-  TableGetRowsDelegate,
-} from "./utils";
+import { IColumn, IGenerator, IRelation, ITable } from "./interfaces";
+import { ColumnOptions, Matrix, MatrixRow, Row } from "./types";
+import { GeneratorGetMatrixDelegate, TableGetRowsDelegate } from "./utils";
 
 export abstract class Column<
-  TRow,
+  TRow extends Row,
   TValue,
-  TOptions extends ColumnOptions = Any
-> implements IColumn<TRow, TValue, TOptions> {
+  TOptions extends ColumnOptions = ColumnOptions
+> implements IColumn<TRow, TValue, TOptions>
+{
   public readonly name: KeyOf<TRow>;
-  public readonly options!: TOptions;
+  public readonly options: TOptions;
 
   public constructor(name: KeyOf<TRow>, options?: TOptions) {
     this.name = name;
-    if (options) this.options = options;
+    this.options = options || ({} as TOptions);
   }
 
   public abstract getValue(row: TRow): TValue;
@@ -51,8 +39,9 @@ export class Generator implements IGenerator {
   }
 }
 
-export abstract class Relation<TSourceRow, TTargetRow>
-  implements IRelation<TSourceRow, TTargetRow> {
+export abstract class Relation<TSourceRow extends Row, TTargetRow extends Row>
+  implements IRelation<TSourceRow, TTargetRow>
+{
   public readonly sourceColumnName: KeyOf<TSourceRow>;
   public readonly sourceTable: ITable<TSourceRow>;
   public readonly targetTable: ITable<TTargetRow>;
@@ -67,7 +56,7 @@ export abstract class Relation<TSourceRow, TTargetRow>
     this.targetTable = targetTable;
   }
 
-  protected getTableRows<TRow>(
+  protected getTableRows<TRow extends Row>(
     table: ITable<TRow>,
     matrix: Matrix
   ): List<TRow> {
@@ -77,23 +66,17 @@ export abstract class Relation<TSourceRow, TTargetRow>
   public abstract setValues(matrix: Matrix): void;
 }
 
-export class Table<TRow> implements ITable<TRow> {
-  public readonly columns: List<IColumn<TRow, Any, Any>>;
+export class Table<TRow extends Row> implements ITable<TRow> {
+  public readonly columns: List<IColumn<TRow>>;
   public readonly name: string;
-  public readonly options?: TableOptions<TRow>;
 
-  public constructor(
-    name: string,
-    columns: List<IColumn<TRow, Any, Any>>,
-    options?: TableOptions<TRow>
-  ) {
+  public constructor(name: string, columns: List<IColumn<TRow>>) {
     this.columns = columns;
     this.name = name;
-    this.options = options;
   }
 
-  public getRows(rowsNumber: number): List<TRow> {
-    const { columns, options } = this;
-    return TableGetRowsDelegate(columns, rowsNumber, options);
+  public getRows(count: number): List<TRow> {
+    const { columns } = this;
+    return TableGetRowsDelegate(columns, count);
   }
 }
