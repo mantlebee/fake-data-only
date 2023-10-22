@@ -1,6 +1,6 @@
 import { List } from "@mantlebee/ts-core";
 
-import { RelationValueSetValuesDelegate } from "../utils";
+import { ColumnRelationValueDelegate } from "../utils";
 
 describe("RelationValue", () => {
   describe("utils", () => {
@@ -16,11 +16,11 @@ describe("RelationValue", () => {
           { personId: -1 },
         ];
         const masterRows: List<Master> = [{ id: 1 }, { id: 2 }, { id: 3 }];
-        RelationValueSetValuesDelegate<Detail, Master>(
+        ColumnRelationValueDelegate<Detail, Master>(
           "personId",
+          "id",
           detailRows,
-          masterRows,
-          "id"
+          masterRows
         );
         detailRows.forEach((a) => {
           expect(a.personId).toBeGreaterThanOrEqual(1);

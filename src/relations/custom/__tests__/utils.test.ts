@@ -1,7 +1,7 @@
 import { List } from "@mantlebee/ts-core";
 
-import { RelationCustomGetValueDelegate } from "../types";
-import { RelationCustomSetValuesDelegate } from "../utils";
+import { ColumnRelationCustomGetValueDelegate } from "../types";
+import { ColumnRelationCustomDelegate } from "../utils";
 
 describe("RelationCustom", () => {
   describe("utils", () => {
@@ -19,16 +19,17 @@ describe("RelationCustom", () => {
           { emailsWithCCount: -1 },
           { emailsWithCCount: -1 },
         ];
-        const delegate: RelationCustomGetValueDelegate<From, To, number> = (
-          s,
-          t
-        ) => t.filter((a) => /x/.test(a.email)).length;
-        RelationCustomSetValuesDelegate<From, To, number>(
+        const delegate: ColumnRelationCustomGetValueDelegate<
+          From,
+          To,
+          number
+        > = (s, t) => t.filter((a) => /x/.test(a.email)).length;
+        ColumnRelationCustomDelegate<From, To, number>(
           "emailsWithCCount",
+          delegate,
           people,
           contacts,
-          [],
-          delegate
+          {}
         );
         people.forEach((a) => {
           expect(a.emailsWithCCount).toBe(2);

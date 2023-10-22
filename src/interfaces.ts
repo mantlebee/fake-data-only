@@ -45,7 +45,8 @@ export interface IColumnRelation<
 > extends IColumn<TSourceRow, TValue, TOptions> {
   setRelationValues(
     sourceRows: List<TSourceRow>,
-    targetRows: List<TTargetRow>
+    targetRows: List<TTargetRow>,
+    data: Data
   ): void;
 }
 
@@ -58,8 +59,6 @@ export interface IDatabase {
   readonly tables: List<ITable<Any>>;
   getData(rowsNumberMap: Dictionary<number>): Data;
 }
-
-
 
 /**
  * Represents a table.

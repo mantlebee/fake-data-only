@@ -1,41 +1,31 @@
-import { KeyOf } from "@mantlebee/ts-core";
+import { KeyOf, List } from "@mantlebee/ts-core";
 
-import { ITable } from "@/interfaces";
-import { Relation } from "@/models";
-import { Data } from "@/types";
+import { ColumnRelation } from "@/models";
+import { Row } from "@/types";
 
-import { RelationValueSetValuesDelegate } from "./utils";
+import { ColumnRelationValueDelegate } from "./utils";
 
-export class RelationValue<TSourceRow, TTargetRow> extends Relation<
-  TSourceRow,
-  TTargetRow
-> {
+export class ColumnRelationValue<
+  TSourceRow extends Row,
+  TTargetRow extends Row,
+  TValue
+> extends ColumnRelation<TSourceRow, TTargetRow, TValue> {
   private readonly targetColumnName: KeyOf<TTargetRow>;
 
   public constructor(
-    sourceColumnName: KeyOf<TSourceRow>,
-    sourceTable: ITable<TSourceRow>,
-    targetTable: ITable<TTargetRow>,
+    name: KeyOf<TSourceRow>,
+    defaultValue: TValue,
     targetColumnName: KeyOf<TTargetRow>
   ) {
-    super(sourceColumnName, sourceTable, targetTable);
+    super(name, defaultValue);
     this.targetColumnName = targetColumnName;
   }
 
-  public setValues(matrix: Data): void {
-    const {
-      targetColumnName,
-      sourceColumn: sourceColumnName,
-      sourceTable,
-      targetTable,
-    } = this;
-    const sourceRows = this.getTableRows(sourceTable, matrix);
-    const targetRows = this.getTableRows(targetTable, matrix);
-    RelationValueSetValuesDelegate(
-      sourceColumnName,
-      sourceRows,
-      targetRows,
-      targetColumnName
-    );
+  public setRelationValues(
+    sourceRows: List<TSourceRow>,
+    targetRows: List<TTargetRow>
+  ): void {
+    const { name, targetColumnName } = this;
+    ColumnRelationValueDelegate(name, targetColumnName, sourceRows, targetRows);
   }
 }

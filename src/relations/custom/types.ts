@@ -1,13 +1,9 @@
 import { List } from "@mantlebee/ts-core";
 
-import { Data } from "@/types";
+import { Data, Row } from "@/types";
 
-export type RelationCustomGetValueDelegate<
-  TSourceRow,
-  TTargetRow,
+export type ColumnRelationCustomGetValueDelegate<
+  TSourceRow extends Row,
+  TTargetRow extends Row,
   TValue
-> = (
-  sourceRow: TSourceRow,
-  targetRows: List<TTargetRow>,
-  matrix: Data
-) => TValue;
+> = (sourceRow: TSourceRow, targetRows: List<TTargetRow>, data: Data) => TValue;

@@ -1,19 +1,22 @@
 import { KeyOf, List } from "@mantlebee/ts-core";
 
-import { RelationCountCondition } from "./types";
+import { Row } from "@/types";
 
-export function RelationCountSetValuesDelegate<TSourceRow, TTargetRow>(
-  countConditionDelegate: RelationCountCondition<TSourceRow, TTargetRow>,
+import { ColumnRelationCountCondition } from "./types";
+
+export function ColumnRelationCountDelegate<
+  TSourceRow extends Row,
+  TTargetRow extends Row
+>(
   sourceColumnName: KeyOf<TSourceRow>,
+  countConditionDelegate: ColumnRelationCountCondition<TSourceRow, TTargetRow>,
   sourceRows: List<TSourceRow>,
-  targetRows: List<TTargetRow>
+  targetRows: List<TTargetRow>,
 ): void {
   sourceRows.forEach((sourceRow) => {
     const count = targetRows.filter((targetRow) =>
       countConditionDelegate(sourceRow, targetRow)
     ).length;
-    sourceRow[sourceColumnName] = (count as unknown) as TSourceRow[KeyOf<
-      TSourceRow
-    >];
+    sourceRow[sourceColumnName] = count as TSourceRow[KeyOf<TSourceRow>];
   });
 }

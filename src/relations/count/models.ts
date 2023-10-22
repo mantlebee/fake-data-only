@@ -1,43 +1,36 @@
-import { KeyOf } from "@mantlebee/ts-core";
+import { KeyOf, List } from "@mantlebee/ts-core";
 
-import { ITable } from "@/interfaces";
-import { Relation } from "@/models";
-import { Data } from "@/types";
+import { Row } from "@/types";
 
-import { RelationCountCondition } from "./types";
-import { RelationCountSetValuesDelegate } from "./utils";
+import { ColumnRelationNumber } from "../models";
+import { ColumnRelationCountCondition } from "./types";
+import { ColumnRelationCountDelegate } from "./utils";
 
-export class RelationCount<TSourceRow, TTargetRow> extends Relation<
-  TSourceRow,
-  TTargetRow
-> {
-  private readonly countConditionDelegate: RelationCountCondition<
+export class ColumnRelationCount<
+  TSourceRow extends Row,
+  TTargetRow extends Row
+> extends ColumnRelationNumber<TSourceRow, TTargetRow> {
+  private readonly countConditionDelegate: ColumnRelationCountCondition<
     TSourceRow,
     TTargetRow
   >;
 
   public constructor(
-    sourceColumnName: KeyOf<TSourceRow>,
-    sourceTable: ITable<TSourceRow>,
-    targetTable: ITable<TTargetRow>,
-    countConditionDelegate: RelationCountCondition<TSourceRow, TTargetRow>
+    name: KeyOf<TSourceRow>,
+    countConditionDelegate: ColumnRelationCountCondition<TSourceRow, TTargetRow>
   ) {
-    super(sourceColumnName, sourceTable, targetTable);
+    super(name);
     this.countConditionDelegate = countConditionDelegate;
   }
 
-  public setValues(matrix: Data): void {
-    const {
+  public setRelationValues(
+    sourceRows: List<TSourceRow>,
+    targetRows: List<TTargetRow>
+  ): void {
+    const { countConditionDelegate, name } = this;
+    ColumnRelationCountDelegate(
+      name,
       countConditionDelegate,
-      sourceColumn: sourceColumnName,
-      sourceTable,
-      targetTable,
-    } = this;
-    const sourceRows = this.getTableRows(sourceTable, matrix);
-    const targetRows = this.getTableRows(targetTable, matrix);
-    RelationCountSetValuesDelegate(
-      countConditionDelegate,
-      sourceColumnName,
       sourceRows,
       targetRows
     );

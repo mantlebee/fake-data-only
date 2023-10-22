@@ -1,29 +1,29 @@
 import { KeyOf, List } from "@mantlebee/ts-core";
 
-import { Data } from "@/types";
+import { Data, Row } from "@/types";
 
-import { RelationCustomGetValueDelegate } from "./types";
+import { ColumnRelationCustomGetValueDelegate } from "./types";
 
-export function RelationCustomSetValuesDelegate<
-  TSourceRow,
-  TTargetRow,
+export function ColumnRelationCustomDelegate<
+  TSourceRow extends Row,
+  TTargetRow extends Row,
   TValue
 >(
   sourceColumnName: KeyOf<TSourceRow>,
-  sourceRows: List<TSourceRow>,
-  targetRows: List<TTargetRow>,
-  matrix: Data,
-  getValueDelegate: RelationCustomGetValueDelegate<
+  getValueDelegate: ColumnRelationCustomGetValueDelegate<
     TSourceRow,
     TTargetRow,
     TValue
-  >
+  >,
+  sourceRows: List<TSourceRow>,
+  targetRows: List<TTargetRow>,
+  data: Data
 ): void {
   sourceRows.forEach((sourceRow) => {
-    sourceRow[sourceColumnName] = (getValueDelegate(
+    sourceRow[sourceColumnName] = getValueDelegate(
       sourceRow,
       targetRows,
-      matrix
-    ) as unknown) as TSourceRow[KeyOf<TSourceRow>];
+      data
+    ) as unknown as TSourceRow[KeyOf<TSourceRow>];
   });
 }

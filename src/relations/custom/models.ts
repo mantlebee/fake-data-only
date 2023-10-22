@@ -1,51 +1,47 @@
-import { KeyOf } from "@mantlebee/ts-core";
+import { KeyOf, List } from "@mantlebee/ts-core";
 
-import { ITable } from "@/interfaces";
-import { Relation } from "@/models";
-import { Data } from "@/types";
+import { ColumnRelation } from "@/models";
+import { Data, Row } from "@/types";
 
-import { RelationCustomGetValueDelegate } from "./types";
-import { RelationCustomSetValuesDelegate } from "./utils";
+import { ColumnRelationCustomGetValueDelegate } from "./types";
+import { ColumnRelationCustomDelegate } from "./utils";
 
-export class RelationCustom<TSourceRow, TTargetRow, TValue> extends Relation<
-  TSourceRow,
-  TTargetRow
-> {
-  private readonly getValueDelegate: RelationCustomGetValueDelegate<
+export class ColumnRelationCustom<
+  TSourceRow extends Row,
+  TTargetRow extends Row,
+  TValue
+> extends ColumnRelation<TSourceRow, TTargetRow, TValue> {
+  private readonly getValueDelegate: ColumnRelationCustomGetValueDelegate<
     TSourceRow,
     TTargetRow,
     TValue
   >;
 
   public constructor(
-    sourceColumnName: KeyOf<TSourceRow>,
-    sourceTable: ITable<TSourceRow>,
-    targetTable: ITable<TTargetRow>,
-    getValueDelegate: RelationCustomGetValueDelegate<
+    name: KeyOf<TSourceRow>,
+    defaultValue: TValue,
+    getValueDelegate: ColumnRelationCustomGetValueDelegate<
       TSourceRow,
       TTargetRow,
       TValue
     >
   ) {
-    super(sourceColumnName, sourceTable, targetTable);
+    super(name, defaultValue);
     this.getValueDelegate = getValueDelegate;
   }
 
-  public setValues(matrix: Data): void {
-    const {
+  public setRelationValues(
+    sourceRows: List<TSourceRow>,
+    targetRows: List<TTargetRow>,
+    data: Data
+  ): void {
+    const { getValueDelegate, name } = this;
+    ColumnRelationCustomDelegate(
+      name,
       getValueDelegate,
-      sourceColumn: sourceColumnName,
-      sourceTable,
-      targetTable,
-    } = this;
-    const sourceRows = this.getTableRows(sourceTable, matrix);
-    const targetRows = this.getTableRows(targetTable, matrix);
-    RelationCustomSetValuesDelegate(
-      sourceColumnName,
       sourceRows,
       targetRows,
-      matrix,
-      getValueDelegate
+      data
     );
   }
 }

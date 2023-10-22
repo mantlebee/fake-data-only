@@ -1,8 +1,8 @@
 import { Any, Dictionary, KeyOf, List } from "@mantlebee/ts-core";
 
-import { IColumn, IDatabase, ITable } from "./interfaces";
+import { IColumn, IColumnRelation, IDatabase, ITable } from "./interfaces";
 import { ColumnOptions, Data, Relation, Row } from "./types";
-import { GeneratorGetMatrixDelegate, TableGetRowsDelegate } from "./utils";
+import { DatabaseGetDataDelegate, TableGetRowsDelegate } from "./utils";
 
 export abstract class Column<
   TRow extends Row,
@@ -21,21 +21,49 @@ export abstract class Column<
   public abstract getValue(row: TRow): TValue;
 }
 
+export abstract class ColumnRelation<
+    TSourceRow extends Row,
+    TTargetRow extends Row,
+    TValue = Any,
+    TOptions extends ColumnOptions = ColumnOptions
+  >
+  extends Column<TSourceRow, TValue, TOptions>
+  implements IColumnRelation<TSourceRow, TTargetRow, TValue, TOptions>
+{
+  private readonly defaultValue: TValue;
+
+  public constructor(
+    name: KeyOf<TSourceRow>,
+    defaultValue: TValue,
+    options?: TOptions
+  ) {
+    super(name, options);
+    this.defaultValue = defaultValue;
+  }
+
+  public getValue(row: TSourceRow): TValue {
+    return this.defaultValue;
+  }
+
+  public abstract setRelationValues(
+    sourceRows: List<TSourceRow>,
+    targetRows: List<TTargetRow>,
+    data: Data
+  ): void;
+}
+
 export class Generator implements IDatabase {
   public readonly relations?: List<Relation>;
   public readonly tables: List<ITable<Any>>;
 
-  public constructor(
-    tables: List<ITable<Any>>,
-    relations?: List<Relation>
-  ) {
+  public constructor(tables: List<ITable<Any>>, relations?: List<Relation>) {
     this.relations = relations;
     this.tables = tables;
   }
 
   public getData(rowsNumberMap: Dictionary<number>): Data {
     const { relations, tables } = this;
-    return GeneratorGetMatrixDelegate(tables, rowsNumberMap, relations);
+    return DatabaseGetDataDelegate(tables, rowsNumberMap, relations);
   }
 }
 

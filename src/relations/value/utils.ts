@@ -1,5 +1,7 @@
 import { KeyOf, List } from "@mantlebee/ts-core";
-import { extractRandomItems, generateRandomNumber } from "@mantlebee/ts-random";
+import { extractRandomItems } from "@mantlebee/ts-random";
+
+import { Row } from "@/types";
 
 function createChunks<T>(list: List<T>, size: number): List<List<T>> {
   const chunks: List<List<T>> = [];
@@ -12,18 +14,21 @@ function createChunks<T>(list: List<T>, size: number): List<List<T>> {
   return chunks;
 }
 
-export function RelationValueSetValuesDelegate<TSourceRow, TTargetRow>(
+export function ColumnRelationValueDelegate<
+  TSourceRow extends Row,
+  TTargetRow extends Row
+>(
   sourceColumnName: KeyOf<TSourceRow>,
+  targetColumnName: KeyOf<TTargetRow>,
   sourceRows: List<TSourceRow>,
-  targetRows: List<TTargetRow>,
-  targetColumnName: KeyOf<TTargetRow>
+  targetRows: List<TTargetRow>
 ): void {
   const sourceRowsChunk = createChunks(sourceRows, targetRows.length);
   targetRows.forEach((targetRow, index) => {
     sourceRowsChunk[index].forEach((sourceRow) => {
-      sourceRow[sourceColumnName] = (targetRow[
+      sourceRow[sourceColumnName] = targetRow[
         targetColumnName
-      ] as unknown) as TSourceRow[KeyOf<TSourceRow>];
+      ] as unknown as TSourceRow[KeyOf<TSourceRow>];
     });
   });
 }

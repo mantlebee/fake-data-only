@@ -3,23 +3,37 @@ import { generateRandomBoolean } from "@mantlebee/ts-random";
 
 import { IColumn, ITable } from "./interfaces";
 import { Data, Relation, Row } from "./types";
+import { ColumnRelation } from "./models";
+
+const DefaultCount = 0;
 
 function shouldBeNull<TRow extends Row>(column: IColumn<TRow>): boolean {
-  return Boolean(column.options.nullable && generateRandomBoolean());
+  const { nullable } = column.options;
+  return Boolean(
+    (column instanceof ColumnRelation && nullable) ||
+      (nullable && generateRandomBoolean())
+  );
 }
 
-export function GeneratorGetMatrixDelegate(
+export function DatabaseGetDataDelegate(
   tables: List<ITable<Any>>,
   countsMap: Dictionary<number>,
   relations?: List<Relation>
 ): Data {
   const data = tables.reduce((result, current) => {
     const { name } = current;
-    const count = countsMap[name];
-    result[name] = { table: current, rows: current.getRows(count) }
+    const count = countsMap[name] || DefaultCount;
+    result[name] = { table: current, rows: current.getRows(count) };
     return result;
-  }, {});
-  if (relations) relations.forEach((a) => a.setValues(data));
+  }, {} as Data);
+  if (relations)
+    relations.forEach((a) => {
+      const { sourceColumn, sourceTable, targetTable } = a;
+      const sourceData = data[sourceTable.name];
+      const targetData = data[targetTable.name];
+      if (sourceData && targetData)
+        sourceColumn.setRelationValues(sourceData.rows, targetData.rows, data);
+    });
   return data;
 }
 

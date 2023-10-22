@@ -1,10 +1,12 @@
 import {
+  Any,
   Dictionary,
   isBoolean,
   isDate,
   isEmail,
   isNumber,
   isString,
+  List,
   Nullable,
   objectHasKey,
 } from "@mantlebee/ts-core";
@@ -25,121 +27,156 @@ import {
   ColumnPattern,
   ColumnString,
 } from "@/columns";
-import { RelationCount, RelationCustom, RelationValue } from "@/relations";
-import { MatrixRow } from "@/types";
+import {
+  ColumnRelationCount,
+  ColumnRelationCustom,
+  ColumnRelationValue,
+} from "@/relations";
 import { TableGetRowsDelegate } from "@/utils";
+import { Row } from "@/types";
 
 import { Table } from "../models";
-import { GeneratorGetMatrixDelegate } from "../utils";
+import { DatabaseGetDataDelegate } from "../utils";
+import { ITable, Relation } from "..";
 
+//#region Types
 type Product = { categoryId: number; id: number; name: string };
 type ProductCategory = { id: number; name: string };
-type Order = { categoriesCount: number; id: number; productsCount: number };
+type Order = {
+  categoriesCount: number;
+  id: number;
+  productsCount: number;
+};
 type OrderProduct = { orderId: number; productId: number };
+//#endregion
 
+//#region Columns
+const productCategoryColumn = new ColumnRelationValue<
+  Product,
+  ProductCategory,
+  number
+>("categoryId", 0, "id");
+const orderCategoriesCountColumn = new ColumnRelationCustom<
+  Order,
+  OrderProduct,
+  number
+>("categoriesCount", 0, (order, orderProducts, data) => {
+  // Product ids of the order
+  const productsIds = orderProducts
+    .filter((a) => a.orderId === order.id)
+    .map((a) => a.productId);
+  // Products of the order
+  const products = data[productsTable.name].rows;
+  // Categories ids list with duplicate values
+  const fullCategoriesIds = products
+    .filter((a) => productsIds.includes(a.id))
+    .map((a) => a.categoryId);
+  // Distinct of categories ids
+  const categoriesIds = new Set(fullCategoriesIds).values;
+  // Count of the categories of the order
+  return categoriesIds.length;
+});
+const orderProductsCountColumn = new ColumnRelationCount<Order, OrderProduct>(
+  "productsCount",
+  (o, op) => op.orderId === o.id
+);
+const orderProductOrderColumn = new ColumnRelationValue<
+  OrderProduct,
+  Order,
+  number
+>("orderId", 0, "id");
+const orderProductProductColumn = new ColumnRelationValue<
+  OrderProduct,
+  Product,
+  number
+>("productId", 0, "id");
+//#endregion
+
+//#region Tables
+const productsTable = new Table<Product>("products", [
+  new ColumnId("id"),
+  new ColumnString("name", { maxLength: 20 }),
+  productCategoryColumn,
+]);
 const productCategoriesTable = new Table<ProductCategory>(
   "product-categories",
   [new ColumnId("id"), new ColumnString("name", { maxLength: 20 })]
 );
-const productsTable = new Table<Product>("products", [
-  new ColumnId("id"),
-  new ColumnString("name", { maxLength: 20 }),
+const orderProductsTable = new Table<OrderProduct>("order-products", [
+  orderProductOrderColumn,
+  orderProductProductColumn,
 ]);
-const orderProductsTable = new Table<OrderProduct>("order-products", []);
-const ordersTable = new Table<Order>("orders", [new ColumnId("id")]);
+const ordersTable = new Table<Order>("orders", [
+  new ColumnId("id"),
+  orderProductsCountColumn,
+  orderCategoriesCountColumn,
+]);
+//#endregion
 
-const productCategoryRelation = new RelationValue<Product, ProductCategory>(
-  "categoryId",
-  productsTable,
-  productCategoriesTable,
-  "id"
-);
-const orderProductOrderRelation = new RelationValue<OrderProduct, Order>(
-  "orderId",
-  orderProductsTable,
-  ordersTable,
-  "id"
-);
-const orderProductProductRelation = new RelationValue<OrderProduct, Product>(
-  "productId",
-  orderProductsTable,
-  productsTable,
-  "id"
-);
-const orderProductsCountRelation = new RelationCount<Order, OrderProduct>(
-  "productsCount",
-  ordersTable,
-  orderProductsTable,
-  (o, op) => op.orderId === o.id
-);
-const orderCategoriesCountRelations = new RelationCustom<
-  Order,
-  OrderProduct,
-  number
->(
-  "categoriesCount",
-  ordersTable,
-  orderProductsTable,
-  (order, orderProducts, matrix) => {
-    // Product ids of the order
-    const productsIds = orderProducts
-      .filter((a) => a.orderId === order.id)
-      .map((a) => a.productId);
-    // Products of the order
-    const products = (
-      matrix.find((a) => a.table === productsTable) as MatrixRow<Product>
-    ).rows;
-    // Categories ids list with duplicate values
-    const fullCategoriesIds = products
-      .filter((a) => productsIds.includes(a.id))
-      .map((a) => a.categoryId);
-    // Distinct of categories ids
-    const categoriesIds = new Set(fullCategoriesIds).values;
-    // Count of the categories of the order
-    return categoriesIds.length;
-  }
-);
+//#region Relations
+const orderCategoriesCountRelation: Relation<Order, OrderProduct> = {
+  sourceColumn: orderCategoriesCountColumn,
+  sourceTable: ordersTable,
+  targetTable: orderProductsTable,
+};
+const orderProductsCountRelation: Relation<Order, OrderProduct> = {
+  sourceColumn: orderProductsCountColumn,
+  sourceTable: ordersTable,
+  targetTable: orderProductsTable,
+};
+const orderProductOrderRelation: Relation<OrderProduct, Order> = {
+  sourceColumn: orderProductOrderColumn,
+  sourceTable: orderProductsTable,
+  targetTable: ordersTable,
+};
+const orderProductProductRelation: Relation<OrderProduct, Product> = {
+  sourceColumn: orderProductProductColumn,
+  sourceTable: orderProductsTable,
+  targetTable: productsTable,
+};
+const productCategoryRelation: Relation<Product, ProductCategory> = {
+  sourceColumn: productCategoryColumn,
+  sourceTable: productsTable,
+  targetTable: productCategoriesTable,
+};
+//#endregion
 
-const tables = [
+const tables: List<ITable<Any>> = [
   productCategoriesTable,
   productsTable,
   orderProductsTable,
   ordersTable,
 ];
-const relations = [
+const relations: List<Relation<Any, Any>> = [
   productCategoryRelation,
   orderProductOrderRelation,
   orderProductProductRelation,
   orderProductsCountRelation,
-  orderCategoriesCountRelations,
+  orderCategoriesCountRelation,
 ];
 
 describe("Table", () => {
   describe("utils", () => {
     describe("GeneratorGetMatrixDelegate", () => {
       it("Generates a map of lists, the map as the same keys of the given tablesMap param.", () => {
-        const rowsNumberMap: Dictionary<number> = {
+        const countsMap: Dictionary<number> = {
           [productCategoriesTable.name]: 10,
           [productsTable.name]: 50,
           [orderProductsTable.name]: 5,
           [ordersTable.name]: 1,
         };
-        const matrix = GeneratorGetMatrixDelegate(
-          tables,
-          rowsNumberMap,
-          relations
-        );
-        expect(matrix.length).toBe(4);
-        matrix.forEach((matrixItem, index) => {
-          expect(matrixItem.table).toBe(tables[index]);
-          expect(matrixItem.rows.length).toBe(
-            rowsNumberMap[matrixItem.table.name]
-          );
+        const data = DatabaseGetDataDelegate(tables, countsMap, relations);
+        const dataKeys = Object.keys(data);
+        expect(dataKeys.length).toBe(4);
+        dataKeys.forEach((key) => {
+          const { rows, table } = data[key];
+          expect(table.name).toBe(key);
+          expect(rows.length).toBe(countsMap[table.name]);
         });
-        const productCategories = matrix[0].rows;
-        const products = matrix[1].rows;
-        const orderProducts = matrix[2].rows;
-        const orders = matrix[3].rows;
+        const productCategories = data[productCategoriesTable.name].rows;
+        const products = data[productsTable.name].rows;
+        const orderProducts = data[orderProductsTable.name].rows;
+        const orders = data[ordersTable.name].rows;
         const categoriesIds = productCategories.map((a) => a.id);
         products.forEach((a) => {
           expect(categoriesIds).toContain(a.categoryId);

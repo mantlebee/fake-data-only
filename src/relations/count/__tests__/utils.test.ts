@@ -1,7 +1,7 @@
 import { List } from "@mantlebee/ts-core";
 
-import { RelationCountCondition } from "../types";
-import { RelationCountSetValuesDelegate } from "../utils";
+import { ColumnRelationCountCondition } from "../types";
+import { ColumnRelationCountDelegate } from "../utils";
 
 describe("RelationCount", () => {
   describe("utils", () => {
@@ -17,11 +17,13 @@ describe("RelationCount", () => {
           { contactsCount: -1, id: 1 },
           { contactsCount: -1, id: 2 },
         ];
-        const condition: RelationCountCondition<Person, Contact> = (s, t) =>
-          t.personId === s.id;
-        RelationCountSetValuesDelegate(
-          condition,
+        const condition: ColumnRelationCountCondition<Person, Contact> = (
+          s,
+          t
+        ) => t.personId === s.id;
+        ColumnRelationCountDelegate(
           "contactsCount",
+          condition,
           people,
           contacts
         );
