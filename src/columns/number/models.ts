@@ -17,7 +17,7 @@ export class ColumnNumber<TRow extends Row> extends Column<
   }
 }
 
-export class ColumnNumberDependency<TRow> extends ColumnDependencyAbstract<
+export class ColumnNumberDependency<TRow extends Row> extends ColumnDependencyAbstract<
   TRow,
   number,
   ColumnNumberOptions,

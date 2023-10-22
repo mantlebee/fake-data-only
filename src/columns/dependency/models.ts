@@ -36,7 +36,7 @@ export abstract class ColumnDependencyAbstract<
 }
 
 export class ColumnDependency<
-  TRow,
+  TRow extends Row,
   TValue,
   TOptions extends ColumnOptions,
   TConstructor extends ColumnConstructor<TRow, TValue, TOptions>,
