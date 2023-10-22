@@ -1,6 +1,3 @@
-import { ConstructorOf } from "@mantlebee/ts-core";
-
-import { ColumnConstructor, ColumnDependencyAbstract } from "@/columns";
 import { Column } from "@/models";
 import { Row } from "@/types";
 
@@ -12,19 +9,8 @@ export class ColumnEmail<TRow extends Row> extends Column<
   string,
   ColumnEmailOptions
 > {
-  public getValue(): string {
-    return columnEmailGetValueDelegate(this.options);
+  public getValue(row: TRow): string {
+    const options = this.getOptionsDelegate(row);
+    return columnEmailGetValueDelegate(options);
   }
-}
-
-export class ColumnEmailDependency<
-  TRow extends Row,
-> extends ColumnDependencyAbstract<
-  TRow,
-  string,
-  ColumnEmailOptions,
-  ColumnConstructor<TRow, string, ColumnEmailOptions>
-> {
-  public readonly columnConstructor: ConstructorOf<ColumnEmail<TRow>> =
-    ColumnEmail;
 }

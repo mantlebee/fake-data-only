@@ -1,9 +1,8 @@
 import { Dictionary, Any, List, KeyOf } from "@mantlebee/ts-core";
 import { generateRandomBoolean } from "@mantlebee/ts-random";
 
-import { IColumn, ITable } from "./interfaces";
-import { Dataset, Relation, Row } from "./types";
-import { ColumnRelation } from "./models";
+import { ColumnOptions, Dataset, Relation, Row } from "./types";
+import { Column, ColumnRelation, Table } from "./models";
 
 /**
  * Default values of rows to generate.
@@ -17,8 +16,11 @@ const DefaultRowsCount = 0;
  * @param column Column processing during the table rows generation.
  * @returns A boolean value indicating if to generate a value for the current column or to set the `null` value.
  */
-function shouldBeNull<TRow extends Row>(column: IColumn<TRow>): boolean {
-  const { nullable } = column.options;
+function shouldBeNull<TRow extends Row>(
+  column: Column<TRow>,
+  options: ColumnOptions
+): boolean {
+  const { nullable } = options;
   return Boolean(
     (column instanceof ColumnRelation && nullable) ||
       (nullable && generateRandomBoolean())
@@ -37,7 +39,7 @@ function shouldBeNull<TRow extends Row>(column: IColumn<TRow>): boolean {
  * @returns the database dataset, it is a dictionary, where the keys are the tables names and the values are objects with the table instance and its generated rows.
  */
 export function databaseGetDatasetDelegate(
-  tables: List<ITable<Any>>,
+  tables: List<Table<Any>>,
   countsMap: Dictionary<number>,
   relations?: List<Relation>
 ): Dataset {
@@ -66,14 +68,15 @@ export function databaseGetDatasetDelegate(
  * @returns Rows generated where the keys are the columns names.
  */
 export function tableGetRowsDelegate<TRow extends Row>(
-  columns: List<IColumn<TRow>>,
+  columns: List<Column<TRow, Any>>,
   count: number
 ): List<TRow> {
   const items: List<TRow> = [];
   for (let i = 0; i < count; i++) {
     const row: TRow = {} as TRow;
     columns.forEach((a) => {
-      if (shouldBeNull(a)) row[a.name] = null as TRow[KeyOf<TRow>];
+      const options = a.getOptionsDelegate(row);
+      if (shouldBeNull(a, options)) row[a.name] = null as TRow[KeyOf<TRow>];
       else row[a.name] = a.getValue({ ...row });
     });
     items.push(row);

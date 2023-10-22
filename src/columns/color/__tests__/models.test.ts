@@ -9,7 +9,7 @@ describe("ColumnColor", () => {
     describe("ColumnColor", () => {
       it("Generates a random IColor instance", () => {
         const column = new ColumnColor<RowTest>("name");
-        const value = column.getValue();
+        const value = column.getValue({} as RowTest);
         const rgba = value.rgba();
         expect(rgba).toMatch(
           /^rgba\([0-9]{1,3},[0-9]{1,3},[0-9]{1,3},[0-9]\)$$/

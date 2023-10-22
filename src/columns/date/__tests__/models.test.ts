@@ -1,4 +1,4 @@
-import { ColumnDateDependency } from "../models";
+import { ColumnDate } from "../models";
 
 type RowTest = {
   dateFrom: Date;
@@ -12,12 +12,12 @@ const row: RowTest = {
 
 describe("ColumnDate", () => {
   describe("models", () => {
-    describe("ColumnDateDependency", () => {
+    describe("ColumnDate", () => {
       it("Generates a random date, using startFrom e startTo from passed row", () => {
-        const dependantColumn = new ColumnDateDependency<RowTest>("dateFrom", {
-          dateFrom: (a) => row.dateFrom,
-          dateTo: (a) => a.dateTo,
-        });
+        const dependantColumn = new ColumnDate<RowTest>("dateFrom", (a) => ({
+          dateFrom: a.dateFrom,
+          dateTo: a.dateTo,
+        }));
         const random = dependantColumn.getValue(row);
         expect(random.getTime()).toBeGreaterThanOrEqual(row.dateFrom.getTime());
         expect(random.getTime()).toBeLessThanOrEqual(row.dateTo.getTime());

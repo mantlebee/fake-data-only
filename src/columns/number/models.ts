@@ -1,6 +1,3 @@
-import { ConstructorOf } from "@mantlebee/ts-core";
-
-import { ColumnConstructor, ColumnDependencyAbstract } from "@/columns";
 import { Column } from "@/models";
 import { Row } from "@/types";
 
@@ -12,17 +9,8 @@ export class ColumnNumber<TRow extends Row> extends Column<
   number,
   ColumnNumberOptions
 > {
-  public getValue(): number {
-    return columnNumberGetValueDelegate(this.options);
+  public getValue(row: TRow): number {
+    const options = this.getOptionsDelegate(row);
+    return columnNumberGetValueDelegate(options);
   }
-}
-
-export class ColumnNumberDependency<TRow extends Row> extends ColumnDependencyAbstract<
-  TRow,
-  number,
-  ColumnNumberOptions,
-  ColumnConstructor<TRow, number, ColumnNumberOptions>
-> {
-  public readonly columnConstructor: ConstructorOf<ColumnNumber<TRow>> =
-    ColumnNumber;
 }

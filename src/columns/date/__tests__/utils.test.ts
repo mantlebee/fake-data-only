@@ -16,7 +16,7 @@ describe("ColumnDate", () => {
   describe("utils", () => {
     describe("columnDateGetValueDelegate", () => {
       it("Generates a random date", () => {
-        const random = columnDateGetValueDelegate();
+        const random = columnDateGetValueDelegate({});
         expect(random.getTime()).toBeGreaterThanOrEqual(firstDate.getTime());
         expect(random.getTime()).toBeLessThanOrEqual(Date.now());
       });

@@ -14,6 +14,11 @@ export type ColumnOptions = { nullable?: boolean };
  */
 export type Dataset = Dictionary<{ table: ITable<Row>; rows: List<Row> }>;
 
+export type GetColumnOptionsDelegate<
+  TRow extends Row,
+  TOptions extends ColumnOptions,
+> = (row: TRow) => TOptions;
+
 /**
  * Represents a relation between tables ({@link ITable}).
  * Its purpose is to update the values of a column ({@link IColumnRelation}) of the source table using the rows of a target table.

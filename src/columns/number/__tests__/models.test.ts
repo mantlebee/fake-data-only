@@ -1,4 +1,4 @@
-import { ColumnNumberDependency } from "../models";
+import { ColumnNumber } from "../models";
 
 type RowTest = {
   decimals: number;
@@ -14,13 +14,13 @@ const row: RowTest = {
 
 describe("ColumnNumber", () => {
   describe("models", () => {
-    describe("ColumnNumberDependency", () => {
+    describe("ColumnNumber", () => {
       it("Generates a random number, taking decimals, max and min from the passed row", () => {
-        const dependantColumn = new ColumnNumberDependency<RowTest>("max", {
-          decimals: (a) => a.decimals,
-          max: (a) => a.max,
-          min: (a) => a.min,
-        });
+        const dependantColumn = new ColumnNumber<RowTest>("max", (a) => ({
+          decimals: a.decimals,
+          max: a.max,
+          min: a.min,
+        }));
         const random = dependantColumn.getValue(row);
         expect(`${random}`.length).toBeGreaterThanOrEqual(2);
         expect(`${random}`.length).toBeLessThanOrEqual(5);

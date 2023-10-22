@@ -1,4 +1,4 @@
-import { ColumnEmailDependency } from "../models";
+import { ColumnEmail } from "../models";
 
 type RowTest = {
   domain: string;
@@ -14,13 +14,13 @@ const row: RowTest = {
 
 describe("ColumnEmail", () => {
   describe("models", () => {
-    describe("ColumnEmailDependency", () => {
+    describe("ColumnEmail", () => {
       it("Generates a random email, taking domain, firstName and lastname from the passed row", () => {
-        const dependantColumn = new ColumnEmailDependency<RowTest>("domain", {
-          domains: (a) => [a.domain],
-          firstNames: (a) => [a.firstName],
-          lastNames: (a) => [a.lastName],
-        });
+        const dependantColumn = new ColumnEmail<RowTest>("domain", (a) => ({
+          domains: [a.domain],
+          firstNames: [a.firstName],
+          lastNames: [a.lastName],
+        }));
         const random = dependantColumn.getValue(row);
         expect(random).toBe("john.doe@gmail.com");
       });

@@ -32,12 +32,6 @@ class ColumnRelationTestCategory extends ColumnRelation<
 }
 
 describe("models", () => {
-  describe("Column", () => {
-    it("set default options if no options are passed to the constructor", () => {
-      const column = new ColumnTestId("id");
-      expect(column.options).toEqual({});
-    });
-  });
   describe("ColumnRelation", () => {
     it("returns the default value passed to the constructor", () => {
       const column = new ColumnRelationTestCategory("id", 42);
@@ -56,7 +50,7 @@ describe("models", () => {
       new ColumnTestId("id"),
       categoryRelationColumn,
     ]);
-    const tables: List<ITable<Any>> = [productsTable, categoriesTable];
+    const tables: List<Table<Any>> = [productsTable, categoriesTable];
     const relations: List<Relation<Any, Any>> = [
       {
         sourceColumn: categoryRelationColumn,

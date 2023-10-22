@@ -17,14 +17,12 @@ import {
   ColumnColor,
   ColumnCustom,
   ColumnDate,
-  ColumnDateDependency,
-  ColumnEmailDependency,
+  ColumnEmail,
   ColumnEnum,
   ColumnFirstName,
   ColumnId,
   ColumnLastName,
   ColumnNumber,
-  ColumnNumberDependency,
   ColumnPattern,
   ColumnString,
 } from "@/columns";
@@ -95,12 +93,12 @@ const orderProductProductColumn = new ColumnRelationLookup<
 //#region Tables
 const productsTable = new Table<Product>("products", [
   new ColumnId("id"),
-  new ColumnString("name", { maxLength: 20 }),
+  new ColumnString("name", () => ({ maxLength: 20 })),
   productCategoryColumn,
 ]);
 const productCategoriesTable = new Table<ProductCategory>(
   "product-categories",
-  [new ColumnId("id"), new ColumnString("name", { maxLength: 20 })]
+  [new ColumnId("id"), new ColumnString("name", () => ({ maxLength: 20 }))]
 );
 const orderProductsTable = new Table<OrderProduct>("order-products", [
   orderProductOrderColumn,
@@ -141,7 +139,7 @@ const productCategoryRelation: Relation<Product, ProductCategory> = {
 };
 //#endregion
 
-const tables: List<ITable<Any>> = [
+const tables: List<Table<Any>> = [
   productCategoriesTable,
   productsTable,
   orderProductsTable,
@@ -199,10 +197,10 @@ describe("Table", () => {
         type RowTest = { name: string };
         const rows = tableGetRowsDelegate<RowTest>(
           [
-            new ColumnString<RowTest>("name", {
+            new ColumnString<RowTest>("name", () => ({
               maxLength: 12,
               minLength: 4,
-            }),
+            })),
           ],
           5
         );
@@ -244,22 +242,25 @@ describe("Table", () => {
               "fullname",
               (a) => `${a.name} ${a.surname}`
             ),
-            new ColumnNumber<RowTest>("age", { max: 90, nullable: true }),
-            new ColumnEmailDependency<RowTest>("email", {
-              firstNames: (a) => [a.name],
-              lastNames: (a) => [a.surname],
-            }),
+            new ColumnNumber<RowTest>("age", () => ({
+              max: 90,
+              nullable: true,
+            })),
+            new ColumnEmail<RowTest>("email", (a) => ({
+              firstNames: [a.name],
+              lastNames: [a.surname],
+            })),
             new ColumnBoolean<RowTest>("active"),
             new ColumnDate<RowTest>("registered"),
-            new ColumnDateDependency<RowTest>("expires", {
-              dateFrom: (a) => a.registered,
-            }),
+            new ColumnDate<RowTest>("expires", (a) => ({
+              dateFrom: a.registered,
+            })),
             new ColumnEnum<RowTest, RowType>("type", Object(RowType)),
             new ColumnColor<RowTest>("color"),
-            new ColumnNumber<RowTest>("scoreMax", { max: 100 }),
-            new ColumnNumberDependency<RowTest>("score", {
-              max: (a) => a.scoreMax,
-            }),
+            new ColumnNumber<RowTest>("scoreMax", () => ({ max: 100 })),
+            new ColumnNumber<RowTest>("score", (a) => ({
+              max: a.scoreMax,
+            })),
             new ColumnPattern<RowTest>("phone", "+000-00000"),
             new ColumnPattern<RowTest>("username", "a{8,12}"),
           ],

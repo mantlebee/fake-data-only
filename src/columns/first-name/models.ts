@@ -9,7 +9,8 @@ export class ColumnFirstName<TRow extends Row> extends Column<
   string,
   ColumnFirstNameOptions
 > {
-  public getValue(): string {
-    return columnFirstNameGetValueDelegate(this.options);
+  public getValue(row: TRow): string {
+    const options = this.getOptionsDelegate(row);
+    return columnFirstNameGetValueDelegate(options);
   }
 }

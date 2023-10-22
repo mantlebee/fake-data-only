@@ -1,7 +1,13 @@
 import { Any, Dictionary, KeyOf, List } from "@mantlebee/ts-core";
 
 import { IColumn, IColumnRelation, IDatabase, ITable } from "./interfaces";
-import { ColumnOptions, Dataset, Relation, Row } from "./types";
+import {
+  GetColumnOptionsDelegate,
+  Dataset,
+  Relation,
+  Row,
+  ColumnOptions,
+} from "./types";
 import { databaseGetDatasetDelegate, tableGetRowsDelegate } from "./utils";
 
 /**
@@ -9,16 +15,20 @@ import { databaseGetDatasetDelegate, tableGetRowsDelegate } from "./utils";
  */
 export abstract class Column<
   TRow extends Row,
-  TValue,
+  TValue = Any,
   TOptions extends ColumnOptions = ColumnOptions,
-> implements IColumn<TRow, TValue, TOptions>
+> implements IColumn<TRow, TValue>
 {
   public readonly name: KeyOf<TRow>;
-  public readonly options: TOptions;
+  public readonly getOptionsDelegate: GetColumnOptionsDelegate<TRow, TOptions>;
 
-  public constructor(name: KeyOf<TRow>, options: TOptions = {} as TOptions) {
+  public constructor(
+    name: KeyOf<TRow>,
+    getOptionsDelegate: GetColumnOptionsDelegate<TRow, TOptions> = () =>
+      ({}) as TOptions
+  ) {
     this.name = name;
-    this.options = options;
+    this.getOptionsDelegate = getOptionsDelegate;
   }
 
   public abstract getValue(row: TRow): TValue;
@@ -36,7 +46,7 @@ export abstract class ColumnRelation<
     TOptions extends ColumnOptions = ColumnOptions,
   >
   extends Column<TSourceRow, TValue, TOptions>
-  implements IColumnRelation<TSourceRow, TTargetRow, TValue, TOptions>
+  implements IColumnRelation<TSourceRow, TTargetRow, TValue>
 {
   /**
    * The default value is returned by the {@link getValue} method during rows generation.
@@ -46,9 +56,9 @@ export abstract class ColumnRelation<
   public constructor(
     name: KeyOf<TSourceRow>,
     defaultValue: TValue,
-    options?: TOptions
+    getOptionsDelegate?: GetColumnOptionsDelegate<TSourceRow, TOptions>
   ) {
-    super(name, options);
+    super(name, getOptionsDelegate);
     this.defaultValue = defaultValue;
   }
 
@@ -69,9 +79,9 @@ export abstract class ColumnRelation<
  */
 export class Database implements IDatabase {
   public readonly relations?: List<Relation>;
-  public readonly tables: List<ITable<Any>>;
+  public readonly tables: List<Table<Any>>;
 
-  public constructor(tables: List<ITable<Any>>, relations?: List<Relation>) {
+  public constructor(tables: List<Table<Any>>, relations?: List<Relation>) {
     this.relations = relations;
     this.tables = tables;
   }
@@ -87,10 +97,10 @@ export class Database implements IDatabase {
  * It uses the delegate {@link tableGetRowsDelegate} to generate the rows.
  */
 export class Table<TRow extends Row> implements ITable<TRow> {
-  public readonly columns: List<IColumn<TRow>>;
+  public readonly columns: List<Column<TRow>>;
   public readonly name: string;
 
-  public constructor(name: string, columns: List<IColumn<TRow>>) {
+  public constructor(name: string, columns: List<Column<TRow>>) {
     this.columns = columns;
     this.name = name;
   }

@@ -16,8 +16,8 @@ export class ColumnColor<TRow extends Row> extends Column<
   IColor,
   ColumnColorOptions
 > {
-  public getValue(): IColor {
-    const { from, to, transparent } = { ...this.options };
+  public getValue(row: TRow): IColor {
+    const { from, to, transparent } = this.getOptionsDelegate(row);
     return generateRandomColor(transparent, from, to);
   }
 }
