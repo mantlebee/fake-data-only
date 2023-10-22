@@ -1,6 +1,6 @@
 import { Any, Dictionary, KeyOf, List } from "@mantlebee/ts-core";
 
-import { ColumnOptionsGetter, Dataset, Relation, Row } from "./types";
+import { Dataset, Relation, Row } from "./types";
 
 /**
  * Represents the column of a table ({@link ITable}).
