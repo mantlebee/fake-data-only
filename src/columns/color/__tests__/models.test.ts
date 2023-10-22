@@ -7,11 +7,12 @@ type RowTest = {
 describe("ColumnColor", () => {
   describe("models", () => {
     describe("ColumnColor", () => {
-      it("Generates a random color", () => {
-        const colorColumn = new ColumnColor<RowTest>("name");
-        const rgba = colorColumn.getValue();
+      it("Generates a random IColor instance", () => {
+        const column = new ColumnColor<RowTest>("name");
+        const value = column.getValue();
+        const rgba = value.rgba();
         expect(rgba).toMatch(
-          /^rgba\([0-9]{1,3},[0-9]{1,3},[0-9]{1,3},[0-9]\)$$/,
+          /^rgba\([0-9]{1,3},[0-9]{1,3},[0-9]{1,3},[0-9]\)$$/
         );
       });
     });

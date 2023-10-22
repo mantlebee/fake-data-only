@@ -1,6 +1,7 @@
 import {
   Any,
   Dictionary,
+  IColor,
   isBoolean,
   isDate,
   isEmail,
@@ -228,7 +229,7 @@ describe("Table", () => {
           registered: Date;
           expires: Date;
           type: RowType;
-          color: string;
+          color: IColor;
           scoreMax: number;
           score: number;
           phone: string;
@@ -286,7 +287,7 @@ describe("Table", () => {
             a.registered.getTime()
           );
           expect(a.type in RowType).toBeTruthy();
-          expect(a.color).toMatch(
+          expect(a.color.rgba()).toMatch(
             /^rgba\([0-9]{1,3},[0-9]{1,3},[0-9]{1,3},[0-9]\)$$/
           );
           expect(isNumber(a.scoreMax)).toBeTruthy();

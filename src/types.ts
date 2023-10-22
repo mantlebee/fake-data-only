@@ -4,7 +4,7 @@ import { IColumnRelation, ITable } from "./interfaces";
 
 /**
  * Default column ({@link IColumn}) options.
- * @prop nullable - The column value can be casually `null`.
+ * @prop `nullable` - The column value can be casually `null`.
  */
 export type ColumnOptions = { nullable?: boolean };
 
