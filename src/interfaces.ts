@@ -44,7 +44,7 @@ export interface IColumnRelation<
   TOptions extends ColumnOptions = ColumnOptions,
 > extends IColumn<TSourceRow, TValue, TOptions> {
   /**
-   * Processes al source rows to update the column value. It can uses the target table rows or the entire data set.
+   * Processes al source rows to update the column value. It can uses the target table rows or the entire dataset.
    * @param sourceRows List of rows to update of the source table.
    * @param targetRows List of rows of the target table.
    * @param data The databse data generated.
@@ -58,7 +58,7 @@ export interface IColumnRelation<
 
 /**
  * Represents a database with its own tables ({@link ITable}) and relations {@link Relation}.
- * Its purpose is to generate the database data set.
+ * Its purpose is to generate the database dataset.
  * The {@link Data} object is a dictionary, where the keys are the tables names and the values are objects with the table instance and its generated rows.
  */
 export interface IDatabase {
@@ -71,7 +71,7 @@ export interface IDatabase {
    */
   readonly tables: List<ITable<Any>>;
   /**
-   * Generates the database data set, it is a dictionary, where the keys are the tables names and the values are objects with the table instance and its generated rows.
+   * Generates the database dataset, it is a dictionary, where the keys are the tables names and the values are objects with the table instance and its generated rows.
    * @param countsMap Dictionary with the tables counts, used to generate a specific amount of rows for each table. It is a dictionary where the keys are the tables names and the values the row counts to generate.
    */
   getData(countsMap: Dictionary<number>): Data;
