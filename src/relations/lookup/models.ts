@@ -3,9 +3,9 @@ import { KeyOf, List } from "@mantlebee/ts-core";
 import { ColumnRelation } from "@/models";
 import { Row } from "@/types";
 
-import { ColumnRelationValueDelegate } from "./utils";
+import { ColumnRelationLookupDelegate } from "./utils";
 
-export class ColumnRelationValue<
+export class ColumnRelationLookup<
   TSourceRow extends Row,
   TTargetRow extends Row,
   TValue
@@ -26,6 +26,6 @@ export class ColumnRelationValue<
     targetRows: List<TTargetRow>
   ): void {
     const { name, targetColumnName } = this;
-    ColumnRelationValueDelegate(name, targetColumnName, sourceRows, targetRows);
+    ColumnRelationLookupDelegate(name, targetColumnName, sourceRows, targetRows);
   }
 }

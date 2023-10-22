@@ -3,9 +3,9 @@ import { List } from "@mantlebee/ts-core";
 import { ColumnRelationCustomGetValueDelegate } from "../types";
 import { ColumnRelationCustomDelegate } from "../utils";
 
-describe("RelationCustom", () => {
+describe("ColumnRelationCustom", () => {
   describe("utils", () => {
-    describe("RelationCustomSetValueDelegate", () => {
+    describe("ColumnRelationCustomSetValueDelegate", () => {
       it("Set the value resulting from the delegate", () => {
         type To = { email: string };
         type From = { emailsWithCCount: number };

@@ -30,7 +30,7 @@ import {
 import {
   ColumnRelationCount,
   ColumnRelationCustom,
-  ColumnRelationValue,
+  ColumnRelationLookup,
 } from "@/relations";
 import { TableGetRowsDelegate } from "@/utils";
 import { Row } from "@/types";
@@ -51,7 +51,7 @@ type OrderProduct = { orderId: number; productId: number };
 //#endregion
 
 //#region Columns
-const productCategoryColumn = new ColumnRelationValue<
+const productCategoryColumn = new ColumnRelationLookup<
   Product,
   ProductCategory,
   number
@@ -80,12 +80,12 @@ const orderProductsCountColumn = new ColumnRelationCount<Order, OrderProduct>(
   "productsCount",
   (o, op) => op.orderId === o.id
 );
-const orderProductOrderColumn = new ColumnRelationValue<
+const orderProductOrderColumn = new ColumnRelationLookup<
   OrderProduct,
   Order,
   number
 >("orderId", 0, "id");
-const orderProductProductColumn = new ColumnRelationValue<
+const orderProductProductColumn = new ColumnRelationLookup<
   OrderProduct,
   Product,
   number

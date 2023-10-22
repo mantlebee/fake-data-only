@@ -3,9 +3,9 @@ import { List } from "@mantlebee/ts-core";
 import { ColumnRelationCountCondition } from "../types";
 import { ColumnRelationCountDelegate } from "../utils";
 
-describe("RelationCount", () => {
+describe("ColumnRelationCount", () => {
   describe("utils", () => {
-    describe("RelationCountSetValueDelegate", () => {
+    describe("ColumnRelationCountSetValueDelegate", () => {
       it("Set the correct count.", () => {
         type Contact = { email: string; personId: number };
         type Person = { contactsCount: number; id: number };
