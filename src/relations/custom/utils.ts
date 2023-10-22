@@ -1,6 +1,6 @@
 import { KeyOf, List } from "@mantlebee/ts-core";
 
-import { Data, Row } from "@/types";
+import { Dataset, Row } from "@/types";
 
 import { columnRelationCustomGetValueDelegate } from "./types";
 
@@ -17,13 +17,13 @@ export function columnRelationCustomSetValuesDelegate<
   >,
   sourceRows: List<TSourceRow>,
   targetRows: List<TTargetRow>,
-  data: Data,
+  dataset: Dataset
 ): void {
   sourceRows.forEach((sourceRow) => {
     sourceRow[sourceColumnName] = getValueDelegate(
       sourceRow,
       targetRows,
-      data,
+      dataset
     ) as unknown as TSourceRow[KeyOf<TSourceRow>];
   });
 }

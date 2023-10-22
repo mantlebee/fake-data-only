@@ -1,7 +1,7 @@
 import { KeyOf, List } from "@mantlebee/ts-core";
 
 import { ColumnRelation } from "@/models";
-import { Data, Row } from "@/types";
+import { Dataset, Row } from "@/types";
 
 import { columnRelationCustomGetValueDelegate } from "./types";
 import { columnRelationCustomSetValuesDelegate } from "./utils";
@@ -24,7 +24,7 @@ export class ColumnRelationCustom<
       TSourceRow,
       TTargetRow,
       TValue
-    >,
+    >
   ) {
     super(name, defaultValue);
     this.getValueDelegate = getValueDelegate;
@@ -33,7 +33,7 @@ export class ColumnRelationCustom<
   public setValues(
     sourceRows: List<TSourceRow>,
     targetRows: List<TTargetRow>,
-    data: Data,
+    dataset: Dataset
   ): void {
     const { getValueDelegate, name } = this;
     columnRelationCustomSetValuesDelegate(
@@ -41,7 +41,7 @@ export class ColumnRelationCustom<
       getValueDelegate,
       sourceRows,
       targetRows,
-      data,
+      dataset
     );
   }
 }

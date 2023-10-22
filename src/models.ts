@@ -1,8 +1,8 @@
 import { Any, Dictionary, KeyOf, List } from "@mantlebee/ts-core";
 
 import { IColumn, IColumnRelation, IDatabase, ITable } from "./interfaces";
-import { ColumnOptions, Data, Relation, Row } from "./types";
-import { databaseGetDataDelegate, tableGetRowsDelegate } from "./utils";
+import { ColumnOptions, Dataset, Relation, Row } from "./types";
+import { databaseGetDatasetDelegate, tableGetRowsDelegate } from "./utils";
 
 /**
  * Abstract implementation of {@link IColumn}.
@@ -46,7 +46,7 @@ export abstract class ColumnRelation<
   public constructor(
     name: KeyOf<TSourceRow>,
     defaultValue: TValue,
-    options?: TOptions,
+    options?: TOptions
   ) {
     super(name, options);
     this.defaultValue = defaultValue;
@@ -59,13 +59,13 @@ export abstract class ColumnRelation<
   public abstract setValues(
     sourceRows: List<TSourceRow>,
     targetRows: List<TTargetRow>,
-    data: Data,
+    dataset: Dataset
   ): void;
 }
 
 /**
  * Implementation of {@link IDatabase}.
- * It uses the delegate {@link databaseGetDataDelegate} to generate the dataset.
+ * It uses the delegate {@link databaseGetDatasetDelegate} to generate the dataset.
  */
 export class Database implements IDatabase {
   public readonly relations?: List<Relation>;
@@ -76,9 +76,9 @@ export class Database implements IDatabase {
     this.tables = tables;
   }
 
-  public getData(countsMap: Dictionary<number>): Data {
+  public getDataset(countsMap: Dictionary<number>): Dataset {
     const { relations, tables } = this;
-    return databaseGetDataDelegate(tables, countsMap, relations);
+    return databaseGetDatasetDelegate(tables, countsMap, relations);
   }
 }
 

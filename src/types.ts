@@ -9,10 +9,10 @@ import { IColumnRelation, ITable } from "./interfaces";
 export type ColumnOptions = { nullable?: boolean };
 
 /**
- * Database ({@link IDatabase}) data. It is a dictionary where the key is the table ({@link ITable}) name and the value the table rows generated.
+ * Database ({@link IDatabase}) dataset. It is a dictionary where the key is the table ({@link ITable}) name and the value the table rows generated.
  * Like the {@link Row} type, this type is defined to simplify return types.
  */
-export type Data = Dictionary<{ table: ITable<Row>; rows: List<Row> }>;
+export type Dataset = Dictionary<{ table: ITable<Row>; rows: List<Row> }>;
 
 /**
  * Represents a relation between tables ({@link ITable}).

@@ -2,12 +2,12 @@ import { Dictionary, Any, List, KeyOf } from "@mantlebee/ts-core";
 import { generateRandomBoolean } from "@mantlebee/ts-random";
 
 import { IColumn, ITable } from "./interfaces";
-import { Data, Relation, Row } from "./types";
+import { Dataset, Relation, Row } from "./types";
 import { ColumnRelation } from "./models";
 
 /**
  * Default values of rows to generate.
- * It is used by the delegate {@link databaseGetDataDelegate} if the counts map doesn't include a key of the current table processing.
+ * It is used by the delegate {@link databaseGetDatasetDelegate} if the counts map doesn't include a key of the current table processing.
  */
 const DefaultRowsCount = 0;
 
@@ -21,7 +21,7 @@ function shouldBeNull<TRow extends Row>(column: IColumn<TRow>): boolean {
   const { nullable } = column.options;
   return Boolean(
     (column instanceof ColumnRelation && nullable) ||
-      (nullable && generateRandomBoolean()),
+      (nullable && generateRandomBoolean())
   );
 }
 
@@ -36,26 +36,26 @@ function shouldBeNull<TRow extends Row>(column: IColumn<TRow>): boolean {
  * @param relations List of relations to process to update the rows values.
  * @returns the database dataset, it is a dictionary, where the keys are the tables names and the values are objects with the table instance and its generated rows.
  */
-export function databaseGetDataDelegate(
+export function databaseGetDatasetDelegate(
   tables: List<ITable<Any>>,
   countsMap: Dictionary<number>,
-  relations?: List<Relation>,
-): Data {
-  const data = tables.reduce((result, current) => {
+  relations?: List<Relation>
+): Dataset {
+  const dataset = tables.reduce((result, current) => {
     const { name } = current;
     const count = countsMap[name] || DefaultRowsCount;
     result[name] = { table: current, rows: current.getRows(count) };
     return result;
-  }, {} as Data);
+  }, {} as Dataset);
   if (relations)
     relations.forEach((a) => {
       const { sourceColumn, sourceTable, targetTable } = a;
-      const sourceData = data[sourceTable.name];
-      const targetData = data[targetTable.name];
+      const sourceData = dataset[sourceTable.name];
+      const targetData = dataset[targetTable.name];
       if (sourceData && targetData)
-        sourceColumn.setValues(sourceData.rows, targetData.rows, data);
+        sourceColumn.setValues(sourceData.rows, targetData.rows, dataset);
     });
-  return data;
+  return dataset;
 }
 
 /**
@@ -67,7 +67,7 @@ export function databaseGetDataDelegate(
  */
 export function tableGetRowsDelegate<TRow extends Row>(
   columns: List<IColumn<TRow>>,
-  count: number,
+  count: number
 ): List<TRow> {
   const items: List<TRow> = [];
   for (let i = 0; i < count; i++) {

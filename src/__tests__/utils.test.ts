@@ -35,7 +35,7 @@ import {
 import { tableGetRowsDelegate } from "@/utils";
 
 import { Table } from "../models";
-import { databaseGetDataDelegate } from "../utils";
+import { databaseGetDatasetDelegate } from "../utils";
 import { ITable, Relation } from "..";
 
 //#region Types
@@ -59,13 +59,13 @@ const orderCategoriesCountColumn = new ColumnRelationCustom<
   Order,
   OrderProduct,
   number
->("categoriesCount", 0, (order, orderProducts, data) => {
+>("categoriesCount", 0, (order, orderProducts, dataset) => {
   // Product ids of the order
   const productsIds = orderProducts
     .filter((a) => a.orderId === order.id)
     .map((a) => a.productId);
   // Products of the order
-  const products = data[productsTable.name].rows;
+  const products = dataset[productsTable.name].rows;
   // Categories ids list with duplicate values
   const fullCategoriesIds = products
     .filter((a) => productsIds.includes(a.id))
@@ -77,7 +77,7 @@ const orderCategoriesCountColumn = new ColumnRelationCustom<
 });
 const orderProductsCountColumn = new ColumnRelationCount<Order, OrderProduct>(
   "productsCount",
-  (o, op) => op.orderId === o.id,
+  (o, op) => op.orderId === o.id
 );
 const orderProductOrderColumn = new ColumnRelationLookup<
   OrderProduct,
@@ -99,7 +99,7 @@ const productsTable = new Table<Product>("products", [
 ]);
 const productCategoriesTable = new Table<ProductCategory>(
   "product-categories",
-  [new ColumnId("id"), new ColumnString("name", { maxLength: 20 })],
+  [new ColumnId("id"), new ColumnString("name", { maxLength: 20 })]
 );
 const orderProductsTable = new Table<OrderProduct>("order-products", [
   orderProductOrderColumn,
@@ -156,7 +156,7 @@ const relations: List<Relation<Any, Any>> = [
 
 describe("Table", () => {
   describe("utils", () => {
-    describe("databaseGetDataDelegate", () => {
+    describe("databaseGetDatasetDelegate", () => {
       it("Generates a map of lists, the map as the same keys of the given tablesMap param.", () => {
         const countsMap: Dictionary<number> = {
           [productCategoriesTable.name]: 10,
@@ -164,18 +164,22 @@ describe("Table", () => {
           [orderProductsTable.name]: 5,
           [ordersTable.name]: 1,
         };
-        const data = databaseGetDataDelegate(tables, countsMap, relations);
-        const dataKeys = Object.keys(data);
+        const dataset = databaseGetDatasetDelegate(
+          tables,
+          countsMap,
+          relations
+        );
+        const dataKeys = Object.keys(dataset);
         expect(dataKeys.length).toBe(4);
         dataKeys.forEach((key) => {
-          const { rows, table } = data[key];
+          const { rows, table } = dataset[key];
           expect(table.name).toBe(key);
           expect(rows.length).toBe(countsMap[table.name]);
         });
-        const productCategories = data[productCategoriesTable.name].rows;
-        const products = data[productsTable.name].rows;
-        const orderProducts = data[orderProductsTable.name].rows;
-        const orders = data[ordersTable.name].rows;
+        const productCategories = dataset[productCategoriesTable.name].rows;
+        const products = dataset[productsTable.name].rows;
+        const orderProducts = dataset[orderProductsTable.name].rows;
+        const orders = dataset[ordersTable.name].rows;
         const categoriesIds = productCategories.map((a) => a.id);
         products.forEach((a) => {
           expect(categoriesIds).toContain(a.categoryId);
@@ -199,12 +203,12 @@ describe("Table", () => {
               minLength: 4,
             }),
           ],
-          5,
+          5
         );
         expect(rows.length).toBe(5);
         expect(rows.every((a) => objectHasKey(a, "name"))).toBeTruthy();
         expect(
-          rows.every((a) => a.name.length >= 4 && a.name.length <= 12),
+          rows.every((a) => a.name.length >= 4 && a.name.length <= 12)
         ).toBeTruthy();
       });
       it("Generates 100 rows of `{id: number, name: string, surname: string, fullname: string, age: Nullable<number>, email: string active: boolean, registered: Date, expires: Date, type: RowType, color: string, scoreMax: number; score: number, phone: string, username: string}`", () => {
@@ -237,7 +241,7 @@ describe("Table", () => {
             new ColumnLastName<RowTest>("surname"),
             new ColumnCustom<RowTest, string>(
               "fullname",
-              (a) => `${a.name} ${a.surname}`,
+              (a) => `${a.name} ${a.surname}`
             ),
             new ColumnNumber<RowTest>("age", { max: 90, nullable: true }),
             new ColumnEmailDependency<RowTest>("email", {
@@ -258,7 +262,7 @@ describe("Table", () => {
             new ColumnPattern<RowTest>("phone", "+000-00000"),
             new ColumnPattern<RowTest>("username", "a{8,12}"),
           ],
-          100,
+          100
         );
         expect(rows.length).toBe(100);
         let lastRow: Nullable<RowTest> = null;
@@ -272,18 +276,18 @@ describe("Table", () => {
           expect(isEmail(a.email)).toBeTruthy();
           expect(
             a.email.indexOf(
-              `${a.name.toLowerCase()}.${a.surname.toLowerCase()}`,
-            ),
+              `${a.name.toLowerCase()}.${a.surname.toLowerCase()}`
+            )
           ).toBe(0);
           expect(isBoolean(a.active)).toBeTruthy();
           expect(isDate(a.registered)).toBeTruthy();
           expect(isDate(a.expires)).toBeTruthy();
           expect(a.expires.getTime()).toBeGreaterThanOrEqual(
-            a.registered.getTime(),
+            a.registered.getTime()
           );
           expect(a.type in RowType).toBeTruthy();
           expect(a.color).toMatch(
-            /^rgba\([0-9]{1,3},[0-9]{1,3},[0-9]{1,3},[0-9]\)$$/,
+            /^rgba\([0-9]{1,3},[0-9]{1,3},[0-9]{1,3},[0-9]\)$$/
           );
           expect(isNumber(a.scoreMax)).toBeTruthy();
           expect(isNumber(a.score)).toBeTruthy();

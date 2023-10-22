@@ -2,7 +2,7 @@ import { Any, List, NumericIdentityManager } from "@mantlebee/ts-core";
 import { extractRandomItem } from "@mantlebee/ts-random";
 
 import { Column, ColumnRelation, Database, Table } from "@/models";
-import { Data, Relation } from "@/types";
+import { Dataset, Relation } from "@/types";
 import { ITable } from "..";
 
 type RowTest = { id: number };
@@ -24,7 +24,7 @@ class ColumnRelationTestCategory extends ColumnRelation<
   public setValues(
     sourceRows: List<Product>,
     targetRows: List<Category>,
-    data: Data
+    dataset: Dataset
   ): void {
     const randomTargetRow = extractRandomItem(targetRows);
     sourceRows.forEach((a) => (a.category = randomTargetRow.id));
@@ -66,24 +66,24 @@ describe("models", () => {
     ];
     it("generates a dataset with specific amount of rows for each table", () => {
       const database = new Database(tables);
-      const data = database.getData({ categories: 5, products: 20 });
-      expect(data.categories.rows).toHaveLength(5);
-      expect(data.products.rows).toHaveLength(20);
+      const dataset = database.getDataset({ categories: 5, products: 20 });
+      expect(dataset.categories.rows).toHaveLength(5);
+      expect(dataset.products.rows).toHaveLength(20);
     });
     it("generates 0 rows for a table not defined in the countsMap", () => {
       const database = new Database(tables);
-      const data = database.getData({ categories: 5 });
-      expect(data.products.rows).toHaveLength(0);
+      const dataset = database.getDataset({ categories: 5 });
+      expect(dataset.products.rows).toHaveLength(0);
     });
     it("doesn't update the relation columns values if there are not relations for that columns", () => {
       const database = new Database(tables);
-      const data = database.getData({ categories: 5, products: 20 });
-      expect(data.products.rows.every((a) => a.category === 0)).toBeTruthy();
+      const dataset = database.getDataset({ categories: 5, products: 20 });
+      expect(dataset.products.rows.every((a) => a.category === 0)).toBeTruthy();
     });
     it("updates the relation columns values if there are relations for that columns", () => {
       const database = new Database(tables, relations);
-      const data = database.getData({ categories: 5, products: 20 });
-      expect(data.products.rows.every((a) => a.category !== 0)).toBeTruthy();
+      const dataset = database.getDataset({ categories: 5, products: 20 });
+      expect(dataset.products.rows.every((a) => a.category !== 0)).toBeTruthy();
     });
   });
   describe("Table", () => {
