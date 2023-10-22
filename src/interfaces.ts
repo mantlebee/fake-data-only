@@ -24,7 +24,7 @@ export interface IColumn<
   readonly options: TOptions;
   /**
    * Generates a value. The returned value is applied to the row.
-   * @param row Row to update. The row already has the values of the previous columns already processed.
+   * @param row Row to update. The row has the values of the previous columns already processed.
    */
   getValue(row: TRow): TValue;
 }
@@ -43,6 +43,12 @@ export interface IColumnRelation<
   TValue = Any,
   TOptions extends ColumnOptions = ColumnOptions,
 > extends IColumn<TSourceRow, TValue, TOptions> {
+  /**
+   * Processes al source rows to update the column value. It can uses the target table rows or the entire data set.
+   * @param sourceRows List of rows to update of the source table.
+   * @param targetRows List of rows of the target table.
+   * @param data The databse data generated.
+   */
   setValues(
     sourceRows: List<TSourceRow>,
     targetRows: List<TTargetRow>,
@@ -52,11 +58,22 @@ export interface IColumnRelation<
 
 /**
  * Represents a database with its own tables ({@link ITable}) and relations {@link Relation}.
- * Its purpose is to generate a dictionary of data, where the key is the table name and the value is the table rows generated.
+ * Its purpose is to generate the database data set.
+ * The {@link Data} object is a dictionary, where the keys are the tables names and the values are objects with the table instance and its generated rows.
  */
 export interface IDatabase {
+  /**
+   * List of relations between tables that must be processed after the tables rows are generated.
+   */
   readonly relations?: List<Relation<Any, Any>>;
+  /**
+   * List of tables that must be used to generate rows.
+   */
   readonly tables: List<ITable<Any>>;
+  /**
+   * Generates the database data set, it is a dictionary, where the keys are the tables names and the values are objects with the table instance and its generated rows.
+   * @param countsMap Dictionary with the tables counts, used to generate a specific amount of rows for each table. It is a dictionary where the keys are the tables names and the values the row counts to generate.
+   */
   getData(countsMap: Dictionary<number>): Data;
 }
 
