@@ -61,9 +61,9 @@ export class Generator implements IDatabase {
     this.tables = tables;
   }
 
-  public getData(rowsNumberMap: Dictionary<number>): Data {
+  public getData(countsMap: Dictionary<number>): Data {
     const { relations, tables } = this;
-    return databaseGetDataDelegate(tables, rowsNumberMap, relations);
+    return databaseGetDataDelegate(tables, countsMap, relations);
   }
 }
 

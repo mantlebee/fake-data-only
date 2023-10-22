@@ -57,7 +57,7 @@ export interface IColumnRelation<
 export interface IDatabase {
   readonly relations?: List<Relation<Any, Any>>;
   readonly tables: List<ITable<Any>>;
-  getData(rowsNumberMap: Dictionary<number>): Data;
+  getData(countsMap: Dictionary<number>): Data;
 }
 
 /**
