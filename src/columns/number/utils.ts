@@ -4,9 +4,13 @@ import { ColumnNumberOptionsDefault } from "./constants";
 import { ColumnNumberOptions } from "./types";
 
 export function ColumnNumberGetValueDelegate(
-  options?: ColumnNumberOptions
+  options?: ColumnNumberOptions,
 ): number {
-  let { decimals = 0, max, min = 0 } = {
+  let {
+    decimals = 0,
+    max,
+    min = 0,
+  } = {
     ...ColumnNumberOptionsDefault,
     ...options,
   };

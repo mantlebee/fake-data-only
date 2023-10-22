@@ -6,7 +6,7 @@ import { ColumnOptions, Row } from "@/types";
 export abstract class ColumnRelationNumber<
   TSourceRow extends Row,
   TTargetRow extends Row,
-  TOptions extends ColumnOptions = ColumnOptions
+  TOptions extends ColumnOptions = ColumnOptions,
 > extends ColumnRelation<TSourceRow, TTargetRow, number, TOptions> {
   public constructor(name: KeyOf<TSourceRow>, options?: TOptions) {
     super(name, 0, options);
@@ -16,7 +16,7 @@ export abstract class ColumnRelationNumber<
 export abstract class ColumnRelationString<
   TSourceRow extends Row,
   TTargetRow extends Row,
-  TOptions extends ColumnOptions = ColumnOptions
+  TOptions extends ColumnOptions = ColumnOptions,
 > extends ColumnRelation<TSourceRow, TTargetRow, string, TOptions> {
   public constructor(name: KeyOf<TSourceRow>, options?: TOptions) {
     super(name, "", options);

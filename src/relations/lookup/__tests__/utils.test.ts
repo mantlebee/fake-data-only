@@ -20,7 +20,7 @@ describe("ColumnRelationLookup", () => {
           "personId",
           "id",
           detailRows,
-          masterRows
+          masterRows,
         );
         detailRows.forEach((a) => {
           expect(a.personId).toBeGreaterThanOrEqual(1);

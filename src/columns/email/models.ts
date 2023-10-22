@@ -18,7 +18,7 @@ export class ColumnEmail<TRow extends Row> extends Column<
 }
 
 export class ColumnEmailDependency<
-  TRow extends Row
+  TRow extends Row,
 > extends ColumnDependencyAbstract<
   TRow,
   string,

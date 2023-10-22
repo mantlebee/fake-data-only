@@ -12,7 +12,7 @@ import {
 import { ColumnStringOptions } from "./types";
 
 export function ColumnStringGetValueDelegate(
-  options: ColumnStringOptions
+  options: ColumnStringOptions,
 ): string {
   const {
     include = {

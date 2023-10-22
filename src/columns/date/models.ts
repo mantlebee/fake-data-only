@@ -19,7 +19,7 @@ export class ColumnDate<TRow extends Row> extends Column<
 }
 
 export class ColumnDateDependency<
-  TRow extends Row
+  TRow extends Row,
 > extends ColumnDependencyAbstract<
   TRow,
   Date,

@@ -10,7 +10,7 @@ export abstract class ColumnDependencyAbstract<
   TRow extends Row,
   TValue,
   TOptions extends ColumnOptions,
-  TConstructor extends ColumnConstructor<TRow, TValue, TOptions>
+  TConstructor extends ColumnConstructor<TRow, TValue, TOptions>,
 > extends Column<TRow, TValue> {
   public abstract readonly columnConstructor: TConstructor;
   private readonly optionsValuesGetters!: ColumnOptionsValueGettersMap<
@@ -20,7 +20,7 @@ export abstract class ColumnDependencyAbstract<
 
   public constructor(
     name: KeyOf<TRow>,
-    optionsValuesGetters: ColumnOptionsValueGettersMap<TRow, TOptions>
+    optionsValuesGetters: ColumnOptionsValueGettersMap<TRow, TOptions>,
   ) {
     super(name);
     this.optionsValuesGetters = optionsValuesGetters;
@@ -30,7 +30,7 @@ export abstract class ColumnDependencyAbstract<
     return ColumnDependencyGetValueDelegate(
       row,
       this.columnConstructor,
-      this.optionsValuesGetters
+      this.optionsValuesGetters,
     );
   }
 }
@@ -39,14 +39,14 @@ export class ColumnDependency<
   TRow,
   TValue,
   TOptions extends ColumnOptions,
-  TConstructor extends ColumnConstructor<TRow, TValue, TOptions>
+  TConstructor extends ColumnConstructor<TRow, TValue, TOptions>,
 > extends ColumnDependencyAbstract<TRow, TValue, TOptions, TConstructor> {
   public readonly columnConstructor!: TConstructor;
 
   public constructor(
     name: KeyOf<TRow>,
     optionsValuesGetters: ColumnOptionsValueGettersMap<TRow, TOptions>,
-    columnConstructor: TConstructor
+    columnConstructor: TConstructor,
   ) {
     super(name, optionsValuesGetters);
     this.columnConstructor = columnConstructor;

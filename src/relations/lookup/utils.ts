@@ -16,12 +16,12 @@ function createChunks<T>(list: List<T>, size: number): List<List<T>> {
 
 export function ColumnRelationLookupDelegate<
   TSourceRow extends Row,
-  TTargetRow extends Row
+  TTargetRow extends Row,
 >(
   sourceColumnName: KeyOf<TSourceRow>,
   targetColumnName: KeyOf<TTargetRow>,
   sourceRows: List<TSourceRow>,
-  targetRows: List<TTargetRow>
+  targetRows: List<TTargetRow>,
 ): void {
   const sourceRowsChunk = createChunks(sourceRows, targetRows.length);
   targetRows.forEach((targetRow, index) => {

@@ -1,4 +1,4 @@
 export type ColumnRelationCountCondition<TSourceRow, TTargetRow> = (
   sourceRow: TSourceRow,
-  targetRow: TTargetRow
+  targetRow: TTargetRow,
 ) => boolean;

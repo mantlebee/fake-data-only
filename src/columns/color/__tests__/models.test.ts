@@ -11,7 +11,7 @@ describe("ColumnColor", () => {
         const colorColumn = new ColumnColor<RowTest>("name");
         const rgba = colorColumn.getValue();
         expect(rgba).toMatch(
-          /^rgba\([0-9]{1,3},[0-9]{1,3},[0-9]{1,3},[0-9]\)$$/
+          /^rgba\([0-9]{1,3},[0-9]{1,3},[0-9]{1,3},[0-9]\)$$/,
         );
       });
     });

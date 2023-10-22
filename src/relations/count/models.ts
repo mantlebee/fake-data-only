@@ -8,7 +8,7 @@ import { ColumnRelationCountDelegate } from "./utils";
 
 export class ColumnRelationCount<
   TSourceRow extends Row,
-  TTargetRow extends Row
+  TTargetRow extends Row,
 > extends ColumnRelationNumber<TSourceRow, TTargetRow> {
   private readonly countConditionDelegate: ColumnRelationCountCondition<
     TSourceRow,
@@ -17,7 +17,10 @@ export class ColumnRelationCount<
 
   public constructor(
     name: KeyOf<TSourceRow>,
-    countConditionDelegate: ColumnRelationCountCondition<TSourceRow, TTargetRow>
+    countConditionDelegate: ColumnRelationCountCondition<
+      TSourceRow,
+      TTargetRow
+    >,
   ) {
     super(name);
     this.countConditionDelegate = countConditionDelegate;
@@ -25,14 +28,14 @@ export class ColumnRelationCount<
 
   public setRelationValues(
     sourceRows: List<TSourceRow>,
-    targetRows: List<TTargetRow>
+    targetRows: List<TTargetRow>,
   ): void {
     const { countConditionDelegate, name } = this;
     ColumnRelationCountDelegate(
       name,
       countConditionDelegate,
       sourceRows,
-      targetRows
+      targetRows,
     );
   }
 }

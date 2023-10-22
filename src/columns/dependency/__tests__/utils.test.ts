@@ -38,7 +38,7 @@ describe("ColumnDependency", () => {
             >(row, ColumnNumber, {
               max: (a) => a.slotsTotal,
               min: (a) => a.slotsAvailable,
-            })
+            }),
           );
         randoms.forEach((a) => {
           expect(a).toBeGreaterThanOrEqual(row.slotsAvailable);
@@ -57,7 +57,7 @@ describe("ColumnDependency", () => {
             >(row, ColumnDate, {
               dateFrom: (a) => a.activatedOn,
               dateTo: (a) => a.exipresOn,
-            })
+            }),
           );
         randoms.forEach((a) => {
           expect(a.getTime()).toBeGreaterThanOrEqual(row.activatedOn.getTime());

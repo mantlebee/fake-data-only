@@ -9,7 +9,7 @@ import { ColumnRelationCustomDelegate } from "./utils";
 export class ColumnRelationCustom<
   TSourceRow extends Row,
   TTargetRow extends Row,
-  TValue
+  TValue,
 > extends ColumnRelation<TSourceRow, TTargetRow, TValue> {
   private readonly getValueDelegate: ColumnRelationCustomGetValueDelegate<
     TSourceRow,
@@ -24,7 +24,7 @@ export class ColumnRelationCustom<
       TSourceRow,
       TTargetRow,
       TValue
-    >
+    >,
   ) {
     super(name, defaultValue);
     this.getValueDelegate = getValueDelegate;
@@ -33,7 +33,7 @@ export class ColumnRelationCustom<
   public setRelationValues(
     sourceRows: List<TSourceRow>,
     targetRows: List<TTargetRow>,
-    data: Data
+    data: Data,
   ): void {
     const { getValueDelegate, name } = this;
     ColumnRelationCustomDelegate(
@@ -41,7 +41,7 @@ export class ColumnRelationCustom<
       getValueDelegate,
       sourceRows,
       targetRows,
-      data
+      data,
     );
   }
 }

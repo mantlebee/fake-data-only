@@ -7,7 +7,7 @@ import { DatabaseGetDataDelegate, TableGetRowsDelegate } from "./utils";
 export abstract class Column<
   TRow extends Row,
   TValue,
-  TOptions extends ColumnOptions = ColumnOptions
+  TOptions extends ColumnOptions = ColumnOptions,
 > implements IColumn<TRow, TValue, TOptions>
 {
   public readonly name: KeyOf<TRow>;
@@ -25,7 +25,7 @@ export abstract class ColumnRelation<
     TSourceRow extends Row,
     TTargetRow extends Row,
     TValue = Any,
-    TOptions extends ColumnOptions = ColumnOptions
+    TOptions extends ColumnOptions = ColumnOptions,
   >
   extends Column<TSourceRow, TValue, TOptions>
   implements IColumnRelation<TSourceRow, TTargetRow, TValue, TOptions>
@@ -35,7 +35,7 @@ export abstract class ColumnRelation<
   public constructor(
     name: KeyOf<TSourceRow>,
     defaultValue: TValue,
-    options?: TOptions
+    options?: TOptions,
   ) {
     super(name, options);
     this.defaultValue = defaultValue;
@@ -48,7 +48,7 @@ export abstract class ColumnRelation<
   public abstract setRelationValues(
     sourceRows: List<TSourceRow>,
     targetRows: List<TTargetRow>,
-    data: Data
+    data: Data,
   ): void;
 }
 

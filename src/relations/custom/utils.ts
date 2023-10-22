@@ -7,7 +7,7 @@ import { ColumnRelationCustomGetValueDelegate } from "./types";
 export function ColumnRelationCustomDelegate<
   TSourceRow extends Row,
   TTargetRow extends Row,
-  TValue
+  TValue,
 >(
   sourceColumnName: KeyOf<TSourceRow>,
   getValueDelegate: ColumnRelationCustomGetValueDelegate<
@@ -17,13 +17,13 @@ export function ColumnRelationCustomDelegate<
   >,
   sourceRows: List<TSourceRow>,
   targetRows: List<TTargetRow>,
-  data: Data
+  data: Data,
 ): void {
   sourceRows.forEach((sourceRow) => {
     sourceRow[sourceColumnName] = getValueDelegate(
       sourceRow,
       targetRows,
-      data
+      data,
     ) as unknown as TSourceRow[KeyOf<TSourceRow>];
   });
 }

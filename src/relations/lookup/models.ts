@@ -8,14 +8,14 @@ import { ColumnRelationLookupDelegate } from "./utils";
 export class ColumnRelationLookup<
   TSourceRow extends Row,
   TTargetRow extends Row,
-  TValue
+  TValue,
 > extends ColumnRelation<TSourceRow, TTargetRow, TValue> {
   private readonly targetColumnName: KeyOf<TTargetRow>;
 
   public constructor(
     name: KeyOf<TSourceRow>,
     defaultValue: TValue,
-    targetColumnName: KeyOf<TTargetRow>
+    targetColumnName: KeyOf<TTargetRow>,
   ) {
     super(name, defaultValue);
     this.targetColumnName = targetColumnName;
@@ -23,9 +23,14 @@ export class ColumnRelationLookup<
 
   public setRelationValues(
     sourceRows: List<TSourceRow>,
-    targetRows: List<TTargetRow>
+    targetRows: List<TTargetRow>,
   ): void {
     const { name, targetColumnName } = this;
-    ColumnRelationLookupDelegate(name, targetColumnName, sourceRows, targetRows);
+    ColumnRelationLookupDelegate(
+      name,
+      targetColumnName,
+      sourceRows,
+      targetRows,
+    );
   }
 }

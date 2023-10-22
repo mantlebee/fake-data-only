@@ -15,7 +15,7 @@ function generateRandomDomain(): string {
 }
 
 export function ColumnEmailGetValueDelegate(
-  options?: ColumnEmailOptions
+  options?: ColumnEmailOptions,
 ): string {
   const {
     domains = [generateRandomDomain()],

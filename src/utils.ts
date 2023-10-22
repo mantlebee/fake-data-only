@@ -11,14 +11,14 @@ function shouldBeNull<TRow extends Row>(column: IColumn<TRow>): boolean {
   const { nullable } = column.options;
   return Boolean(
     (column instanceof ColumnRelation && nullable) ||
-      (nullable && generateRandomBoolean())
+      (nullable && generateRandomBoolean()),
   );
 }
 
 export function DatabaseGetDataDelegate(
   tables: List<ITable<Any>>,
   countsMap: Dictionary<number>,
-  relations?: List<Relation>
+  relations?: List<Relation>,
 ): Data {
   const data = tables.reduce((result, current) => {
     const { name } = current;
@@ -39,7 +39,7 @@ export function DatabaseGetDataDelegate(
 
 export function TableGetRowsDelegate<TRow extends Row>(
   columns: List<IColumn<TRow>>,
-  count: number
+  count: number,
 ): List<TRow> {
   const items: List<TRow> = [];
   for (let i = 0; i < count; i++) {

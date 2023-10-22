@@ -17,7 +17,7 @@ describe("ColumnEmail", () => {
           randoms.push(
             ColumnEmailGetValueDelegate({
               domains: ["outlook.it", "outlook.com"],
-            })
+            }),
           );
         expect(randoms.every(isEmail)).toBeTruthy();
         expect(randoms.every((a) => /outlook\.(it|com)$/.test(a))).toBeTruthy();

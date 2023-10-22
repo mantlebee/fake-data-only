@@ -6,7 +6,7 @@ import { ColumnRelationCountCondition } from "./types";
 
 export function ColumnRelationCountDelegate<
   TSourceRow extends Row,
-  TTargetRow extends Row
+  TTargetRow extends Row,
 >(
   sourceColumnName: KeyOf<TSourceRow>,
   countConditionDelegate: ColumnRelationCountCondition<TSourceRow, TTargetRow>,
@@ -15,7 +15,7 @@ export function ColumnRelationCountDelegate<
 ): void {
   sourceRows.forEach((sourceRow) => {
     const count = targetRows.filter((targetRow) =>
-      countConditionDelegate(sourceRow, targetRow)
+      countConditionDelegate(sourceRow, targetRow),
     ).length;
     sourceRow[sourceColumnName] = count as TSourceRow[KeyOf<TSourceRow>];
   });

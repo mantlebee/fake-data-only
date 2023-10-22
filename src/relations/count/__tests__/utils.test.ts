@@ -19,13 +19,13 @@ describe("ColumnRelationCount", () => {
         ];
         const condition: ColumnRelationCountCondition<Person, Contact> = (
           s,
-          t
+          t,
         ) => t.personId === s.id;
         ColumnRelationCountDelegate(
           "contactsCount",
           condition,
           people,
-          contacts
+          contacts,
         );
         expect(people[0].contactsCount).toBe(2);
         expect(people[1].contactsCount).toBe(0);

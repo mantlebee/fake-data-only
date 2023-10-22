@@ -6,11 +6,11 @@ export function ColumnDependencyGetValueDelegate<
   TRow,
   TValue,
   TOptions extends ColumnOptions,
-  TConstructor extends ColumnConstructor<TRow, TValue, TOptions>
+  TConstructor extends ColumnConstructor<TRow, TValue, TOptions>,
 >(
   row: TRow,
   columnConstructor: TConstructor,
-  optionsValuesGetters: ColumnOptionsValueGettersMap<TRow, TOptions>
+  optionsValuesGetters: ColumnOptionsValueGettersMap<TRow, TOptions>,
 ): TValue {
   const options = {} as TOptions;
   Object.keys(optionsValuesGetters).forEach((key) => {

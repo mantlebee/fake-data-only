@@ -12,7 +12,7 @@ import { ColumnOptions, Data, Relation, Row } from "./types";
 export interface IColumn<
   TRow extends Row,
   TValue = Any,
-  TOptions extends ColumnOptions = ColumnOptions
+  TOptions extends ColumnOptions = ColumnOptions,
 > {
   /**
    * Column's name. It must be unique for a {@link ITable}.
@@ -41,12 +41,12 @@ export interface IColumnRelation<
   TSourceRow extends Row,
   TTargetRow extends Row,
   TValue = Any,
-  TOptions extends ColumnOptions = ColumnOptions
+  TOptions extends ColumnOptions = ColumnOptions,
 > extends IColumn<TSourceRow, TValue, TOptions> {
   setRelationValues(
     sourceRows: List<TSourceRow>,
     targetRows: List<TTargetRow>,
-    data: Data
+    data: Data,
   ): void;
 }
 

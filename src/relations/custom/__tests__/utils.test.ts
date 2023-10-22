@@ -29,7 +29,7 @@ describe("ColumnRelationCustom", () => {
           delegate,
           people,
           contacts,
-          {}
+          {},
         );
         people.forEach((a) => {
           expect(a.emailsWithCCount).toBe(2);

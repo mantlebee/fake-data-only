@@ -20,7 +20,7 @@ export type Data = Dictionary<{ table: ITable<Row>; rows: List<Row> }>;
  */
 export type Relation<
   TSourceRow extends Row = Row,
-  TTargetRow extends Row = Row
+  TTargetRow extends Row = Row,
 > = {
   sourceColumn: IColumnRelation<TSourceRow, TTargetRow>;
   sourceTable: ITable<TSourceRow>;
