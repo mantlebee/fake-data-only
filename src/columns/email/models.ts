@@ -2,7 +2,7 @@ import { Column } from "@/models";
 import { Row } from "@/types";
 
 import { ColumnEmailOptions } from "./types";
-import { columnEmailGetValueDelegate } from "./utils";
+import { getColumnEmailValue } from "./utils";
 
 export class ColumnEmail<TRow extends Row> extends Column<
   TRow,
@@ -10,7 +10,7 @@ export class ColumnEmail<TRow extends Row> extends Column<
   ColumnEmailOptions
 > {
   public getValue(row: TRow): string {
-    const options = this.getOptionsDelegate(row);
-    return columnEmailGetValueDelegate(options);
+    const options = this.getOptions(row);
+    return getColumnEmailValue(options);
   }
 }

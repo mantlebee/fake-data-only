@@ -3,9 +3,7 @@ import { generateRandomNumber } from "@mantlebee/ts-random";
 import { ColumnNumberOptionsDefault } from "./constants";
 import { ColumnNumberOptions } from "./types";
 
-export function columnNumberGetValueDelegate(
-  options?: ColumnNumberOptions,
-): number {
+export function getColumnNumberValue(options?: ColumnNumberOptions): number {
   let {
     decimals = 0,
     max,

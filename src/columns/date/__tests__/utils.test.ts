@@ -1,4 +1,4 @@
-import { columnDateGetValueDelegate } from "../utils";
+import { getColumnDateValue } from "../utils";
 
 type RowTest = {
   dateFrom: Date;
@@ -14,9 +14,9 @@ const firstDate = new Date(1970, 0, 1, 0, 0, 0);
 
 describe("ColumnDate", () => {
   describe("utils", () => {
-    describe("columnDateGetValueDelegate", () => {
+    describe("getColumnDateValue", () => {
       it("Generates a random date", () => {
-        const random = columnDateGetValueDelegate({});
+        const random = getColumnDateValue({});
         expect(random.getTime()).toBeGreaterThanOrEqual(firstDate.getTime());
         expect(random.getTime()).toBeLessThanOrEqual(Date.now());
       });

@@ -4,18 +4,18 @@ import { Row } from "@/types";
 
 import { ColumnRelationCountCondition } from "./types";
 
-export function columnRelationCountSetValuesDelegate<
+export function setColumnRelationCountValues<
   TSourceRow extends Row,
   TTargetRow extends Row,
 >(
   sourceColumnName: KeyOf<TSourceRow>,
-  countConditionDelegate: ColumnRelationCountCondition<TSourceRow, TTargetRow>,
+  countCondition: ColumnRelationCountCondition<TSourceRow, TTargetRow>,
   sourceRows: List<TSourceRow>,
-  targetRows: List<TTargetRow>,
+  targetRows: List<TTargetRow>
 ): void {
   sourceRows.forEach((sourceRow) => {
     const count = targetRows.filter((targetRow) =>
-      countConditionDelegate(sourceRow, targetRow),
+      countCondition(sourceRow, targetRow)
     ).length;
     sourceRow[sourceColumnName] = count as TSourceRow[KeyOf<TSourceRow>];
   });

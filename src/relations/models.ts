@@ -1,7 +1,7 @@
 import { KeyOf } from "@mantlebee/ts-core";
 
 import { ColumnRelation } from "@/models";
-import { ColumnOptions, GetColumnOptionsDelegate, Row } from "@/types";
+import { ColumnOptions, ColumnOptionsGetter, Row } from "@/types";
 
 export abstract class ColumnRelationNumber<
   TSourceRow extends Row,
@@ -10,9 +10,9 @@ export abstract class ColumnRelationNumber<
 > extends ColumnRelation<TSourceRow, TTargetRow, number, TOptions> {
   public constructor(
     name: KeyOf<TSourceRow>,
-    getOptionsDelegate?: GetColumnOptionsDelegate<TSourceRow, TOptions>
+    getOptions?: ColumnOptionsGetter<TSourceRow, TOptions>
   ) {
-    super(name, 0, getOptionsDelegate);
+    super(name, 0, getOptions);
   }
 }
 
@@ -23,8 +23,8 @@ export abstract class ColumnRelationString<
 > extends ColumnRelation<TSourceRow, TTargetRow, string, TOptions> {
   public constructor(
     name: KeyOf<TSourceRow>,
-    getOptionsDelegate?: GetColumnOptionsDelegate<TSourceRow, TOptions>
+    getOptions?: ColumnOptionsGetter<TSourceRow, TOptions>
   ) {
-    super(name, "", getOptionsDelegate);
+    super(name, "", getOptions);
   }
 }

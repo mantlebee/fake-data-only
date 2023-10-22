@@ -2,13 +2,13 @@ import { Any, Dictionary, KeyOf, List } from "@mantlebee/ts-core";
 
 import { IColumn, IColumnRelation, IDatabase, ITable } from "./interfaces";
 import {
-  GetColumnOptionsDelegate,
+  ColumnOptionsGetter,
   Dataset,
   Relation,
   Row,
   ColumnOptions,
 } from "./types";
-import { databaseGetDatasetDelegate, tableGetRowsDelegate } from "./utils";
+import { getDatabaseDataset, getTableRows } from "./utils";
 
 /**
  * Abstract implementation of {@link IColumn}.
@@ -20,15 +20,14 @@ export abstract class Column<
 > implements IColumn<TRow, TValue>
 {
   public readonly name: KeyOf<TRow>;
-  public readonly getOptionsDelegate: GetColumnOptionsDelegate<TRow, TOptions>;
+  public readonly getOptions: ColumnOptionsGetter<TRow, TOptions>;
 
   public constructor(
     name: KeyOf<TRow>,
-    getOptionsDelegate: GetColumnOptionsDelegate<TRow, TOptions> = () =>
-      ({}) as TOptions
+    getOptions: ColumnOptionsGetter<TRow, TOptions> = () => ({}) as TOptions
   ) {
     this.name = name;
-    this.getOptionsDelegate = getOptionsDelegate;
+    this.getOptions = getOptions;
   }
 
   public abstract getValue(row: TRow): TValue;
@@ -56,9 +55,9 @@ export abstract class ColumnRelation<
   public constructor(
     name: KeyOf<TSourceRow>,
     defaultValue: TValue,
-    getOptionsDelegate?: GetColumnOptionsDelegate<TSourceRow, TOptions>
+    getOptions?: ColumnOptionsGetter<TSourceRow, TOptions>
   ) {
-    super(name, getOptionsDelegate);
+    super(name, getOptions);
     this.defaultValue = defaultValue;
   }
 
@@ -75,7 +74,7 @@ export abstract class ColumnRelation<
 
 /**
  * Implementation of {@link IDatabase}.
- * It uses the delegate {@link databaseGetDatasetDelegate} to generate the dataset.
+ * It uses the delegate {@link getDatabaseDataset} to generate the dataset.
  */
 export class Database implements IDatabase {
   public readonly relations?: List<Relation>;
@@ -88,13 +87,13 @@ export class Database implements IDatabase {
 
   public getDataset(countsMap: Dictionary<number>): Dataset {
     const { relations, tables } = this;
-    return databaseGetDatasetDelegate(tables, countsMap, relations);
+    return getDatabaseDataset(tables, countsMap, relations);
   }
 }
 
 /**
  * Implementation of {@link ITable}.
- * It uses the delegate {@link tableGetRowsDelegate} to generate the rows.
+ * It uses the delegate {@link getTableRows} to generate the rows.
  */
 export class Table<TRow extends Row> implements ITable<TRow> {
   public readonly columns: List<Column<TRow>>;
@@ -107,6 +106,6 @@ export class Table<TRow extends Row> implements ITable<TRow> {
 
   public getRows(count: number): List<TRow> {
     const { columns } = this;
-    return tableGetRowsDelegate(columns, count);
+    return getTableRows(columns, count);
   }
 }

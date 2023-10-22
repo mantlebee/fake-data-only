@@ -3,15 +3,15 @@ import { KeyOf, List } from "@mantlebee/ts-core";
 import { ColumnRelation } from "@/models";
 import { Dataset, Row } from "@/types";
 
-import { columnRelationCustomGetValueDelegate } from "./types";
-import { columnRelationCustomSetValuesDelegate } from "./utils";
+import { ColumnRelationCustomValueGetter } from "./types";
+import { setColumnRelationCustomValues } from "./utils";
 
 export class ColumnRelationCustom<
   TSourceRow extends Row,
   TTargetRow extends Row,
   TValue,
 > extends ColumnRelation<TSourceRow, TTargetRow, TValue> {
-  private readonly getValueDelegate: columnRelationCustomGetValueDelegate<
+  private readonly getValueDelegate: ColumnRelationCustomValueGetter<
     TSourceRow,
     TTargetRow,
     TValue
@@ -20,7 +20,7 @@ export class ColumnRelationCustom<
   public constructor(
     name: KeyOf<TSourceRow>,
     defaultValue: TValue,
-    getValueDelegate: columnRelationCustomGetValueDelegate<
+    getValueDelegate: ColumnRelationCustomValueGetter<
       TSourceRow,
       TTargetRow,
       TValue
@@ -36,7 +36,7 @@ export class ColumnRelationCustom<
     dataset: Dataset
   ): void {
     const { getValueDelegate, name } = this;
-    columnRelationCustomSetValuesDelegate(
+    setColumnRelationCustomValues(
       name,
       getValueDelegate,
       sourceRows,

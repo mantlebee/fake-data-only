@@ -6,26 +6,9 @@ import { Column, ColumnRelation, Table } from "./models";
 
 /**
  * Default values of rows to generate.
- * It is used by the delegate {@link databaseGetDatasetDelegate} if the counts map doesn't include a key of the current table processing.
+ * It is used by the delegate {@link getDatabaseDataset} if the counts map doesn't include a key of the current table processing.
  */
 const DefaultRowsCount = 0;
-
-/**
- * Returns a random boolean value indicating if to generate a value for the current column or to set the `null` value.
- * If the column is a relation column and it is nullable, the method returns `true`.
- * @param column Column processing during the table rows generation.
- * @returns A boolean value indicating if to generate a value for the current column or to set the `null` value.
- */
-function shouldBeNull<TRow extends Row>(
-  column: Column<TRow>,
-  options: ColumnOptions
-): boolean {
-  const { nullable } = options;
-  return Boolean(
-    (column instanceof ColumnRelation && nullable) ||
-      (nullable && generateRandomBoolean())
-  );
-}
 
 /**
  * Generates a database dataset using the given tables and relations.
@@ -38,7 +21,7 @@ function shouldBeNull<TRow extends Row>(
  * @param relations List of relations to process to update the rows values.
  * @returns the database dataset, it is a dictionary, where the keys are the tables names and the values are objects with the table instance and its generated rows.
  */
-export function databaseGetDatasetDelegate(
+export function getDatabaseDataset(
   tables: List<Table<Any>>,
   countsMap: Dictionary<number>,
   relations?: List<Relation>
@@ -67,7 +50,7 @@ export function databaseGetDatasetDelegate(
  * @param count Number of rows to generated.
  * @returns Rows generated where the keys are the columns names.
  */
-export function tableGetRowsDelegate<TRow extends Row>(
+export function getTableRows<TRow extends Row>(
   columns: List<Column<TRow, Any>>,
   count: number
 ): List<TRow> {
@@ -75,11 +58,28 @@ export function tableGetRowsDelegate<TRow extends Row>(
   for (let i = 0; i < count; i++) {
     const row: TRow = {} as TRow;
     columns.forEach((a) => {
-      const options = a.getOptionsDelegate(row);
+      const options = a.getOptions(row);
       if (shouldBeNull(a, options)) row[a.name] = null as TRow[KeyOf<TRow>];
       else row[a.name] = a.getValue({ ...row });
     });
     items.push(row);
   }
   return items;
+}
+
+/**
+ * Returns a random boolean value indicating if to generate a value for the current column or to set the `null` value.
+ * If the column is a relation column and it is nullable, the method returns `true`.
+ * @param column Column processing during the table rows generation.
+ * @returns A boolean value indicating if to generate a value for the current column or to set the `null` value.
+ */
+function shouldBeNull<TRow extends Row>(
+  column: Column<TRow>,
+  options: ColumnOptions
+): boolean {
+  const { nullable } = options;
+  return Boolean(
+    (column instanceof ColumnRelation && nullable) ||
+      (nullable && generateRandomBoolean())
+  );
 }

@@ -2,15 +2,15 @@ import { KeyOf, List } from "@mantlebee/ts-core";
 
 import { Dataset, Row } from "@/types";
 
-import { columnRelationCustomGetValueDelegate } from "./types";
+import { ColumnRelationCustomValueGetter } from "./types";
 
-export function columnRelationCustomSetValuesDelegate<
+export function setColumnRelationCustomValues<
   TSourceRow extends Row,
   TTargetRow extends Row,
   TValue,
 >(
   sourceColumnName: KeyOf<TSourceRow>,
-  getValueDelegate: columnRelationCustomGetValueDelegate<
+  getValueDelegate: ColumnRelationCustomValueGetter<
     TSourceRow,
     TTargetRow,
     TValue

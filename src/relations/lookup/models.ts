@@ -3,7 +3,7 @@ import { KeyOf, List } from "@mantlebee/ts-core";
 import { ColumnRelation } from "@/models";
 import { Row } from "@/types";
 
-import { columnRelationLookupSetValuesDelegate } from "./utils";
+import { setColumnRelationLookupValues } from "./utils";
 
 export class ColumnRelationLookup<
   TSourceRow extends Row,
@@ -15,7 +15,7 @@ export class ColumnRelationLookup<
   public constructor(
     name: KeyOf<TSourceRow>,
     defaultValue: TValue,
-    targetColumnName: KeyOf<TTargetRow>,
+    targetColumnName: KeyOf<TTargetRow>
   ) {
     super(name, defaultValue);
     this.targetColumnName = targetColumnName;
@@ -23,14 +23,14 @@ export class ColumnRelationLookup<
 
   public setValues(
     sourceRows: List<TSourceRow>,
-    targetRows: List<TTargetRow>,
+    targetRows: List<TTargetRow>
   ): void {
     const { name, targetColumnName } = this;
-    columnRelationLookupSetValuesDelegate(
+    setColumnRelationLookupValues(
       name,
       targetColumnName,
       sourceRows,
-      targetRows,
+      targetRows
     );
   }
 }

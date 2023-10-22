@@ -11,9 +11,7 @@ import {
 
 import { ColumnStringOptions } from "./types";
 
-export function columnStringGetValueDelegate(
-  options: ColumnStringOptions,
-): string {
+export function getColumnStringValue(options: ColumnStringOptions): string {
   const {
     include = {
       lowercase: true,

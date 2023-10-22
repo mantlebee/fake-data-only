@@ -31,10 +31,10 @@ import {
   ColumnRelationCustom,
   ColumnRelationLookup,
 } from "@/relations";
-import { tableGetRowsDelegate } from "@/utils";
+import { getTableRows } from "@/utils";
 
 import { Table } from "../models";
-import { databaseGetDatasetDelegate } from "../utils";
+import { getDatabaseDataset } from "../utils";
 import { ITable, Relation } from "..";
 
 //#region Types
@@ -155,7 +155,7 @@ const relations: List<Relation<Any, Any>> = [
 
 describe("Table", () => {
   describe("utils", () => {
-    describe("databaseGetDatasetDelegate", () => {
+    describe("getDatabaseDataset", () => {
       it("Generates a map of lists, the map as the same keys of the given tablesMap param.", () => {
         const countsMap: Dictionary<number> = {
           [productCategoriesTable.name]: 10,
@@ -163,11 +163,7 @@ describe("Table", () => {
           [orderProductsTable.name]: 5,
           [ordersTable.name]: 1,
         };
-        const dataset = databaseGetDatasetDelegate(
-          tables,
-          countsMap,
-          relations
-        );
+        const dataset = getDatabaseDataset(tables, countsMap, relations);
         const dataKeys = Object.keys(dataset);
         expect(dataKeys.length).toBe(4);
         dataKeys.forEach((key) => {
@@ -192,10 +188,10 @@ describe("Table", () => {
         });
       });
     });
-    describe("tableGetRowsDelegate", () => {
+    describe("getTableRows", () => {
       it("Generates 5 rows of {name: string}", () => {
         type RowTest = { name: string };
-        const rows = tableGetRowsDelegate<RowTest>(
+        const rows = getTableRows<RowTest>(
           [
             new ColumnString<RowTest>("name", () => ({
               maxLength: 12,
@@ -233,7 +229,7 @@ describe("Table", () => {
           phone: string;
           username: string;
         };
-        const rows = tableGetRowsDelegate<RowTest>(
+        const rows = getTableRows<RowTest>(
           [
             new ColumnId<RowTest>("id"),
             new ColumnFirstName<RowTest>("name"),

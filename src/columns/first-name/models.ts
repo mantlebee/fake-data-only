@@ -2,7 +2,7 @@ import { Column } from "@/models";
 import { Row } from "@/types";
 
 import { ColumnFirstNameOptions } from "./types";
-import { columnFirstNameGetValueDelegate } from "./utils";
+import { getColumnFirstNameValue } from "./utils";
 
 export class ColumnFirstName<TRow extends Row> extends Column<
   TRow,
@@ -10,7 +10,7 @@ export class ColumnFirstName<TRow extends Row> extends Column<
   ColumnFirstNameOptions
 > {
   public getValue(row: TRow): string {
-    const options = this.getOptionsDelegate(row);
-    return columnFirstNameGetValueDelegate(options);
+    const options = this.getOptions(row);
+    return getColumnFirstNameValue(options);
   }
 }

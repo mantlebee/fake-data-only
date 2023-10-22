@@ -4,38 +4,30 @@ import { Row } from "@/types";
 
 import { ColumnRelationNumber } from "../models";
 import { ColumnRelationCountCondition } from "./types";
-import { columnRelationCountSetValuesDelegate } from "./utils";
+import { setColumnRelationCountValues } from "./utils";
 
 export class ColumnRelationCount<
   TSourceRow extends Row,
   TTargetRow extends Row,
 > extends ColumnRelationNumber<TSourceRow, TTargetRow> {
-  private readonly countConditionDelegate: ColumnRelationCountCondition<
+  private readonly countCondition: ColumnRelationCountCondition<
     TSourceRow,
     TTargetRow
   >;
 
   public constructor(
     name: KeyOf<TSourceRow>,
-    countConditionDelegate: ColumnRelationCountCondition<
-      TSourceRow,
-      TTargetRow
-    >,
+    countCondition: ColumnRelationCountCondition<TSourceRow, TTargetRow>
   ) {
     super(name);
-    this.countConditionDelegate = countConditionDelegate;
+    this.countCondition = countCondition;
   }
 
   public setValues(
     sourceRows: List<TSourceRow>,
-    targetRows: List<TTargetRow>,
+    targetRows: List<TTargetRow>
   ): void {
-    const { countConditionDelegate, name } = this;
-    columnRelationCountSetValuesDelegate(
-      name,
-      countConditionDelegate,
-      sourceRows,
-      targetRows,
-    );
+    const { countCondition, name } = this;
+    setColumnRelationCountValues(name, countCondition, sourceRows, targetRows);
   }
 }
