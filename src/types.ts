@@ -8,17 +8,17 @@ import { IColumnRelation, ITable } from "./interfaces";
  */
 export type ColumnOptions = { nullable?: boolean };
 
-export type Matrix = List<MatrixRow<Any>>;
-export type MatrixRow<TRow extends Row> = {
-  table: ITable<TRow>;
-  rows: List<TRow>;
-};
+/**
+ * Database ({@link IDatabase}) data. It is a dictionary where the key is the table ({@link ITable}) name and the value the table rows generated.
+ * Like the {@link Row} type, this type is defined to simplify return types.
+ */
+export type Data = Dictionary<List<Row>>;
 
 /**
- * Represents a relation between tables.
- * Its purpose is to update the values of a column ({@link IColumnRelation}) of the source table ({@link ITable}) using the rows of a target table.
+ * Represents a relation between tables ({@link ITable}).
+ * Its purpose is to update the values of a column ({@link IColumnRelation}) of the source table using the rows of a target table.
  */
-export type Relation<TSourceRow extends Row, TTargetRow extends Row> = {
+export type Relation<TSourceRow extends Row = Row, TTargetRow extends Row = Row> = {
   sourceColumn: IColumnRelation<TSourceRow, TTargetRow>;
   sourceTable: ITable<TSourceRow>;
   targetTable: ITable<TTargetRow>;

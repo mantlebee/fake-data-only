@@ -1,6 +1,6 @@
 import { KeyOf, List } from "@mantlebee/ts-core";
 
-import { Matrix } from "@/types";
+import { Data } from "@/types";
 
 import { RelationCustomGetValueDelegate } from "./types";
 
@@ -12,7 +12,7 @@ export function RelationCustomSetValuesDelegate<
   sourceColumnName: KeyOf<TSourceRow>,
   sourceRows: List<TSourceRow>,
   targetRows: List<TTargetRow>,
-  matrix: Matrix,
+  matrix: Data,
   getValueDelegate: RelationCustomGetValueDelegate<
     TSourceRow,
     TTargetRow,

@@ -2,7 +2,7 @@ import { KeyOf } from "@mantlebee/ts-core";
 
 import { ITable } from "@/interfaces";
 import { Relation } from "@/models";
-import { Matrix } from "@/types";
+import { Data } from "@/types";
 
 import { RelationCountCondition } from "./types";
 import { RelationCountSetValuesDelegate } from "./utils";
@@ -26,7 +26,7 @@ export class RelationCount<TSourceRow, TTargetRow> extends Relation<
     this.countConditionDelegate = countConditionDelegate;
   }
 
-  public setValues(matrix: Matrix): void {
+  public setValues(matrix: Data): void {
     const {
       countConditionDelegate,
       sourceColumn: sourceColumnName,

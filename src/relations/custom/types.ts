@@ -1,6 +1,6 @@
 import { List } from "@mantlebee/ts-core";
 
-import { Matrix } from "@/types";
+import { Data } from "@/types";
 
 export type RelationCustomGetValueDelegate<
   TSourceRow,
@@ -9,5 +9,5 @@ export type RelationCustomGetValueDelegate<
 > = (
   sourceRow: TSourceRow,
   targetRows: List<TTargetRow>,
-  matrix: Matrix
+  matrix: Data
 ) => TValue;

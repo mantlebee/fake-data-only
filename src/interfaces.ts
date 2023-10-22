@@ -1,6 +1,6 @@
 import { Any, Dictionary, KeyOf, List } from "@mantlebee/ts-core";
 
-import { ColumnOptions, Matrix, Row } from "./types";
+import { ColumnOptions, Data, Relation, Row } from "./types";
 
 /**
  * Represents the column of a table ({@link ITable}).
@@ -50,13 +50,13 @@ export interface IColumnRelation<
 }
 
 /**
- * Represents a database with its own tables ({@link ITable}) and relations {@link IRelation}.
+ * Represents a database with its own tables ({@link ITable}) and relations {@link Relation}.
  * Its purpose is to generate a dictionary of data, where the key is the table name and the value is the table rows generated.
  */
 export interface IDatabase {
-  readonly relations?: List<IRelation<Any, Any>>;
+  readonly relations?: List<Relation<Any, Any>>;
   readonly tables: List<ITable<Any>>;
-  getData(rowsNumberMap: Dictionary<number>): Matrix;
+  getData(rowsNumberMap: Dictionary<number>): Data;
 }
 
 

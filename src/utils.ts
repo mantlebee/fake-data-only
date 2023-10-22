@@ -1,8 +1,8 @@
 import { Dictionary, Any, List, KeyOf } from "@mantlebee/ts-core";
 import { generateRandomBoolean } from "@mantlebee/ts-random";
 
-import { IColumn, IRelation, ITable } from "./interfaces";
-import { Matrix, Row } from "./types";
+import { IColumn, ITable } from "./interfaces";
+import { Data, Relation, Row } from "./types";
 
 function shouldBeNull<TRow extends Row>(column: IColumn<TRow>): boolean {
   return Boolean(column.options.nullable && generateRandomBoolean());
@@ -10,17 +10,17 @@ function shouldBeNull<TRow extends Row>(column: IColumn<TRow>): boolean {
 
 export function GeneratorGetMatrixDelegate(
   tables: List<ITable<Any>>,
-  rowsNumberMap: Dictionary<number>,
-  relations?: List<IRelation<Any, Any>>
-): Matrix {
-  const matrix = tables.reduce((result, current) => {
+  countsMap: Dictionary<number>,
+  relations?: List<Relation>
+): Data {
+  const data = tables.reduce((result, current) => {
     const { name } = current;
-    const rowsNumber = rowsNumberMap[name];
-    result.push({ table: current, rows: current.getRows(rowsNumber) });
+    const count = countsMap[name];
+    result[name] = { table: current, rows: current.getRows(count) }
     return result;
-  }, [] as Matrix);
-  if (relations) relations.forEach((a) => a.setValues(matrix));
-  return matrix;
+  }, {});
+  if (relations) relations.forEach((a) => a.setValues(data));
+  return data;
 }
 
 export function TableGetRowsDelegate<TRow extends Row>(

@@ -2,7 +2,7 @@ import { KeyOf } from "@mantlebee/ts-core";
 
 import { ITable } from "@/interfaces";
 import { Relation } from "@/models";
-import { Matrix } from "@/types";
+import { Data } from "@/types";
 
 import { RelationValueSetValuesDelegate } from "./utils";
 
@@ -22,7 +22,7 @@ export class RelationValue<TSourceRow, TTargetRow> extends Relation<
     this.targetColumnName = targetColumnName;
   }
 
-  public setValues(matrix: Matrix): void {
+  public setValues(matrix: Data): void {
     const {
       targetColumnName,
       sourceColumn: sourceColumnName,
