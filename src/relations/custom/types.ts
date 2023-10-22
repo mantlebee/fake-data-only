@@ -2,7 +2,7 @@ import { List } from "@mantlebee/ts-core";
 
 import { Data, Row } from "@/types";
 
-export type ColumnRelationCustomGetValueDelegate<
+export type columnRelationCustomGetValueDelegate<
   TSourceRow extends Row,
   TTargetRow extends Row,
   TValue,

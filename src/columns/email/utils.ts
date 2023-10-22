@@ -1,8 +1,8 @@
 import { extractRandomItem } from "@mantlebee/ts-random";
 
 import {
-  ColumnFirstNameGetValueDelegate,
-  ColumnLastNameGetValueDelegate,
+  columnFirstNameGetValueDelegate,
+  columnLastNameGetValueDelegate,
 } from "@/columns";
 import { FirstLevelDomains, SecondLevelDomains } from "@/constants";
 
@@ -14,13 +14,13 @@ function generateRandomDomain(): string {
   return `${randomSecondLevel}.${randomFirstLevel}`;
 }
 
-export function ColumnEmailGetValueDelegate(
+export function columnEmailGetValueDelegate(
   options?: ColumnEmailOptions,
 ): string {
   const {
     domains = [generateRandomDomain()],
-    firstNames = [ColumnFirstNameGetValueDelegate()],
-    lastNames = [ColumnLastNameGetValueDelegate()],
+    firstNames = [columnFirstNameGetValueDelegate()],
+    lastNames = [columnLastNameGetValueDelegate()],
   } = { ...options };
   const domain = extractRandomItem(domains);
   const firstName = extractRandomItem(firstNames);

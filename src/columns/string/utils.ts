@@ -11,7 +11,7 @@ import {
 
 import { ColumnStringOptions } from "./types";
 
-export function ColumnStringGetValueDelegate(
+export function columnStringGetValueDelegate(
   options: ColumnStringOptions,
 ): string {
   const {

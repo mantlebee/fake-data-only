@@ -2,7 +2,7 @@ import { Any, Dictionary, KeyOf, List } from "@mantlebee/ts-core";
 
 import { IColumn, IColumnRelation, IDatabase, ITable } from "./interfaces";
 import { ColumnOptions, Data, Relation, Row } from "./types";
-import { DatabaseGetDataDelegate, TableGetRowsDelegate } from "./utils";
+import { databaseGetDataDelegate, tableGetRowsDelegate } from "./utils";
 
 export abstract class Column<
   TRow extends Row,
@@ -63,7 +63,7 @@ export class Generator implements IDatabase {
 
   public getData(rowsNumberMap: Dictionary<number>): Data {
     const { relations, tables } = this;
-    return DatabaseGetDataDelegate(tables, rowsNumberMap, relations);
+    return databaseGetDataDelegate(tables, rowsNumberMap, relations);
   }
 }
 
@@ -78,6 +78,6 @@ export class Table<TRow extends Row> implements ITable<TRow> {
 
   public getRows(count: number): List<TRow> {
     const { columns } = this;
-    return TableGetRowsDelegate(columns, count);
+    return tableGetRowsDelegate(columns, count);
   }
 }

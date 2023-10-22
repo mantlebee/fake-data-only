@@ -2,7 +2,7 @@ import { KeyOf, List } from "@mantlebee/ts-core";
 
 import { Data, Row } from "@/types";
 
-import { ColumnRelationCustomGetValueDelegate } from "./types";
+import { columnRelationCustomGetValueDelegate } from "./types";
 
 export function columnRelationCustomSetValuesDelegate<
   TSourceRow extends Row,
@@ -10,7 +10,7 @@ export function columnRelationCustomSetValuesDelegate<
   TValue,
 >(
   sourceColumnName: KeyOf<TSourceRow>,
-  getValueDelegate: ColumnRelationCustomGetValueDelegate<
+  getValueDelegate: columnRelationCustomGetValueDelegate<
     TSourceRow,
     TTargetRow,
     TValue

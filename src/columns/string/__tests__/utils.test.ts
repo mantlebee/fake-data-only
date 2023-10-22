@@ -1,16 +1,16 @@
-import { ColumnStringGetValueDelegate } from "../utils";
+import { columnStringGetValueDelegate } from "../utils";
 
 describe("ColumnString", () => {
   describe("utils", () => {
-    describe("ColumnStringGetValueDelegate", () => {
+    describe("columnStringGetValueDelegate", () => {
       it("Generates a random string up to 10 chars", () => {
-        const random = ColumnStringGetValueDelegate({
+        const random = columnStringGetValueDelegate({
           maxLength: 10,
         });
         expect(/^.{0,10}$/.test(random)).toBeTruthy();
       });
       it("Generates 5 lowercase chars", () => {
-        const random = ColumnStringGetValueDelegate({
+        const random = columnStringGetValueDelegate({
           include: { lowercase: true },
           maxLength: 5,
           minLength: 5,
@@ -18,7 +18,7 @@ describe("ColumnString", () => {
         expect(/^[a-z]{5}$/.test(random)).toBeTruthy();
       });
       it("Generates a lowercase and uppercase string of length between 10 and 12 chars", () => {
-        const random = ColumnStringGetValueDelegate({
+        const random = columnStringGetValueDelegate({
           include: { lowercase: true, uppercase: true },
           maxLength: 12,
           minLength: 10,

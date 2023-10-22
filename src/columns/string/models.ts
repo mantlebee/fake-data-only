@@ -2,7 +2,7 @@ import { Column } from "@/models";
 import { Row } from "@/types";
 
 import { ColumnStringOptions } from "./types";
-import { ColumnStringGetValueDelegate } from "./utils";
+import { columnStringGetValueDelegate } from "./utils";
 
 export class ColumnString<TRow extends Row> extends Column<
   TRow,
@@ -10,6 +10,6 @@ export class ColumnString<TRow extends Row> extends Column<
   ColumnStringOptions
 > {
   public getValue(): string {
-    return ColumnStringGetValueDelegate(this.options);
+    return columnStringGetValueDelegate(this.options);
   }
 }

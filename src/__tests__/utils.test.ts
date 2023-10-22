@@ -32,11 +32,10 @@ import {
   ColumnRelationCustom,
   ColumnRelationLookup,
 } from "@/relations";
-import { TableGetRowsDelegate } from "@/utils";
-import { Row } from "@/types";
+import { tableGetRowsDelegate } from "@/utils";
 
 import { Table } from "../models";
-import { DatabaseGetDataDelegate } from "../utils";
+import { databaseGetDataDelegate } from "../utils";
 import { ITable, Relation } from "..";
 
 //#region Types
@@ -157,7 +156,7 @@ const relations: List<Relation<Any, Any>> = [
 
 describe("Table", () => {
   describe("utils", () => {
-    describe("GeneratorGetMatrixDelegate", () => {
+    describe("databaseGetDataDelegate", () => {
       it("Generates a map of lists, the map as the same keys of the given tablesMap param.", () => {
         const countsMap: Dictionary<number> = {
           [productCategoriesTable.name]: 10,
@@ -165,7 +164,7 @@ describe("Table", () => {
           [orderProductsTable.name]: 5,
           [ordersTable.name]: 1,
         };
-        const data = DatabaseGetDataDelegate(tables, countsMap, relations);
+        const data = databaseGetDataDelegate(tables, countsMap, relations);
         const dataKeys = Object.keys(data);
         expect(dataKeys.length).toBe(4);
         dataKeys.forEach((key) => {
@@ -190,10 +189,10 @@ describe("Table", () => {
         });
       });
     });
-    describe("TableGetRowsDelegate", () => {
+    describe("tableGetRowsDelegate", () => {
       it("Generates 5 rows of {name: string}", () => {
         type RowTest = { name: string };
-        const rows = TableGetRowsDelegate<RowTest>(
+        const rows = tableGetRowsDelegate<RowTest>(
           [
             new ColumnString<RowTest>("name", {
               maxLength: 12,
@@ -231,7 +230,7 @@ describe("Table", () => {
           phone: string;
           username: string;
         };
-        const rows = TableGetRowsDelegate<RowTest>(
+        const rows = tableGetRowsDelegate<RowTest>(
           [
             new ColumnId<RowTest>("id"),
             new ColumnFirstName<RowTest>("name"),

@@ -5,7 +5,7 @@ import { Column } from "@/models";
 import { Row } from "@/types";
 
 import { ColumnNumberOptions } from "./types";
-import { ColumnNumberGetValueDelegate } from "./utils";
+import { columnNumberGetValueDelegate } from "./utils";
 
 export class ColumnNumber<TRow extends Row> extends Column<
   TRow,
@@ -13,7 +13,7 @@ export class ColumnNumber<TRow extends Row> extends Column<
   ColumnNumberOptions
 > {
   public getValue(): number {
-    return ColumnNumberGetValueDelegate(this.options);
+    return columnNumberGetValueDelegate(this.options);
   }
 }
 

@@ -3,7 +3,7 @@ import { KeyOf } from "@mantlebee/ts-core";
 import { Column } from "@/models";
 import { Row } from "@/types";
 
-import { ColumnEnumGetValueDelegate } from "./utils";
+import { columnEnumGetValueDelegate } from "./utils";
 
 export class ColumnEnum<TRow extends Row, TEnum> extends Column<TRow, TEnum> {
   public readonly enumerative!: TEnum;
@@ -14,6 +14,6 @@ export class ColumnEnum<TRow extends Row, TEnum> extends Column<TRow, TEnum> {
   }
 
   public getValue(): TEnum {
-    return ColumnEnumGetValueDelegate(this.enumerative);
+    return columnEnumGetValueDelegate(this.enumerative);
   }
 }

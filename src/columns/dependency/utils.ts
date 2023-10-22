@@ -2,7 +2,7 @@ import { ColumnOptions, Row } from "@/types";
 
 import { ColumnConstructor, ColumnOptionsValueGettersMap } from "./types";
 
-export function ColumnDependencyGetValueDelegate<
+export function columnDependencyGetValueDelegate<
   TRow extends Row,
   TValue,
   TOptions extends ColumnOptions,

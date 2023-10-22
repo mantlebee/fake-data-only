@@ -15,7 +15,7 @@ function shouldBeNull<TRow extends Row>(column: IColumn<TRow>): boolean {
   );
 }
 
-export function DatabaseGetDataDelegate(
+export function databaseGetDataDelegate(
   tables: List<ITable<Any>>,
   countsMap: Dictionary<number>,
   relations?: List<Relation>,
@@ -37,7 +37,7 @@ export function DatabaseGetDataDelegate(
   return data;
 }
 
-export function TableGetRowsDelegate<TRow extends Row>(
+export function tableGetRowsDelegate<TRow extends Row>(
   columns: List<IColumn<TRow>>,
   count: number,
 ): List<TRow> {

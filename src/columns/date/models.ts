@@ -5,7 +5,7 @@ import { ColumnConstructor } from "@/columns";
 import { Row } from "@/types";
 
 import { ColumnDateOptions } from "./types";
-import { ColumnDateGetValueDelegate } from "./utils";
+import { columnDateGetValueDelegate } from "./utils";
 import { ColumnDependencyAbstract } from "../dependency";
 
 export class ColumnDate<TRow extends Row> extends Column<
@@ -14,7 +14,7 @@ export class ColumnDate<TRow extends Row> extends Column<
   ColumnDateOptions
 > {
   public getValue(): Date {
-    return ColumnDateGetValueDelegate(this.options);
+    return columnDateGetValueDelegate(this.options);
   }
 }
 

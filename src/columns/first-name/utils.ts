@@ -5,7 +5,7 @@ import { FemaleFirstNames, Gender, MaleFirstNames } from "@/constants";
 import { ColumnFirstNameOptions } from "./types";
 import { ColumnFirstNameOptionsDefault } from "./constants";
 
-export function ColumnFirstNameGetValueDelegate(
+export function columnFirstNameGetValueDelegate(
   options?: ColumnFirstNameOptions,
 ): string {
   const { gender } = { ...ColumnFirstNameOptionsDefault, ...options };

@@ -1,6 +1,6 @@
 import { extractRandomItem } from "@mantlebee/ts-random";
 
-export function ColumnEnumGetValueDelegate<TEnum>(enumerative: TEnum): TEnum {
+export function columnEnumGetValueDelegate<TEnum>(enumerative: TEnum): TEnum {
   const keysAndValues = Object.keys(enumerative);
   const keys = keysAndValues.splice(keysAndValues.length / 2);
   const randomKey = extractRandomItem(keys);

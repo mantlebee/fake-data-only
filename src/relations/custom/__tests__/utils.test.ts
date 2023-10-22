@@ -1,6 +1,6 @@
 import { List } from "@mantlebee/ts-core";
 
-import { ColumnRelationCustomGetValueDelegate } from "../types";
+import { columnRelationCustomGetValueDelegate } from "../types";
 import { columnRelationCustomSetValuesDelegate } from "../utils";
 
 describe("ColumnRelationCustom", () => {
@@ -19,7 +19,7 @@ describe("ColumnRelationCustom", () => {
           { emailsWithCCount: -1 },
           { emailsWithCCount: -1 },
         ];
-        const delegate: ColumnRelationCustomGetValueDelegate<
+        const delegate: columnRelationCustomGetValueDelegate<
           From,
           To,
           number

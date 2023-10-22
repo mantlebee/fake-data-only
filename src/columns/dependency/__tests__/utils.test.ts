@@ -7,7 +7,7 @@ import {
   ColumnNumberOptions,
 } from "@/columns";
 
-import { ColumnDependencyGetValueDelegate } from "../utils";
+import { columnDependencyGetValueDelegate } from "../utils";
 
 type RowTest = {
   activatedOn: Date;
@@ -25,12 +25,12 @@ const row: RowTest = {
 
 describe("ColumnDependency", () => {
   describe("utils", () => {
-    describe("ColumnDependencyGetValueDelegate", () => {
+    describe("columnDependencyGetValueDelegate", () => {
       it("Generates a random number value, using row.slotsAvailable and row.slotsTotal as range", () => {
         const randoms: List<number> = [];
         for (let i = 0; i < 100; ++i)
           randoms.push(
-            ColumnDependencyGetValueDelegate<
+            columnDependencyGetValueDelegate<
               RowTest,
               number,
               ColumnNumberOptions,
@@ -49,7 +49,7 @@ describe("ColumnDependency", () => {
         const randoms: List<Date> = [];
         for (let i = 0; i < 100; ++i)
           randoms.push(
-            ColumnDependencyGetValueDelegate<
+            columnDependencyGetValueDelegate<
               RowTest,
               Date,
               ColumnDateOptions,

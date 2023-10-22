@@ -1,6 +1,6 @@
 import { List } from "@mantlebee/ts-core";
 
-import { ColumnEnumGetValueDelegate } from "../utils";
+import { columnEnumGetValueDelegate } from "../utils";
 
 enum Enumerative {
   first,
@@ -10,11 +10,11 @@ enum Enumerative {
 
 describe("ColumnEnum", () => {
   describe("utils", () => {
-    describe("ColumnEnumGetValueDelegate", () => {
+    describe("columnEnumGetValueDelegate", () => {
       it("Generates a random enumerative value", () => {
         const randoms: List<Enumerative> = [];
         for (let i = 0; i < 100; ++i)
-          randoms.push(ColumnEnumGetValueDelegate(Object(Enumerative)));
+          randoms.push(columnEnumGetValueDelegate(Object(Enumerative)));
         randoms.forEach((a) => {
           expect([0, 1, 2]).toContain(a);
         });

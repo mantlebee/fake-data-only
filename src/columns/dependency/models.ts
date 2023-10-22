@@ -3,7 +3,7 @@ import { KeyOf } from "@mantlebee/ts-core";
 import { Column } from "@/models";
 import { ColumnOptions, Row } from "@/types";
 
-import { ColumnDependencyGetValueDelegate } from "./utils";
+import { columnDependencyGetValueDelegate } from "./utils";
 import { ColumnConstructor, ColumnOptionsValueGettersMap } from "./types";
 
 export abstract class ColumnDependencyAbstract<
@@ -27,7 +27,7 @@ export abstract class ColumnDependencyAbstract<
   }
 
   public getValue(row: TRow): TValue {
-    return ColumnDependencyGetValueDelegate(
+    return columnDependencyGetValueDelegate(
       row,
       this.columnConstructor,
       this.optionsValuesGetters,
