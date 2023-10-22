@@ -1,10 +1,10 @@
 import { List } from "@mantlebee/ts-core";
 
-import { ColumnRelationLookupDelegate } from "../utils";
+import { columnRelationLookupSetValuesDelegate } from "../utils";
 
 describe("ColumnRelationLookup", () => {
   describe("utils", () => {
-    describe("ColumnRelationLookupDelegate", () => {
+    describe("columnRelationLookupSetValuesDelegate", () => {
       it("Correct count", () => {
         type Detail = { personId: number };
         type Master = { id: number };
@@ -16,7 +16,7 @@ describe("ColumnRelationLookup", () => {
           { personId: -1 },
         ];
         const masterRows: List<Master> = [{ id: 1 }, { id: 2 }, { id: 3 }];
-        ColumnRelationLookupDelegate<Detail, Master>(
+        columnRelationLookupSetValuesDelegate<Detail, Master>(
           "personId",
           "id",
           detailRows,

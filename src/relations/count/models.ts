@@ -4,7 +4,7 @@ import { Row } from "@/types";
 
 import { ColumnRelationNumber } from "../models";
 import { ColumnRelationCountCondition } from "./types";
-import { ColumnRelationCountDelegate } from "./utils";
+import { columnRelationCountSetValuesDelegate } from "./utils";
 
 export class ColumnRelationCount<
   TSourceRow extends Row,
@@ -26,12 +26,12 @@ export class ColumnRelationCount<
     this.countConditionDelegate = countConditionDelegate;
   }
 
-  public setRelationValues(
+  public setValues(
     sourceRows: List<TSourceRow>,
     targetRows: List<TTargetRow>,
   ): void {
     const { countConditionDelegate, name } = this;
-    ColumnRelationCountDelegate(
+    columnRelationCountSetValuesDelegate(
       name,
       countConditionDelegate,
       sourceRows,

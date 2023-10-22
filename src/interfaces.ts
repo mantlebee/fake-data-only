@@ -33,7 +33,7 @@ export interface IColumn<
  * Represents a column related to another table ({@link ITable}).
  * Its purpose is double:
  *  1. When table rows are generated, the {@link getValue} method returns a default type-consistent value for the row.
- *  2. When relations are processed by the database ({@link IDatabase}), the {@link setRelationValues} method updates the table's rows values.
+ *  2. When relations are processed by the database ({@link IDatabase}), the {@link setValues} method updates the table's rows values.
  * @typeParam TSourceRow - Type of the row of current table (like the TRow type of {@link IColumn}).
  * @typeParam TTargetRow - Type of the row of the target table.
  */
@@ -43,7 +43,7 @@ export interface IColumnRelation<
   TValue = Any,
   TOptions extends ColumnOptions = ColumnOptions,
 > extends IColumn<TSourceRow, TValue, TOptions> {
-  setRelationValues(
+  setValues(
     sourceRows: List<TSourceRow>,
     targetRows: List<TTargetRow>,
     data: Data,

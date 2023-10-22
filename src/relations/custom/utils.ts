@@ -4,7 +4,7 @@ import { Data, Row } from "@/types";
 
 import { ColumnRelationCustomGetValueDelegate } from "./types";
 
-export function ColumnRelationCustomDelegate<
+export function columnRelationCustomSetValuesDelegate<
   TSourceRow extends Row,
   TTargetRow extends Row,
   TValue,

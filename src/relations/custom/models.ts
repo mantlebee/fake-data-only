@@ -4,7 +4,7 @@ import { ColumnRelation } from "@/models";
 import { Data, Row } from "@/types";
 
 import { ColumnRelationCustomGetValueDelegate } from "./types";
-import { ColumnRelationCustomDelegate } from "./utils";
+import { columnRelationCustomSetValuesDelegate } from "./utils";
 
 export class ColumnRelationCustom<
   TSourceRow extends Row,
@@ -30,13 +30,13 @@ export class ColumnRelationCustom<
     this.getValueDelegate = getValueDelegate;
   }
 
-  public setRelationValues(
+  public setValues(
     sourceRows: List<TSourceRow>,
     targetRows: List<TTargetRow>,
     data: Data,
   ): void {
     const { getValueDelegate, name } = this;
-    ColumnRelationCustomDelegate(
+    columnRelationCustomSetValuesDelegate(
       name,
       getValueDelegate,
       sourceRows,

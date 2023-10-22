@@ -45,7 +45,7 @@ export abstract class ColumnRelation<
     return this.defaultValue;
   }
 
-  public abstract setRelationValues(
+  public abstract setValues(
     sourceRows: List<TSourceRow>,
     targetRows: List<TTargetRow>,
     data: Data,

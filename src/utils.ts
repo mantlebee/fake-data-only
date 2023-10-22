@@ -32,7 +32,7 @@ export function DatabaseGetDataDelegate(
       const sourceData = data[sourceTable.name];
       const targetData = data[targetTable.name];
       if (sourceData && targetData)
-        sourceColumn.setRelationValues(sourceData.rows, targetData.rows, data);
+        sourceColumn.setValues(sourceData.rows, targetData.rows, data);
     });
   return data;
 }

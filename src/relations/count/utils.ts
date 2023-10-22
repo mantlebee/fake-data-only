@@ -4,7 +4,7 @@ import { Row } from "@/types";
 
 import { ColumnRelationCountCondition } from "./types";
 
-export function ColumnRelationCountDelegate<
+export function columnRelationCountSetValuesDelegate<
   TSourceRow extends Row,
   TTargetRow extends Row,
 >(
