@@ -4,8 +4,8 @@ import { ColumnOptions } from "@/types";
 
 /**
  * {@link ColumnColor} options.
- * @prop `from` - Begin of a range color. Default is `black`.
- * @prop `to` - End of a range color. Default is `white`.
+ * @prop `from` - Begin of a color range. Default is `black`.
+ * @prop `to` - End of a color range. Default is `white`.
  * @prop `transparent` - Defines if the color generated should be opaque or have a opacity level.
  */
 export type ColumnColorOptions = ColumnOptions & {
