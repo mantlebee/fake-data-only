@@ -7,7 +7,10 @@ import { ColumnDateOptions } from "./types";
  * @param options "From" and "to" options to restrict the date generation. It includes restriction for date and time.
  * @returns A random date from an optional date and time range.
  */
-export function getColumnDateValue(options: ColumnDateOptions): Date {
-  let { dateFrom, dateTo } = options;
-  return generateRandomDate(dateTo, dateFrom, options);
+export function getColumnDateValue(options?: ColumnDateOptions): Date {
+  if (options) {
+    let { dateFrom, dateTo } = options;
+    return generateRandomDate(dateTo, dateFrom, options);
+  }
+  return generateRandomDate();
 }
