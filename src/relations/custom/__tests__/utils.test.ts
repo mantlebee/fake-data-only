@@ -1,11 +1,11 @@
 import { List } from "@mantlebee/ts-core";
 
-import { ColumnRelationCustomValueGetter } from "../types";
-import { setColumnRelationCustomValues } from "../utils";
+import { RelationCustomValueGetter } from "../types";
+import { setRelationCustomValues } from "../utils";
 
-describe("ColumnRelationCustom", () => {
+describe("RelationCustom", () => {
   describe("utils", () => {
-    describe("setColumnRelationCustomValues", () => {
+    describe("setRelationCustomValues", () => {
       it("Set the value resulting from the delegate", () => {
         type To = { email: string };
         type From = { emailsWithCCount: number };
@@ -19,11 +19,9 @@ describe("ColumnRelationCustom", () => {
           { emailsWithCCount: -1 },
           { emailsWithCCount: -1 },
         ];
-        const delegate: ColumnRelationCustomValueGetter<From, To, number> = (
-          s,
-          t
-        ) => t.filter((a) => /x/.test(a.email)).length;
-        setColumnRelationCustomValues<From, To, number>(
+        const delegate: RelationCustomValueGetter<From, To, number> = (s, t) =>
+          t.filter((a) => /x/.test(a.email)).length;
+        setRelationCustomValues<From, To, number>(
           "emailsWithCCount",
           delegate,
           people,

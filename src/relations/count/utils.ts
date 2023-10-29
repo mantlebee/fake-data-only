@@ -2,14 +2,14 @@ import { KeyOf, List } from "@mantlebee/ts-core";
 
 import { Row } from "@/types";
 
-import { ColumnRelationCountCondition } from "./types";
+import { RelationCountCondition } from "./types";
 
-export function setColumnRelationCountValues<
+export function setRelationCountValues<
   TSourceRow extends Row,
   TTargetRow extends Row,
 >(
   sourceColumnName: KeyOf<TSourceRow>,
-  countCondition: ColumnRelationCountCondition<TSourceRow, TTargetRow>,
+  countCondition: RelationCountCondition<TSourceRow, TTargetRow>,
   sourceRows: List<TSourceRow>,
   targetRows: List<TTargetRow>
 ): void {

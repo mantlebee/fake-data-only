@@ -1,32 +1,29 @@
 import { KeyOf, List } from "@mantlebee/ts-core";
 
-import { ColumnRelation } from "@/models";
+import { Relation, Table } from "@/models";
 import { Dataset, Row } from "@/types";
 
-import { ColumnRelationCustomValueGetter } from "./types";
-import { setColumnRelationCustomValues } from "./utils";
+import { RelationCustomValueGetter } from "./types";
+import { setRelationCustomValues } from "./utils";
 
-export class ColumnRelationCustom<
+export class RelationCustom<
   TSourceRow extends Row,
   TTargetRow extends Row,
   TValue,
-> extends ColumnRelation<TSourceRow, TTargetRow, TValue> {
-  private readonly getValueDelegate: ColumnRelationCustomValueGetter<
+> extends Relation<TSourceRow, TTargetRow> {
+  private readonly getValueDelegate: RelationCustomValueGetter<
     TSourceRow,
     TTargetRow,
     TValue
   >;
 
   public constructor(
-    name: KeyOf<TSourceRow>,
-    defaultValue: TValue,
-    getValueDelegate: ColumnRelationCustomValueGetter<
-      TSourceRow,
-      TTargetRow,
-      TValue
-    >
+    sourceColumnName: KeyOf<TSourceRow>,
+    sourceTable: Table<TSourceRow>,
+    targetTable: Table<TTargetRow>,
+    getValueDelegate: RelationCustomValueGetter<TSourceRow, TTargetRow, TValue>
   ) {
-    super(name, defaultValue);
+    super(sourceColumnName, sourceTable, targetTable);
     this.getValueDelegate = getValueDelegate;
   }
 
@@ -35,9 +32,9 @@ export class ColumnRelationCustom<
     targetRows: List<TTargetRow>,
     dataset: Dataset
   ): void {
-    const { getValueDelegate, name } = this;
-    setColumnRelationCustomValues(
-      name,
+    const { getValueDelegate, sourceColumnName } = this;
+    setRelationCustomValues(
+      sourceColumnName,
       getValueDelegate,
       sourceRows,
       targetRows,

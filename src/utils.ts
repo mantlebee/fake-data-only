@@ -1,8 +1,8 @@
 import { Dictionary, Any, List, KeyOf } from "@mantlebee/ts-core";
 import { generateRandomBoolean } from "@mantlebee/ts-random";
 
-import { ColumnOptions, Dataset, Relation, Row } from "./types";
-import { Column, ColumnRelation, Table } from "./models";
+import { ColumnOptions, Dataset, Row } from "./types";
+import { Column, Relation, Table } from "./models";
 
 /**
  * Default values of rows to generate.
@@ -24,7 +24,7 @@ const DefaultRowsCount = 0;
 export function getDatabaseDataset(
   tables: List<Table<Any>>,
   countsMap: Dictionary<number>,
-  relations?: List<Relation>
+  relations?: List<Relation<Any, Any>>
 ): Dataset {
   const dataset = tables.reduce((result, current) => {
     const { name } = current;
@@ -34,11 +34,11 @@ export function getDatabaseDataset(
   }, {} as Dataset);
   if (relations)
     relations.forEach((a) => {
-      const { sourceColumn, sourceTable, targetTable } = a;
+      const { sourceTable, targetTable } = a;
       const sourceData = dataset[sourceTable.name];
       const targetData = dataset[targetTable.name];
       if (sourceData && targetData)
-        sourceColumn.setValues(sourceData.rows, targetData.rows, dataset);
+        a.setValues(sourceData.rows, targetData.rows, dataset);
     });
   return dataset;
 }
@@ -79,7 +79,7 @@ function shouldBeNull<TRow extends Row>(
 ): boolean {
   const { nullable } = options;
   return Boolean(
-    (column instanceof ColumnRelation && nullable) ||
+    (column instanceof Relation && nullable) ||
       (nullable && generateRandomBoolean())
   );
 }

@@ -14,3 +14,12 @@ export class ColumnNumber<TRow extends Row> extends Column<
     return getColumnNumberValue(options);
   }
 }
+
+export class ColumnNumberDefault<TRow extends Row> extends Column<
+  TRow,
+  number
+> {
+  public getValue(row: TRow): number {
+    return 0;
+  }
+}

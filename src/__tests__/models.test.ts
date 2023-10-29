@@ -1,9 +1,9 @@
 import { Any, List, NumericIdentityManager } from "@mantlebee/ts-core";
 import { extractRandomItem } from "@mantlebee/ts-random";
 
-import { Column, ColumnRelation, Database, Table } from "@/models";
-import { Dataset, Relation } from "@/types";
-import { ITable } from "..";
+import { ColumnCustom } from "@/columns";
+import { Column, Relation, Database, Table } from "@/models";
+import { Dataset } from "@/types";
 
 type RowTest = { id: number };
 type Category = RowTest & { name: string };
@@ -16,11 +16,7 @@ class ColumnTestId extends Column<RowTest, number> {
   }
 }
 
-class ColumnRelationTestCategory extends ColumnRelation<
-  Product,
-  Category,
-  number
-> {
+class RelationTestCategory extends Relation<Product, Category> {
   public setValues(
     sourceRows: List<Product>,
     targetRows: List<Category>,
@@ -32,16 +28,10 @@ class ColumnRelationTestCategory extends ColumnRelation<
 }
 
 describe("models", () => {
-  describe("ColumnRelation", () => {
-    it("returns the default value passed to the constructor", () => {
-      const column = new ColumnRelationTestCategory("id", 42);
-      expect(column.getValue({} as Product)).toBe(42);
-    });
-  });
   describe("Database", () => {
-    const categoryRelationColumn = new ColumnRelationTestCategory(
+    const categoryRelationColumn = new ColumnCustom<Product, number>(
       "category",
-      0
+      () => 0
     );
     const categoriesTable = new Table<Category>("categories", [
       new ColumnTestId("id"),
@@ -52,11 +42,7 @@ describe("models", () => {
     ]);
     const tables: List<Table<Any>> = [productsTable, categoriesTable];
     const relations: List<Relation<Any, Any>> = [
-      {
-        sourceColumn: categoryRelationColumn,
-        sourceTable: productsTable,
-        targetTable: categoriesTable,
-      },
+      new RelationTestCategory("category", productsTable, categoriesTable),
     ];
     it("generates a dataset with specific amount of rows for each table", () => {
       const database = new Database(tables);

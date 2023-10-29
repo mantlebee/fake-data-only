@@ -1,11 +1,11 @@
 import { List } from "@mantlebee/ts-core";
 
-import { ColumnRelationCountCondition } from "../types";
-import { setColumnRelationCountValues } from "../utils";
+import { RelationCountCondition } from "../types";
+import { setRelationCountValues } from "../utils";
 
-describe("ColumnRelationCount", () => {
+describe("RelationCount", () => {
   describe("utils", () => {
-    describe("setColumnRelationCountValues", () => {
+    describe("setRelationCountValues", () => {
       it("Set the correct count.", () => {
         type Contact = { email: string; personId: number };
         type Person = { contactsCount: number; id: number };
@@ -17,16 +17,9 @@ describe("ColumnRelationCount", () => {
           { contactsCount: -1, id: 1 },
           { contactsCount: -1, id: 2 },
         ];
-        const condition: ColumnRelationCountCondition<Person, Contact> = (
-          s,
-          t
-        ) => t.personId === s.id;
-        setColumnRelationCountValues(
-          "contactsCount",
-          condition,
-          people,
-          contacts
-        );
+        const condition: RelationCountCondition<Person, Contact> = (s, t) =>
+          t.personId === s.id;
+        setRelationCountValues("contactsCount", condition, people, contacts);
         expect(people[0].contactsCount).toBe(2);
         expect(people[1].contactsCount).toBe(0);
       });

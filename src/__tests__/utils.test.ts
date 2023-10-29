@@ -1,13 +1,11 @@
 import {
-  Any,
+  Color,
   Dictionary,
-  IColor,
   isBoolean,
   isDate,
   isEmail,
   isNumber,
   isString,
-  List,
   Nullable,
   objectHasKey,
 } from "@mantlebee/ts-core";
@@ -23,153 +21,121 @@ import {
   ColumnId,
   ColumnLastName,
   ColumnNumber,
+  ColumnNumberDefault,
   ColumnPattern,
   ColumnString,
 } from "@/columns";
-import {
-  ColumnRelationCount,
-  ColumnRelationCustom,
-  ColumnRelationLookup,
-} from "@/relations";
-import { getTableRows } from "@/utils";
+import { RelationCount, RelationCustom, RelationLookup } from "@/relations";
+import { getDatabaseDataset, getTableRows } from "@/utils";
 
 import { Table } from "../models";
-import { getDatabaseDataset } from "../utils";
-import { ITable, Relation } from "..";
 
-//#region Types
 type Product = { categoryId: number; id: number; name: string };
 type ProductCategory = { id: number; name: string };
-type Order = {
-  categoriesCount: number;
-  id: number;
-  productsCount: number;
-};
+type Order = { categoriesCount: number; id: number; productsCount: number };
 type OrderProduct = { orderId: number; productId: number };
-//#endregion
 
-//#region Columns
-const productCategoryColumn = new ColumnRelationLookup<
-  Product,
-  ProductCategory,
-  number
->("categoryId", 0, "id");
-const orderCategoriesCountColumn = new ColumnRelationCustom<
-  Order,
-  OrderProduct,
-  number
->("categoriesCount", 0, (order, orderProducts, dataset) => {
-  // Product ids of the order
-  const productsIds = orderProducts
-    .filter((a) => a.orderId === order.id)
-    .map((a) => a.productId);
-  // Products of the order
-  const products = dataset[productsTable.name].rows;
-  // Categories ids list with duplicate values
-  const fullCategoriesIds = products
-    .filter((a) => productsIds.includes(a.id))
-    .map((a) => a.categoryId);
-  // Distinct of categories ids
-  const categoriesIds = new Set(fullCategoriesIds).values;
-  // Count of the categories of the order
-  return categoriesIds.length;
-});
-const orderProductsCountColumn = new ColumnRelationCount<Order, OrderProduct>(
-  "productsCount",
-  (o, op) => op.orderId === o.id
-);
-const orderProductOrderColumn = new ColumnRelationLookup<
-  OrderProduct,
-  Order,
-  number
->("orderId", 0, "id");
-const orderProductProductColumn = new ColumnRelationLookup<
-  OrderProduct,
-  Product,
-  number
->("productId", 0, "id");
-//#endregion
-
-//#region Tables
-const productsTable = new Table<Product>("products", [
-  new ColumnId("id"),
-  new ColumnString("name", () => ({ maxLength: 20 })),
-  productCategoryColumn,
-]);
 const productCategoriesTable = new Table<ProductCategory>(
   "product-categories",
   [new ColumnId("id"), new ColumnString("name", () => ({ maxLength: 20 }))]
 );
+const productsTable = new Table<Product>("products", [
+  new ColumnId("id"),
+  new ColumnString("name", () => ({ maxLength: 20 })),
+  new ColumnNumberDefault("categoryId"),
+]);
 const orderProductsTable = new Table<OrderProduct>("order-products", [
-  orderProductOrderColumn,
-  orderProductProductColumn,
+  new ColumnNumberDefault("orderId"),
+  new ColumnNumberDefault("productId"),
 ]);
 const ordersTable = new Table<Order>("orders", [
   new ColumnId("id"),
-  orderProductsCountColumn,
-  orderCategoriesCountColumn,
+  new ColumnNumberDefault("categoriesCount"),
+  new ColumnNumberDefault("productsCount"),
 ]);
-//#endregion
 
-//#region Relations
-const orderCategoriesCountRelation: Relation<Order, OrderProduct> = {
-  sourceColumn: orderCategoriesCountColumn,
-  sourceTable: ordersTable,
-  targetTable: orderProductsTable,
-};
-const orderProductsCountRelation: Relation<Order, OrderProduct> = {
-  sourceColumn: orderProductsCountColumn,
-  sourceTable: ordersTable,
-  targetTable: orderProductsTable,
-};
-const orderProductOrderRelation: Relation<OrderProduct, Order> = {
-  sourceColumn: orderProductOrderColumn,
-  sourceTable: orderProductsTable,
-  targetTable: ordersTable,
-};
-const orderProductProductRelation: Relation<OrderProduct, Product> = {
-  sourceColumn: orderProductProductColumn,
-  sourceTable: orderProductsTable,
-  targetTable: productsTable,
-};
-const productCategoryRelation: Relation<Product, ProductCategory> = {
-  sourceColumn: productCategoryColumn,
-  sourceTable: productsTable,
-  targetTable: productCategoriesTable,
-};
-//#endregion
+const productCategoryRelation = new RelationLookup<Product, ProductCategory>(
+  "categoryId",
+  productsTable,
+  productCategoriesTable,
+  "id"
+);
+const orderProductOrderRelation = new RelationLookup<OrderProduct, Order>(
+  "orderId",
+  orderProductsTable,
+  ordersTable,
+  "id"
+);
+const orderProductProductRelation = new RelationLookup<OrderProduct, Product>(
+  "productId",
+  orderProductsTable,
+  productsTable,
+  "id"
+);
+const orderProductsCountRelation = new RelationCount<Order, OrderProduct>(
+  "productsCount",
+  ordersTable,
+  orderProductsTable,
+  (o, op) => op.orderId === o.id
+);
+const orderCategoriesCountRelations = new RelationCustom<
+  Order,
+  OrderProduct,
+  number
+>(
+  "categoriesCount",
+  ordersTable,
+  orderProductsTable,
+  (order, orderProducts, dataset) => {
+    // Product ids of the order
+    const productsIds = orderProducts
+      .filter((a) => a.orderId === order.id)
+      .map((a) => a.productId);
+    // Products of the order
+    const products = dataset[productsTable.name].rows;
+    // Categories ids list with duplicate values
+    const fullCategoriesIds = products
+      .filter((a) => productsIds.includes(a.id))
+      .map((a) => a.categoryId);
+    // Distinct of categories ids
+    const categoriesIds = new Set(fullCategoriesIds).values;
+    // Count of the categories of the order
+    return categoriesIds.length;
+  }
+);
 
-const tables: List<Table<Any>> = [
+const tables = [
   productCategoriesTable,
   productsTable,
   orderProductsTable,
   ordersTable,
 ];
-const relations: List<Relation<Any, Any>> = [
+const relations = [
   productCategoryRelation,
   orderProductOrderRelation,
   orderProductProductRelation,
   orderProductsCountRelation,
-  orderCategoriesCountRelation,
+  orderCategoriesCountRelations,
 ];
 
 describe("Table", () => {
   describe("utils", () => {
     describe("getDatabaseDataset", () => {
       it("Generates a map of lists, the map as the same keys of the given tablesMap param.", () => {
-        const countsMap: Dictionary<number> = {
+        const rowsNumberMap: Dictionary<number> = {
           [productCategoriesTable.name]: 10,
           [productsTable.name]: 50,
           [orderProductsTable.name]: 5,
           [ordersTable.name]: 1,
         };
-        const dataset = getDatabaseDataset(tables, countsMap, relations);
-        const dataKeys = Object.keys(dataset);
-        expect(dataKeys.length).toBe(4);
-        dataKeys.forEach((key) => {
-          const { rows, table } = dataset[key];
-          expect(table.name).toBe(key);
-          expect(rows.length).toBe(countsMap[table.name]);
+        const dataset = getDatabaseDataset(tables, rowsNumberMap, relations);
+        const datasetValues = Object.values(dataset);
+        expect(datasetValues.length).toBe(4);
+        datasetValues.forEach((datasetItem, index) => {
+          expect(datasetItem.table).toBe(tables[index]);
+          expect(datasetItem.rows.length).toBe(
+            rowsNumberMap[datasetItem.table.name]
+          );
         });
         const productCategories = dataset[productCategoriesTable.name].rows;
         const products = dataset[productsTable.name].rows;
@@ -190,10 +156,10 @@ describe("Table", () => {
     });
     describe("getTableRows", () => {
       it("Generates 5 rows of {name: string}", () => {
-        type RowTest = { name: string };
-        const rows = getTableRows<RowTest>(
+        type Row = { name: string };
+        const rows = getTableRows<Row>(
           [
-            new ColumnString<RowTest>("name", () => ({
+            new ColumnString<Row>("name", () => ({
               maxLength: 12,
               minLength: 4,
             })),
@@ -212,7 +178,7 @@ describe("Table", () => {
           standard,
           advanced,
         }
-        type RowTest = {
+        type Row = {
           id: number;
           name: string;
           surname: string;
@@ -223,47 +189,40 @@ describe("Table", () => {
           registered: Date;
           expires: Date;
           type: RowType;
-          color: IColor;
+          color: Color;
           scoreMax: number;
           score: number;
           phone: string;
           username: string;
         };
-        const rows = getTableRows<RowTest>(
+        const rows = getTableRows<Row>(
           [
-            new ColumnId<RowTest>("id"),
-            new ColumnFirstName<RowTest>("name"),
-            new ColumnLastName<RowTest>("surname"),
-            new ColumnCustom<RowTest, string>(
+            new ColumnId<Row>("id"),
+            new ColumnFirstName<Row>("name"),
+            new ColumnLastName<Row>("surname"),
+            new ColumnCustom<Row, string>(
               "fullname",
               (a) => `${a.name} ${a.surname}`
             ),
-            new ColumnNumber<RowTest>("age", () => ({
-              max: 90,
-              nullable: true,
-            })),
-            new ColumnEmail<RowTest>("email", (a) => ({
+            new ColumnNumber<Row>("age", () => ({ max: 90, nullable: true })),
+            new ColumnEmail<Row>("email", (a) => ({
               firstNames: [a.name],
               lastNames: [a.surname],
             })),
-            new ColumnBoolean<RowTest>("active"),
-            new ColumnDate<RowTest>("registered"),
-            new ColumnDate<RowTest>("expires", (a) => ({
-              dateFrom: a.registered,
-            })),
-            new ColumnEnum<RowTest, RowType>("type", Object(RowType)),
-            new ColumnColor<RowTest>("color"),
-            new ColumnNumber<RowTest>("scoreMax", () => ({ max: 100 })),
-            new ColumnNumber<RowTest>("score", (a) => ({
-              max: a.scoreMax,
-            })),
-            new ColumnPattern<RowTest>("phone", "+000-00000"),
-            new ColumnPattern<RowTest>("username", "a{8,12}"),
+            new ColumnBoolean<Row>("active"),
+            new ColumnDate<Row>("registered"),
+            new ColumnDate<Row>("expires", (a) => ({ dateFrom: a.registered })),
+            new ColumnEnum<Row, RowType>("type", Object(RowType)),
+            new ColumnColor<Row>("color"),
+            new ColumnNumber<Row>("scoreMax", () => ({ max: 100 })),
+            new ColumnNumber<Row>("score", (a) => ({ max: a.scoreMax })),
+            new ColumnPattern<Row>("phone", "+000-00000"),
+            new ColumnPattern<Row>("username", "a{8,12}"),
           ],
           100
         );
         expect(rows.length).toBe(100);
-        let lastRow: Nullable<RowTest> = null;
+        let lastRow: Nullable<Row> = null;
         rows.forEach((a) => {
           if (lastRow) expect(a.id).toBe(lastRow.id + 1);
           expect(isNumber(a.id)).toBeTruthy();

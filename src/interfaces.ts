@@ -1,6 +1,6 @@
 import { Any, Dictionary, KeyOf, List } from "@mantlebee/ts-core";
 
-import { Dataset, Relation, Row } from "./types";
+import { Dataset, Row } from "./types";
 
 /**
  * Represents the column of a table ({@link ITable}).
@@ -21,32 +21,6 @@ export interface IColumn<TRow extends Row, TValue = Any> {
 }
 
 /**
- * Represents a column related to another table ({@link ITable}).
- * Its purpose is double:
- *  1. When table rows are generated, the {@link getValue} method returns a default type-consistent value for the row.
- *  2. When relations are processed by the database ({@link IDatabase}), the {@link setValues} method updates the table's rows values.
- * @typeParam TSourceRow - Type of the row of current table (like the TRow type of {@link IColumn}).
- * @typeParam TTargetRow - Type of the row of the target table.
- */
-export interface IColumnRelation<
-  TSourceRow extends Row,
-  TTargetRow extends Row,
-  TValue = Any,
-> extends IColumn<TSourceRow, TValue> {
-  /**
-   * Processes al source rows to update the column value. It can uses the target table rows or the entire dataset.
-   * @param sourceRows List of rows to update of the source table.
-   * @param targetRows List of rows of the target table.
-   * @param dataset The database dataset generated.
-   */
-  setValues(
-    sourceRows: List<TSourceRow>,
-    targetRows: List<TTargetRow>,
-    dataset: Dataset
-  ): void;
-}
-
-/**
  * Represents a database with its own tables ({@link ITable}) and relations {@link Relation}.
  * Its purpose is to generate the database dataset.
  * The {@link Dataset} object is a dictionary, where the keys are the tables names and the values are objects with the table instance and its generated rows.
@@ -55,7 +29,7 @@ export interface IDatabase {
   /**
    * List of relations between tables that must be processed after the tables rows are generated.
    */
-  readonly relations?: List<Relation<Any, Any>>;
+  readonly relations?: List<IRelation<Any, Any>>;
   /**
    * List of tables that must be used to generate rows.
    */
@@ -65,6 +39,28 @@ export interface IDatabase {
    * @param countsMap Dictionary with the tables counts, used to generate a specific amount of rows for each table. It is a dictionary where the keys are the tables names and the values the row counts to generate.
    */
   getDataset(countsMap: Dictionary<number>): Dataset;
+}
+
+/**
+ * Represents a relation between two tables ({@link ITable}).
+ * Its purpose is to update table rows according to another table rows values.
+ * @typeParam TSourceRow - Type of the row of the source table.
+ * @typeParam TTargetRow - Type of the row of the target table.
+ */
+export interface IRelation<TSourceRow extends Row, TTargetRow extends Row> {
+  readonly sourceTable: ITable<TSourceRow>;
+  readonly targetTable: ITable<TTargetRow>;
+  /**
+   * Update source table rows using a target table rows or the entire dataset.
+   * @param sourceRows List of rows to update of the source table.
+   * @param targetRows List of rows of the target table.
+   * @param dataset The entire database dataset.
+   */
+  setValues(
+    sourceRows: List<TSourceRow>,
+    targetRows: List<TTargetRow>,
+    dataset: Dataset
+  ): void;
 }
 
 /**

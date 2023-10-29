@@ -14,7 +14,7 @@ function createChunks<T>(list: List<T>, size: number): List<List<T>> {
   return chunks;
 }
 
-export function setColumnRelationLookupValues<
+export function setRelationLookupValues<
   TSourceRow extends Row,
   TTargetRow extends Row,
 >(
