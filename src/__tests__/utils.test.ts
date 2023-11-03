@@ -20,6 +20,7 @@ import {
   ColumnFirstName,
   ColumnId,
   ColumnLastName,
+  ColumnLoremIpsum,
   ColumnNumber,
   ColumnNumberDefault,
   ColumnPattern,
@@ -194,6 +195,7 @@ describe("Table", () => {
           score: number;
           phone: string;
           username: string;
+          description: string;
         };
         const rows = getTableRows<Row>(
           [
@@ -218,6 +220,10 @@ describe("Table", () => {
             new ColumnNumber<Row>("score", (a) => ({ max: a.scoreMax })),
             new ColumnPattern<Row>("phone", "+000-00000"),
             new ColumnPattern<Row>("username", "a{8,12}"),
+            new ColumnLoremIpsum("description", () => ({
+              nullable: true,
+              paragraphs: { max: 5, min: 5 },
+            })),
           ],
           100
         );
@@ -269,11 +275,20 @@ describe("Table", () => {
             "score",
             "phone",
             "username",
+            "description",
           ]);
           lastRow = a;
         });
+        // Nullable columns
         expect(rows.some((a) => isNumber(a.age))).toBeTruthy();
         expect(rows.some((a) => a.age === null)).toBeTruthy();
+        expect(rows.some((a) => isString(a.description))).toBeTruthy();
+        expect(rows.some((a) => a.description === null)).toBeTruthy();
+        rows
+          .filter((a) => a.description)
+          .forEach((a) => {
+            expect(a.description.split("\n\n")).toHaveLength(5);
+          });
       });
     });
   });
