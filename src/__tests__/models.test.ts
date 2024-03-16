@@ -42,7 +42,11 @@ describe("models", () => {
     ]);
     const tables: List<Table<Any>> = [productsTable, categoriesTable];
     const relations: List<Relation<Any, Any>> = [
-      new RelationTestCategory("category", productsTable, categoriesTable),
+      new RelationTestCategory(
+        "category",
+        productsTable.key,
+        categoriesTable.key
+      ),
     ];
     it("generates a dataset with specific amount of rows for each table", () => {
       const database = new Database(tables);

@@ -31,62 +31,68 @@ import { getDatabaseDataset, getTableRows } from "@/utils";
 
 import { Table } from "../models";
 
+//#region Products
 type Product = { categoryId: number; id: number; name: string };
-type ProductCategory = { id: number; name: string };
-type Order = { categoriesCount: number; id: number; productsCount: number };
-type OrderProduct = { orderId: number; productId: number };
-
-const productCategoriesTable = new Table<ProductCategory>(
-  "product-categories",
-  [new ColumnId("id"), new ColumnString("name", () => ({ maxLength: 20 }))]
-);
 const productsTable = new Table<Product>("products", [
   new ColumnId("id"),
   new ColumnString("name", () => ({ maxLength: 20 })),
   new ColumnNumberDefault("categoryId"),
 ]);
-const orderProductsTable = new Table<OrderProduct>("order-products", [
-  new ColumnNumberDefault("orderId"),
-  new ColumnNumberDefault("productId"),
-]);
+//#endregion
+
+//#region Product Categories
+type ProductCategory = { id: number; name: string };
+const productCategoriesTable = new Table<ProductCategory>(
+  "product-categories",
+  [new ColumnId("id"), new ColumnString("name", () => ({ maxLength: 20 }))]
+);
+//#endregion
+
+//#region Orders
+type Order = { categoriesCount: number; id: number; productsCount: number };
 const ordersTable = new Table<Order>("orders", [
   new ColumnId("id"),
   new ColumnNumberDefault("categoriesCount"),
   new ColumnNumberDefault("productsCount"),
 ]);
+//#endregion
 
-const productCategoryRelation = new RelationLookup<Product, ProductCategory>(
+//#region Order Products
+type OrderProduct = { orderId: number; productId: number };
+const orderProductsTable = new Table<OrderProduct>("order-products", [
+  new ColumnNumberDefault("orderId"),
+  new ColumnNumberDefault("productId"),
+]);
+//#endregion
+
+const productCategoryRelation = new RelationLookup(
   "categoryId",
-  productsTable,
-  productCategoriesTable,
+  productsTable.key,
+  productCategoriesTable.key,
   "id"
 );
-const orderProductOrderRelation = new RelationLookup<OrderProduct, Order>(
+const orderProductOrderRelation = new RelationLookup(
   "orderId",
-  orderProductsTable,
-  ordersTable,
+  orderProductsTable.key,
+  ordersTable.key,
   "id"
 );
-const orderProductProductRelation = new RelationLookup<OrderProduct, Product>(
+const orderProductProductRelation = new RelationLookup(
   "productId",
-  orderProductsTable,
-  productsTable,
+  orderProductsTable.key,
+  productsTable.key,
   "id"
 );
-const orderProductsCountRelation = new RelationCount<Order, OrderProduct>(
+const orderProductsCountRelation = new RelationCount(
   "productsCount",
-  ordersTable,
-  orderProductsTable,
+  ordersTable.key,
+  orderProductsTable.key,
   (o, op) => op.orderId === o.id
 );
-const orderCategoriesCountRelations = new RelationCustom<
-  Order,
-  OrderProduct,
-  number
->(
+const orderCategoriesCountRelations = new RelationCustom(
   "categoriesCount",
-  ordersTable,
-  orderProductsTable,
+  ordersTable.key,
+  orderProductsTable.key,
   (order, orderProducts, dataset) => {
     // Product ids of the order
     const productsIds = orderProducts
@@ -122,7 +128,7 @@ const relations = [
 describe("Table", () => {
   describe("utils", () => {
     describe("getDatabaseDataset", () => {
-      it("Generates a map of lists, the map as the same keys of the given tablesMap param.", () => {
+      it("Generates a map where the keys are the tables names and the values the generated rows.", () => {
         const rowsNumberMap: Dictionary<number> = {
           [productCategoriesTable.name]: 10,
           [productsTable.name]: 50,
