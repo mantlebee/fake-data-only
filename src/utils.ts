@@ -26,19 +26,23 @@ export function getDatabaseDataset(
   countsMap: Dictionary<number>,
   relations?: List<Relation<Any, Any>>
 ): Dataset {
+  // The rowsMap dictionary is populated during the dataset creation and will be used to retrieve rows for the relations
+  const rowsMap = {} as Dictionary<List<Any>>;
   const dataset = tables.reduce((result, current) => {
-    const { name } = current;
+    const { key, name } = current;
     const count = countsMap[name] || DefaultRowsCount;
-    result[name] = { table: current, rows: current.getRows(count) };
+    const rows = current.getRows(count);
+    result[name] = { table: current, rows };
+    rowsMap[key.toString()] = rows;
     return result;
   }, {} as Dataset);
   if (relations)
     relations.forEach((a) => {
-      const { sourceTable, targetTable } = a;
-      const sourceData = dataset[sourceTable.name];
-      const targetData = dataset[targetTable.name];
-      if (sourceData && targetData)
-        a.setValues(sourceData.rows, targetData.rows, dataset);
+      const { sourceTableKey, targetTableKey } = a;
+      const sourceRows = rowsMap[sourceTableKey.toString()];
+      const targetRows = rowsMap[targetTableKey.toString()];
+      if (sourceRows && targetRows)
+        a.setValues(sourceRows, targetRows, dataset);
     });
   return dataset;
 }

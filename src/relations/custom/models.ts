@@ -1,7 +1,7 @@
 import { KeyOf, List } from "@mantlebee/ts-core";
 
-import { Relation, Table } from "@/models";
-import { Dataset, Row } from "@/types";
+import { Relation } from "@/models";
+import { Dataset, Row, TableKey } from "@/types";
 
 import { RelationCustomValueGetter } from "./types";
 import { setRelationCustomValues } from "./utils";
@@ -19,11 +19,11 @@ export class RelationCustom<
 
   public constructor(
     sourceColumnName: KeyOf<TSourceRow>,
-    sourceTable: Table<TSourceRow>,
-    targetTable: Table<TTargetRow>,
+    sourceTableKey: TableKey<TSourceRow>,
+    targetTableKey: TableKey<TTargetRow>,
     getValueDelegate: RelationCustomValueGetter<TSourceRow, TTargetRow, TValue>
   ) {
-    super(sourceColumnName, sourceTable, targetTable);
+    super(sourceColumnName, sourceTableKey, targetTableKey);
     this.getValueDelegate = getValueDelegate;
   }
 

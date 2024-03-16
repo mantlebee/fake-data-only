@@ -48,8 +48,6 @@ export interface IDatabase {
  * @typeParam TTargetRow - Type of the row of the target table.
  */
 export interface IRelation<TSourceRow extends Row, TTargetRow extends Row> {
-  readonly sourceTable: ITable<TSourceRow>;
-  readonly targetTable: ITable<TTargetRow>;
   /**
    * Update source table rows using a target table rows or the entire dataset.
    * @param sourceRows List of rows to update of the source table.

@@ -1,7 +1,7 @@
 import { KeyOf, List } from "@mantlebee/ts-core";
 
-import { Relation, Table } from "@/models";
-import { Row } from "@/types";
+import { Relation } from "@/models";
+import { Row, TableKey } from "@/types";
 
 import { RelationCountCondition } from "./types";
 import { setRelationCountValues } from "./utils";
@@ -17,11 +17,11 @@ export class RelationCount<
 
   public constructor(
     sourceColumnName: KeyOf<TSourceRow>,
-    sourceTable: Table<TSourceRow>,
-    targetTable: Table<TTargetRow>,
+    sourceTableKey: TableKey<TSourceRow>,
+    targetTableKey: TableKey<TTargetRow>,
     countCondition: RelationCountCondition<TSourceRow, TTargetRow>
   ) {
-    super(sourceColumnName, sourceTable, targetTable);
+    super(sourceColumnName, sourceTableKey, targetTableKey);
     this.countCondition = countCondition;
   }
 

@@ -1,7 +1,19 @@
-import { Any, Dictionary, KeyOf, List } from "@mantlebee/ts-core";
+import {
+  Any,
+  Dictionary,
+  KeyOf,
+  List,
+  createTypedKey,
+} from "@mantlebee/ts-core";
 
 import { IColumn, IRelation, IDatabase, ITable } from "./interfaces";
-import { ColumnOptionsGetter, Dataset, Row, ColumnOptions } from "./types";
+import {
+  ColumnOptionsGetter,
+  Dataset,
+  Row,
+  ColumnOptions,
+  TableKey,
+} from "./types";
 import { getDatabaseDataset, getTableRows } from "./utils";
 
 /**
@@ -56,17 +68,17 @@ export abstract class Relation<TSourceRow extends Row, TTargetRow extends Row>
   implements IRelation<TSourceRow, TTargetRow>
 {
   protected readonly sourceColumnName: KeyOf<TSourceRow>;
-  public readonly sourceTable: Table<TSourceRow>;
-  public readonly targetTable: Table<TTargetRow>;
+  public readonly sourceTableKey: TableKey<TSourceRow>;
+  public readonly targetTableKey: TableKey<TTargetRow>;
 
   public constructor(
     sourceColumnName: KeyOf<TSourceRow>,
-    sourceTable: Table<TSourceRow>,
-    targetTable: Table<TTargetRow>
+    sourceTableKey: TableKey<TSourceRow>,
+    targetTableKey: TableKey<TTargetRow>
   ) {
     this.sourceColumnName = sourceColumnName;
-    this.sourceTable = sourceTable;
-    this.targetTable = targetTable;
+    this.sourceTableKey = sourceTableKey;
+    this.targetTableKey = targetTableKey;
   }
 
   public abstract setValues(
@@ -82,10 +94,12 @@ export abstract class Relation<TSourceRow extends Row, TTargetRow extends Row>
  */
 export class Table<TRow extends Row> implements ITable<TRow> {
   public readonly columns: List<Column<TRow>>;
+  public readonly key: TableKey<TRow>;
   public readonly name: string;
 
   public constructor(name: string, columns: List<Column<TRow>>) {
     this.columns = columns;
+    this.key = createTypedKey<TRow>();
     this.name = name;
   }
 

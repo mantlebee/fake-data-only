@@ -1,7 +1,7 @@
 import { KeyOf, List } from "@mantlebee/ts-core";
 
-import { Relation, Table } from "@/models";
-import { Row } from "@/types";
+import { Relation } from "@/models";
+import { Row, TableKey } from "@/types";
 
 import { setRelationLookupValues } from "./utils";
 
@@ -13,11 +13,11 @@ export class RelationLookup<
 
   public constructor(
     sourceColumnName: KeyOf<TSourceRow>,
-    sourceTable: Table<TSourceRow>,
-    targetTable: Table<TTargetRow>,
+    sourceTableKey: TableKey<TSourceRow>,
+    targetTableKey: TableKey<TTargetRow>,
     targetColumnName: KeyOf<TTargetRow>
   ) {
-    super(sourceColumnName, sourceTable, targetTable);
+    super(sourceColumnName, sourceTableKey, targetTableKey);
     this.targetColumnName = targetColumnName;
   }
 
