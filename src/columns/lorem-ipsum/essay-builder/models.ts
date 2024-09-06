@@ -3,6 +3,7 @@ import { generateRandomNumber } from "@mantlebee/ts-random";
 
 import { IEssayBuilder } from "./interfaces";
 import { EssayBuilderOptions } from "./types";
+import { capitalizeFirstLetter } from "./utils";
 
 class EssayBuilderBase implements IEssayBuilder {
   private _length: number;
@@ -27,10 +28,6 @@ class EssayBuilderBase implements IEssayBuilder {
   public toString(): string {
     return this._chunks.join(this._separator);
   }
-}
-
-function capitalizeFirstLetter(text: string): string {
-  return text.charAt(0).toUpperCase() + text.slice(1);
 }
 
 class SentenceBuilder extends EssayBuilderBase {
