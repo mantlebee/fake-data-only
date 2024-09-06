@@ -11,6 +11,13 @@ import {
 
 import { ColumnStringOptions } from "./types";
 
+/**
+ * Generates a random string.
+ * It is possible to restrict the min and max length, and which symbols must be included.
+ * To generate the string, uses the {@link generateRandomStringFromChars} method from the `@mantlebee/ts-random` package.
+ * @param options Options to restrict string length and which symbols must be included.
+ * @returns a random string.
+ */
 export function getColumnStringValue(options: ColumnStringOptions): string {
   const {
     include = {

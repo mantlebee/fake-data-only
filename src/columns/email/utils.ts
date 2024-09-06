@@ -16,7 +16,7 @@ function generateRandomDomain(): string {
 }
 
 /**
- * Generates a random email with first name, last name and two-levels domain, e.g. "john.dow@outlook.com".
+ * Generates a random email with first name, last name and two-levels domain, e.g. "john.doe@outlook.com".
  * It is possible to restrict the choice of these three parameters, using the options.
  * @param options Options to restrict the choice of the parameters first name, last name and domain.
  * @returns a random email formatted "[first-name].[last-name]@[domain]".

@@ -5,6 +5,12 @@ import { FemaleFirstNames, Gender, MaleFirstNames } from "@/constants";
 import { ColumnFirstNameOptions } from "./types";
 import { ColumnFirstNameOptionsDefault } from "./constants";
 
+/**
+ * Generates a random male or female american first name.
+ * It is possible to restrict the gender of the name to generate, using the options.
+ * @param options Options to restrict the gender of the name, or not.
+ * @returns a random male or female american first name.
+ */
 export function getColumnFirstNameValue(
   options?: ColumnFirstNameOptions
 ): string {

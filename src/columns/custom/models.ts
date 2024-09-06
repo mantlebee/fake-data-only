@@ -12,9 +12,14 @@ export class ColumnCustom<TRow extends Row, TValue> extends Column<
 > {
   /**
    * Delegate used to generate the value.
+   * The row passed as param has the values of the previous columns already processed.
    */
   private readonly getValueDelegate!: (row: TRow) => TValue;
 
+  /**
+   * @param name Name of the column and of the field.
+   * @param getValueDelegate Delegate used to generate the value. The row passed as param has the values of the previous columns already processed.
+   */
   public constructor(
     name: KeyOf<TRow>,
     getValueDelegate: (row: TRow) => TValue

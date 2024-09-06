@@ -3,15 +3,18 @@ import { KeyOf, NumericIdentityManager } from "@mantlebee/ts-core";
 import { Column } from "@/models";
 import { Row } from "@/types";
 
-import { ColumnIdStartsFrom } from "./constants";
-
+/**
+ * Generates a unique and incremental positive number.
+ * It is possible to choose the starting value.
+ */
 export class ColumnId<TRow extends Row> extends Column<TRow, number> {
   private readonly identityManager!: NumericIdentityManager;
 
-  public constructor(
-    name: KeyOf<TRow>,
-    startsFrom: number = ColumnIdStartsFrom
-  ) {
+  /**
+   * @param name Name of the column and of the field.
+   * @param startsFrom Initial value, default is 1.
+   */
+  public constructor(name: KeyOf<TRow>, startsFrom: number = 1) {
     super(name);
     const lastValue = startsFrom - 1;
     this.identityManager = new NumericIdentityManager(lastValue);
