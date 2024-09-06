@@ -1,31 +1,12 @@
-import { Any, List, NumericIdentityManager } from "@mantlebee/ts-core";
-import { extractRandomItem } from "@mantlebee/ts-random";
+import { Any, List } from "@mantlebee/ts-core";
 
-import { ColumnCustom } from "@/columns";
-import { Column, Relation, Database, Table } from "@/models";
-import { Dataset } from "@/types";
+import { ColumnCustom, ColumnId } from "@/columns";
+import { Relation, Database, Table } from "@/models";
+import { RelationLookup } from "@/relations";
 
 type RowTest = { id: number };
 type Category = RowTest & { name: string };
 type Product = RowTest & { name: string; category: number };
-
-class ColumnTestId extends Column<RowTest, number> {
-  private readonly idManager = new NumericIdentityManager(0);
-  public getValue(row: { id: number }): number {
-    return this.idManager.newValue();
-  }
-}
-
-class RelationTestCategory extends Relation<Product, Category> {
-  public setValues(
-    sourceRows: List<Product>,
-    targetRows: List<Category>,
-    dataset: Dataset
-  ): void {
-    const randomTargetRow = extractRandomItem(targetRows);
-    sourceRows.forEach((a) => (a.category = randomTargetRow.id));
-  }
-}
 
 describe("models", () => {
   describe("Database", () => {
@@ -34,18 +15,19 @@ describe("models", () => {
       () => 0
     );
     const categoriesTable = new Table<Category>("categories", [
-      new ColumnTestId("id"),
+      new ColumnId("id"),
     ]);
     const productsTable = new Table<Product>("products", [
-      new ColumnTestId("id"),
+      new ColumnId("id"),
       categoryRelationColumn,
     ]);
     const tables: List<Table<Any>> = [productsTable, categoriesTable];
     const relations: List<Relation<Any, Any>> = [
-      new RelationTestCategory(
+      new RelationLookup(
         "category",
         productsTable.key,
-        categoriesTable.key
+        categoriesTable.key,
+        "id"
       ),
     ];
     it("generates a dataset with specific amount of rows for each table", () => {
@@ -72,7 +54,7 @@ describe("models", () => {
   });
   describe("Table", () => {
     it("generates a specific amount of rows", () => {
-      const table = new Table("products", [new ColumnTestId("id")]);
+      const table = new Table("products", [new ColumnId("id")]);
       const rows = table.getRows(42);
       expect(rows).toHaveLength(42);
     });
