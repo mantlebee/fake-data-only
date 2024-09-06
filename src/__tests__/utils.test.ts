@@ -1,5 +1,6 @@
 import {
   Color,
+  createTypedKey,
   Dictionary,
   isBoolean,
   isDate,
@@ -27,103 +28,99 @@ import {
   ColumnPattern,
   ColumnString,
 } from "@/columns";
-import { RelationCount, RelationCustom, RelationLookup } from "@/relations";
+import {
+  ColumnRelationCount,
+  ColumnRelationCustom,
+  ColumnRelationLookup,
+  RelationCount,
+  RelationCustom,
+  RelationLookup,
+} from "@/relations";
 import { getDatabaseDataset, getTableRows } from "@/utils";
 
 import { Table } from "../models";
 
+const ordersKey = createTypedKey<Order>();
+const orderProductsKey = createTypedKey<OrderProduct>();
+const productsKey = createTypedKey<Product>();
+const productCategoriesKey = createTypedKey<ProductCategory>();
+
 //#region Products
 type Product = { categoryId: number; id: number; name: string };
-const productsTable = new Table<Product>("products", [
-  new ColumnId("id"),
-  new ColumnString("name", () => ({ maxLength: 20 })),
-  new ColumnNumberDefault("categoryId"),
-]);
+const productsTable = new Table<Product>(
+  "products",
+  [
+    new ColumnId("id"),
+    new ColumnString("name", () => ({ maxLength: 20 })),
+    new ColumnRelationLookup("categoryId", 0, productCategoriesKey, "id"),
+  ],
+  productsKey
+);
 //#endregion
 
 //#region Product Categories
 type ProductCategory = { id: number; name: string };
 const productCategoriesTable = new Table<ProductCategory>(
   "product-categories",
-  [new ColumnId("id"), new ColumnString("name", () => ({ maxLength: 20 }))]
+  [new ColumnId("id"), new ColumnString("name", () => ({ maxLength: 20 }))],
+  productCategoriesKey
 );
 //#endregion
 
 //#region Orders
 type Order = { categoriesCount: number; id: number; productsCount: number };
-const ordersTable = new Table<Order>("orders", [
-  new ColumnId("id"),
-  new ColumnNumberDefault("categoriesCount"),
-  new ColumnNumberDefault("productsCount"),
-]);
+const ordersTable = new Table<Order>(
+  "orders",
+  [
+    new ColumnId("id"),
+    new ColumnRelationCustom(
+      "categoriesCount",
+      0,
+      orderProductsKey,
+      (order, orderProducts, dataset) => {
+        // Product ids of the order
+        const productsIds = orderProducts
+          .filter((a) => a.orderId === order.id)
+          .map((a) => a.productId);
+        // Products of the order
+        const products = dataset[productsTable.name].rows;
+        // Categories ids list (without duplicate values)
+        const categoriesIds = new Set(
+          products
+            .filter((a) => productsIds.includes(a.id))
+            .map((a) => a.categoryId)
+        );
+        // Count of the categories of the order
+        return categoriesIds.size;
+      }
+    ),
+    new ColumnRelationCount(
+      "productsCount",
+      orderProductsKey,
+      (o, p) => o.id === p.orderId
+    ),
+  ],
+  ordersKey
+);
 //#endregion
 
 //#region Order Products
 type OrderProduct = { orderId: number; productId: number };
-const orderProductsTable = new Table<OrderProduct>("order-products", [
-  new ColumnNumberDefault("orderId"),
-  new ColumnNumberDefault("productId"),
-]);
+const orderProductsTable = new Table<OrderProduct>(
+  "order-products",
+  [
+    new ColumnRelationLookup("orderId", 0, ordersKey, "id"),
+    new ColumnRelationLookup("productId", 0, productsKey, "id"),
+  ],
+  orderProductsKey
+);
 //#endregion
-
-const productCategoryRelation = new RelationLookup(
-  "categoryId",
-  productsTable.key,
-  productCategoriesTable.key,
-  "id"
-);
-const orderProductOrderRelation = new RelationLookup(
-  "orderId",
-  orderProductsTable.key,
-  ordersTable.key,
-  "id"
-);
-const orderProductProductRelation = new RelationLookup(
-  "productId",
-  orderProductsTable.key,
-  productsTable.key,
-  "id"
-);
-const orderProductsCountRelation = new RelationCount(
-  "productsCount",
-  ordersTable.key,
-  orderProductsTable.key,
-  (o, op) => op.orderId === o.id
-);
-const orderCategoriesCountRelations = new RelationCustom(
-  "categoriesCount",
-  ordersTable.key,
-  orderProductsTable.key,
-  (order, orderProducts, dataset) => {
-    // Product ids of the order
-    const productsIds = orderProducts
-      .filter((a) => a.orderId === order.id)
-      .map((a) => a.productId);
-    // Products of the order
-    const products = dataset[productsTable.name].rows;
-    // Categories ids list (without duplicate values)
-    const categoriesIds = new Set(
-      products
-        .filter((a) => productsIds.includes(a.id))
-        .map((a) => a.categoryId)
-    );
-    // Count of the categories of the order
-    return categoriesIds.size;
-  }
-);
 
 const tables = [
   productCategoriesTable,
   productsTable,
   orderProductsTable,
   ordersTable,
-];
-const relations = [
-  productCategoryRelation,
-  orderProductOrderRelation,
-  orderProductProductRelation,
-  orderProductsCountRelation,
-  orderCategoriesCountRelations,
 ];
 
 describe("Table", () => {
@@ -136,7 +133,7 @@ describe("Table", () => {
           [orderProductsTable.name]: 5,
           [ordersTable.name]: 1,
         };
-        const dataset = getDatabaseDataset(tables, rowsNumberMap, relations);
+        const dataset = getDatabaseDataset(tables, rowsNumberMap);
         const datasetValues = Object.values(dataset);
         expect(datasetValues.length).toBe(4);
         datasetValues.forEach((datasetItem, index) => {

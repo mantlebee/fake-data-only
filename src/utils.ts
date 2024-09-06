@@ -2,7 +2,7 @@ import { Dictionary, Any, List, KeyOf } from "@mantlebee/ts-core";
 import { generateRandomBoolean } from "@mantlebee/ts-random";
 
 import { ColumnOptions, Dataset, Row } from "./types";
-import { Column, Relation, Table } from "./models";
+import { Column, ColumnRelation, Relation, Table } from "./models";
 
 /**
  * Default values of rows to generate.
@@ -36,6 +36,16 @@ export function getDatabaseDataset(
     rowsMap[key as symbol] = rows;
     return result;
   }, {} as Dataset);
+  tables.forEach((table) => {
+    table.columns
+      .filter((a) => a instanceof ColumnRelation)
+      .forEach((column) => {
+        const sourceRows = rowsMap[table.key as symbol];
+        const targetRows = rowsMap[column.targetTableKey as symbol];
+        if (sourceRows && targetRows)
+          column.setValues(sourceRows, targetRows, dataset);
+      });
+  });
   if (relations)
     relations.forEach((a) => {
       const { sourceTableKey, targetTableKey } = a;
@@ -83,7 +93,7 @@ function shouldBeNull<TRow extends Row>(
 ): boolean {
   const { nullable } = options;
   return Boolean(
-    (column instanceof Relation && nullable) ||
+    (column instanceof ColumnRelation && nullable) ||
       (nullable && generateRandomBoolean())
   );
 }

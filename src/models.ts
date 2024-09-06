@@ -6,7 +6,13 @@ import {
   createTypedKey,
 } from "@mantlebee/ts-core";
 
-import { IColumn, IRelation, IDatabase, ITable } from "./interfaces";
+import {
+  IColumn,
+  IRelation,
+  IDatabase,
+  ITable,
+  IColumnRelation,
+} from "./interfaces";
 import {
   ColumnOptionsGetter,
   Dataset,
@@ -37,6 +43,43 @@ export abstract class Column<
   }
 
   public abstract getValue(row: TRow): TValue;
+}
+
+/**
+ * Abstract implementation of {@link IColumnRelation}
+ */
+export abstract class ColumnRelation<
+    TRow extends Row,
+    TTargetRow extends Row,
+    TValue = Any,
+    TOptions extends ColumnOptions = ColumnOptions,
+  >
+  extends Column<TRow, TValue>
+  implements IColumnRelation<TRow, TTargetRow, TValue>
+{
+  protected defaultValue: TValue;
+  public targetTableKey: TableKey<TTargetRow>;
+
+  public constructor(
+    name: KeyOf<TRow>,
+    defaultValue: TValue,
+    targetTableKey: TableKey<TTargetRow>,
+    getOptions: ColumnOptionsGetter<TRow, TOptions> = () => ({}) as TOptions
+  ) {
+    super(name, getOptions);
+    this.defaultValue = defaultValue;
+    this.targetTableKey = targetTableKey;
+  }
+
+  public getValue(): TValue {
+    return this.defaultValue;
+  }
+
+  public abstract setValues(
+    sourceRows: List<TRow>,
+    targetRows: List<TTargetRow>,
+    dataset: Dataset
+  ): void;
 }
 
 /**
@@ -97,9 +140,13 @@ export class Table<TRow extends Row> implements ITable<TRow> {
   public readonly key: TableKey<TRow>;
   public readonly name: string;
 
-  public constructor(name: string, columns: List<Column<TRow>>) {
+  public constructor(
+    name: string,
+    columns: List<Column<TRow>>,
+    key = createTypedKey<TRow>()
+  ) {
     this.columns = columns;
-    this.key = createTypedKey<TRow>();
+    this.key = key;
     this.name = name;
   }
 
