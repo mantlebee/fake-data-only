@@ -7,6 +7,7 @@ export * from "./enum";
 export * from "./first-name";
 export * from "./id";
 export * from "./last-name";
+export * from "./lorem-ipsum";
 export * from "./number";
 export * from "./pattern";
 export * from "./string";

@@ -1,4 +1,4 @@
-import { Any, Dictionary, List } from "@mantlebee/ts-core";
+import { Any, Dictionary, List, TypedKey } from "@mantlebee/ts-core";
 
 import { ITable } from "./interfaces";
 
@@ -27,3 +27,5 @@ export type Dataset = Dictionary<{ table: ITable<Row>; rows: List<Row> }>;
  * The Row type is only defined to simplified the used of generic type TRow when it is passed between different entities.
  */
 export type Row = Dictionary<Any>;
+
+export type TableKey<TRow> = TypedKey<TRow>;

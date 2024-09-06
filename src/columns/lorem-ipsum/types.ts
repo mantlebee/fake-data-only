@@ -1,6 +1,8 @@
+import { OptionalKeysOf } from "@mantlebee/ts-core";
+
 import { ColumnOptions } from "@/types";
 
-export type ColumnLoremIpsumOptions = ColumnOptions & {
-  maxLength: number;
-  minLength?: number;
-};
+import { EssayBuilderOptions } from "./essay-builder";
+
+export type ColumnLoremIpsumOptions = ColumnOptions &
+  OptionalKeysOf<EssayBuilderOptions>;
