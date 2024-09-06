@@ -6,6 +6,7 @@ import {
   isEmail,
   isNumber,
   isString,
+  List,
   Nullable,
   objectHasKey,
 } from "@mantlebee/ts-core";
@@ -100,14 +101,14 @@ const orderCategoriesCountRelations = new RelationCustom(
       .map((a) => a.productId);
     // Products of the order
     const products = dataset[productsTable.name].rows;
-    // Categories ids list with duplicate values
-    const fullCategoriesIds = products
-      .filter((a) => productsIds.includes(a.id))
-      .map((a) => a.categoryId);
-    // Distinct of categories ids
-    const categoriesIds = new Set(fullCategoriesIds).values;
+    // Categories ids list (without duplicate values)
+    const categoriesIds = new Set(
+      products
+        .filter((a) => productsIds.includes(a.id))
+        .map((a) => a.categoryId)
+    );
     // Count of the categories of the order
-    return categoriesIds.length;
+    return categoriesIds.size;
   }
 );
 
@@ -144,10 +145,12 @@ describe("Table", () => {
             rowsNumberMap[datasetItem.table.name]
           );
         });
-        const productCategories = dataset[productCategoriesTable.name].rows;
-        const products = dataset[productsTable.name].rows;
-        const orderProducts = dataset[orderProductsTable.name].rows;
-        const orders = dataset[ordersTable.name].rows;
+        const productCategories = dataset[productCategoriesTable.name]
+          .rows as List<ProductCategory>;
+        const products = dataset[productsTable.name].rows as List<Product>;
+        const orderProducts = dataset[orderProductsTable.name]
+          .rows as List<OrderProduct>;
+        const orders = dataset[ordersTable.name].rows as List<Order>;
         const categoriesIds = productCategories.map((a) => a.id);
         products.forEach((a) => {
           expect(categoriesIds).toContain(a.categoryId);
@@ -157,7 +160,9 @@ describe("Table", () => {
           expect(ordersIds).toContain(a.orderId);
         });
         orders.forEach((a) => {
-          expect(a.productsCount).toBeLessThanOrEqual(orderProducts.length);
+          expect(a.productsCount).toBe(
+            orderProducts.filter((b) => b.orderId === a.id).length
+          );
         });
       });
     });
