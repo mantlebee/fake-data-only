@@ -54,7 +54,7 @@ export abstract class ColumnRelation<
     TValue = Any,
     TOptions extends ColumnOptions = ColumnOptions,
   >
-  extends Column<TRow, TValue>
+  extends Column<TRow, TValue, TOptions>
   implements IColumnRelation<TRow, TTargetRow, TValue>
 {
   protected defaultValue: TValue;
