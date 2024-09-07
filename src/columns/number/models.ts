@@ -18,17 +18,3 @@ export class ColumnNumber<TRow extends Row> extends Column<
     return getColumnNumberValue(options);
   }
 }
-
-/**
- * Column used as placeholder value, for relations.
- * Returns always the default value for numbers, which is `0`.
- * The relation will then change this default value.
- */
-export class ColumnNumberDefault<TRow extends Row> extends Column<
-  TRow,
-  number
-> {
-  public getValue(row: TRow): number {
-    return 0;
-  }
-}

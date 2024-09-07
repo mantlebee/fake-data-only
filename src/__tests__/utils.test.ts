@@ -24,7 +24,6 @@ import {
   ColumnLastName,
   ColumnLoremIpsum,
   ColumnNumber,
-  ColumnNumberDefault,
   ColumnPattern,
   ColumnString,
 } from "@/columns";
@@ -32,9 +31,6 @@ import {
   ColumnRelationCount,
   ColumnRelationCustom,
   ColumnRelationLookup,
-  RelationCount,
-  RelationCustom,
-  RelationLookup,
 } from "@/relations";
 import { getDatabaseDataset, getTableRows } from "@/utils";
 
