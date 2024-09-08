@@ -15,7 +15,7 @@ export type ColumnOptions = { nullable?: boolean };
 export type ColumnOptionsGetter<
   TRow extends Row,
   TOptions extends ColumnOptions,
-> = (row: TRow) => TOptions;
+> = (row: TRow, ...args: Any) => TOptions;
 
 /**
  * Database ({@link IDatabase}) dataset. It is a dictionary where the key is the table ({@link ITable}) name and the value the table rows generated.
