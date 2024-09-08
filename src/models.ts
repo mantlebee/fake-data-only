@@ -6,13 +6,7 @@ import {
   createTypedKey,
 } from "@mantlebee/ts-core";
 
-import {
-  IColumn,
-  IRelation,
-  IDatabase,
-  ITable,
-  IColumnRelation,
-} from "./interfaces";
+import { IColumn, IDatabase, ITable, IColumnRelation } from "./interfaces";
 import {
   ColumnOptionsGetter,
   Dataset,
@@ -87,48 +81,16 @@ export abstract class ColumnRelation<
  * It uses the delegate {@link getDatabaseDataset} to generate the dataset.
  */
 export class Database implements IDatabase {
-  public readonly relations?: List<Relation<Any, Any>>;
   public readonly tables: List<Table<Any>>;
 
-  public constructor(
-    tables: List<Table<Any>>,
-    relations?: List<Relation<Any, Any>>
-  ) {
-    this.relations = relations;
+  public constructor(tables: List<Table<Any>>) {
     this.tables = tables;
   }
 
   public getDataset(countsMap: Dictionary<number>): Dataset {
-    const { relations, tables } = this;
-    return getDatabaseDataset(tables, countsMap, relations);
+    const { tables } = this;
+    return getDatabaseDataset(tables, countsMap);
   }
-}
-
-/**
- * Abstract implementation of {@link IRelation}.
- */
-export abstract class Relation<TSourceRow extends Row, TTargetRow extends Row>
-  implements IRelation<TSourceRow, TTargetRow>
-{
-  protected readonly sourceColumnName: KeyOf<TSourceRow>;
-  public readonly sourceTableKey: TableKey<TSourceRow>;
-  public readonly targetTableKey: TableKey<TTargetRow>;
-
-  public constructor(
-    sourceColumnName: KeyOf<TSourceRow>,
-    sourceTableKey: TableKey<TSourceRow>,
-    targetTableKey: TableKey<TTargetRow>
-  ) {
-    this.sourceColumnName = sourceColumnName;
-    this.sourceTableKey = sourceTableKey;
-    this.targetTableKey = targetTableKey;
-  }
-
-  public abstract setValues(
-    sourceRows: List<TSourceRow>,
-    targetRows: List<TTargetRow>,
-    dataset: Dataset
-  ): void;
 }
 
 /**

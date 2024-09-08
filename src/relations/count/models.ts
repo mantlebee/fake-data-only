@@ -1,6 +1,6 @@
 import { KeyOf, List } from "@mantlebee/ts-core";
 
-import { ColumnRelation, Relation } from "@/models";
+import { ColumnRelation } from "@/models";
 import { Row, TableKey } from "@/types";
 
 import { RelationCountCondition } from "./types";
@@ -21,38 +21,5 @@ export class ColumnRelationCount<
   public setValues(sourceRows: List<TRow>, targetRows: List<TTargetRow>): void {
     const { countCondition, name } = this;
     setRelationCountValues(name, countCondition, sourceRows, targetRows);
-  }
-}
-
-export class RelationCount<
-  TSourceRow extends Row,
-  TTargetRow extends Row,
-> extends Relation<TSourceRow, TTargetRow> {
-  private readonly countCondition: RelationCountCondition<
-    TSourceRow,
-    TTargetRow
-  >;
-
-  public constructor(
-    sourceColumnName: KeyOf<TSourceRow>,
-    sourceTableKey: TableKey<TSourceRow>,
-    targetTableKey: TableKey<TTargetRow>,
-    countCondition: RelationCountCondition<TSourceRow, TTargetRow>
-  ) {
-    super(sourceColumnName, sourceTableKey, targetTableKey);
-    this.countCondition = countCondition;
-  }
-
-  public setValues(
-    sourceRows: List<TSourceRow>,
-    targetRows: List<TTargetRow>
-  ): void {
-    const { countCondition, sourceColumnName } = this;
-    setRelationCountValues(
-      sourceColumnName,
-      countCondition,
-      sourceRows,
-      targetRows
-    );
   }
 }

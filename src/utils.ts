@@ -2,7 +2,7 @@ import { Dictionary, Any, List, KeyOf } from "@mantlebee/ts-core";
 import { generateRandomBoolean } from "@mantlebee/ts-random";
 
 import { ColumnOptions, Dataset, Row } from "./types";
-import { Column, ColumnRelation, Relation, Table } from "./models";
+import { Column, ColumnRelation, Table } from "./models";
 
 /**
  * Default values of rows to generate.
@@ -18,13 +18,11 @@ const DefaultRowsCount = 0;
  * Columns of type relation of the tables are processed during the second step if and only if a relation referring that column is present. If not, the default value is not updated.
  * @param tables List of tables forming part of the database.
  * @param countsMap Dictionary with the tables counts, used to generate a specific amount of rows for each table. It is a dictionary where the keys are the tables names and the values the row counts to generate.
- * @param relations List of relations to process to update the rows values.
  * @returns the database dataset, it is a dictionary, where the keys are the tables names and the values are objects with the table instance and its generated rows.
  */
 export function getDatabaseDataset(
   tables: List<Table<Any>>,
-  countsMap: Dictionary<number>,
-  relations?: List<Relation<Any, Any>>
+  countsMap: Dictionary<number>
 ): Dataset {
   // The rowsMap dictionary is populated during the dataset creation and will be used to retrieve rows for the relations
   const rowsMap = {} as Record<symbol, List<Any>>;
@@ -46,14 +44,6 @@ export function getDatabaseDataset(
           column.setValues(sourceRows, targetRows, dataset);
       });
   });
-  if (relations)
-    relations.forEach((a) => {
-      const { sourceTableKey, targetTableKey } = a;
-      const sourceRows = rowsMap[sourceTableKey as symbol];
-      const targetRows = rowsMap[targetTableKey as symbol];
-      if (sourceRows && targetRows)
-        a.setValues(sourceRows, targetRows, dataset);
-    });
   return dataset;
 }
 

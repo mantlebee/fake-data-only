@@ -52,10 +52,6 @@ export interface IColumnRelation<
  */
 export interface IDatabase {
   /**
-   * List of relations between tables that must be processed after the tables rows are generated.
-   */
-  readonly relations?: List<IRelation<Any, Any>>;
-  /**
    * List of tables that must be used to generate rows.
    */
   readonly tables: List<ITable<Any>>;
@@ -64,26 +60,6 @@ export interface IDatabase {
    * @param countsMap Dictionary with the tables counts, used to generate a specific amount of rows for each table. It is a dictionary where the keys are the tables names and the values the row counts to generate.
    */
   getDataset(countsMap: Dictionary<number>): Dataset;
-}
-
-/**
- * Represents a relation between two tables ({@link ITable}).
- * Its purpose is to update table rows according to another table rows values.
- * @typeParam TSourceRow - Type of the row of the source table.
- * @typeParam TTargetRow - Type of the row of the target table.
- */
-export interface IRelation<TSourceRow extends Row, TTargetRow extends Row> {
-  /**
-   * Update source table rows using a target table rows or the entire dataset.
-   * @param sourceRows List of rows to update of the source table.
-   * @param targetRows List of rows of the target table.
-   * @param dataset The entire database dataset.
-   */
-  setValues(
-    sourceRows: List<TSourceRow>,
-    targetRows: List<TTargetRow>,
-    dataset: Dataset
-  ): void;
 }
 
 /**
