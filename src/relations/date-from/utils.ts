@@ -3,10 +3,10 @@ import { KeyOf, List } from "@mantlebee/ts-core";
 import { ColumnOptionsGetter, Row } from "@/types";
 
 import {
-  ColumnRelationDateFromOptions,
+  DateFromRelationColumnOptions,
   RelationDateFromCondition,
 } from "./types";
-import { ColumnDateOptions, getColumnDateValue } from "@/columns";
+import { DateColumnOptions, getDateColumnValue } from "@/columns";
 
 /**
  * Generates a random date that starts from the date picked from a target row of a different table.
@@ -26,17 +26,17 @@ export function setRelationDateFromValues<
   findTargetRow: RelationDateFromCondition<TSourceRow, TTargetRow>,
   sourceRows: List<TSourceRow>,
   targetRows: List<TTargetRow>,
-  getOptions?: ColumnOptionsGetter<TSourceRow, ColumnRelationDateFromOptions>
+  getOptions?: ColumnOptionsGetter<TSourceRow, DateFromRelationColumnOptions>
 ): void {
   sourceRows.forEach((sourceRow) => {
     const targetRow = targetRows.find((a) => findTargetRow(sourceRow, a));
     if (targetRow) {
       const from = targetRow[targetColumnName] as Date;
-      const dateOptions: ColumnDateOptions = {
+      const dateOptions: DateColumnOptions = {
         from,
         to: getOptions && getOptions(sourceRow, targetRow).to,
       };
-      sourceRow[sourceColumnName] = getColumnDateValue(
+      sourceRow[sourceColumnName] = getDateColumnValue(
         dateOptions
       ) as TSourceRow[KeyOf<TSourceRow>];
     }

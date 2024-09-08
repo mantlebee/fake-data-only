@@ -1,7 +1,7 @@
 import { Gender } from "@/constants";
 
-import { ColumnFirstNameOptions } from "./types";
+import { FirstNameColumnOptions } from "./types";
 
-export const ColumnFirstNameOptionsDefault: ColumnFirstNameOptions = {
+export const FirstNameColumnOptionsDefault: FirstNameColumnOptions = {
   gender: Gender.unspecified,
 };

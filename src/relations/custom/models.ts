@@ -12,7 +12,7 @@ import {
 import { RelationCustomValueGetter } from "./types";
 import { setRelationCustomValues } from "./utils";
 
-export class ColumnRelationCustom<
+export class CustomRelationColumn<
   TRow extends Row,
   TTargetRow extends Row,
   TValue = Any,

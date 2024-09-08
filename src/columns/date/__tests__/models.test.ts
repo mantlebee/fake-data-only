@@ -1,4 +1,4 @@
-import { ColumnDate } from "../models";
+import { DateColumn } from "../models";
 
 type RowTest = {
   dateFrom: Date;
@@ -10,11 +10,11 @@ const row: RowTest = {
   dateTo: new Date(2022, 4, 3, 23, 59, 59),
 };
 
-describe("ColumnDate", () => {
+describe("DateColumn", () => {
   describe("models", () => {
-    describe("ColumnDate", () => {
+    describe("DateColumn", () => {
       it("Generates a random date, using startFrom e startTo from passed row", () => {
-        const dependantColumn = new ColumnDate<RowTest>("dateFrom", (a) => ({
+        const dependantColumn = new DateColumn<RowTest>("dateFrom", (a) => ({
           from: a.dateFrom,
           to: a.dateTo,
         }));

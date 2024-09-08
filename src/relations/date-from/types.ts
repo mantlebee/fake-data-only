@@ -1,21 +1,21 @@
-import { ColumnDateOption } from "@/columns";
+import { DateColumnOption } from "@/columns";
 import { ColumnOptions } from "@/types";
 
 /**
- * {@link ColumnRelationDateFrom} options.
+ * {@link DateFromRelationColumn} options.
  */
-export type ColumnRelationDateFromOptions = ColumnOptions & {
-  to?: Date | ColumnDateOption;
+export type DateFromRelationColumnOptions = ColumnOptions & {
+  to?: Date | DateColumnOption;
 };
 
 /**
- * {@link ColumnRelationDateFrom} options getter.
+ * {@link DateFromRelationColumn} options getter.
  * The second parameter is the target row of the relation.
  */
-export type ColumnRelationDateFromOptionsGetter<TSourceRow, TTargetRow> = (
+export type DateFromRelationColumnOptionsGetter<TSourceRow, TTargetRow> = (
   sourceRow: TSourceRow,
   targetRow: TTargetRow
-) => ColumnRelationDateFromOptions;
+) => DateFromRelationColumnOptions;
 
 /**
  * Type of the delegate to find the target row of the relation.

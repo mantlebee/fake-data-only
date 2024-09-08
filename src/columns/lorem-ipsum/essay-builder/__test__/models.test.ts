@@ -1,7 +1,7 @@
 import { getLowercaseChars } from "@mantlebee/ts-core";
 import { EssayBuilder } from "../models";
 
-describe("ColumnLoremIpsum", () => {
+describe("LoremIpsumColumn", () => {
   describe("EssayBuilder", () => {
     describe("models", () => {
       describe("EssayBuilder", () => {

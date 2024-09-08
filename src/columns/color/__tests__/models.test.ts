@@ -1,14 +1,14 @@
-import { ColumnColor } from "../models";
+import { ColorColumn } from "../models";
 
 type RowTest = {
   name: string;
 };
 
-describe("ColumnColor", () => {
+describe("ColorColumn", () => {
   describe("models", () => {
-    describe("ColumnColor", () => {
+    describe("ColorColumn", () => {
       it("Generates a random IColor instance", () => {
-        const column = new ColumnColor<RowTest>("name");
+        const column = new ColorColumn<RowTest>("name");
         const value = column.getValue({} as RowTest);
         const rgba = value.rgba();
         expect(rgba).toMatch(

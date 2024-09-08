@@ -5,7 +5,7 @@ import { ColumnOptions, ColumnOptionsGetter, Row, TableKey } from "@/types";
 
 import { setRelationLookupValues } from "./utils";
 
-export class ColumnRelationLookup<
+export class LookupRelationColumn<
   TRow extends Row,
   TTargetRow extends Row,
   TValue = Any,

@@ -1,16 +1,16 @@
 import { Column } from "@/models";
 import { Row } from "@/types";
 
-import { ColumnLoremIpsumOptions } from "./types";
-import { getColumnLoremIpsumValue } from "./utils";
+import { LoremIpsumColumnOptions } from "./types";
+import { getLoremIpsumColumnValue } from "./utils";
 
-export class ColumnLoremIpsum<TRow extends Row> extends Column<
+export class LoremIpsumColumn<TRow extends Row> extends Column<
   TRow,
   string,
-  ColumnLoremIpsumOptions
+  LoremIpsumColumnOptions
 > {
   public getValue(row: TRow): string {
     const options = this.getOptions(row);
-    return getColumnLoremIpsumValue(options);
+    return getLoremIpsumColumnValue(options);
   }
 }

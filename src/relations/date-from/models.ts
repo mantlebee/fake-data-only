@@ -4,8 +4,8 @@ import { ColumnRelation } from "@/models";
 import { Row, TableKey } from "@/types";
 
 import {
-  ColumnRelationDateFromOptions,
-  ColumnRelationDateFromOptionsGetter,
+  DateFromRelationColumnOptions,
+  DateFromRelationColumnOptionsGetter,
   RelationDateFromCondition,
 } from "./types";
 import { setRelationDateFromValues } from "./utils";
@@ -13,17 +13,17 @@ import { setRelationDateFromValues } from "./utils";
 /**
  * Generates a random date, starting from a value of a target row.
  * Use Case: every comment of a post, must have a creation date that follows the creation date of the post.
- * Similar to {@link ColumnDate}, it is possible to restrict the range,
+ * Similar to {@link DateColumn}, it is possible to restrict the range,
  * specifing a `to` option, to limit the right-range.
  */
-export class ColumnRelationDateFrom<
+export class DateFromRelationColumn<
   TRow extends Row,
   TTargetRow extends Row,
 > extends ColumnRelation<
   TRow,
   TTargetRow,
   Date,
-  ColumnRelationDateFromOptions
+  DateFromRelationColumnOptions
 > {
   /**
    * @param name Name of the column and of the field.
@@ -40,7 +40,7 @@ export class ColumnRelationDateFrom<
       TRow,
       TTargetRow
     >,
-    getOptions?: ColumnRelationDateFromOptionsGetter<TRow, TTargetRow>
+    getOptions?: DateFromRelationColumnOptionsGetter<TRow, TTargetRow>
   ) {
     super(name, new Date(), targetTableKey, getOptions);
   }

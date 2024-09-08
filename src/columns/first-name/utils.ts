@@ -2,8 +2,8 @@ import { extractRandomItem } from "@mantlebee/ts-random";
 
 import { FemaleFirstNames, Gender, MaleFirstNames } from "@/constants";
 
-import { ColumnFirstNameOptions } from "./types";
-import { ColumnFirstNameOptionsDefault } from "./constants";
+import { FirstNameColumnOptions } from "./types";
+import { FirstNameColumnOptionsDefault } from "./constants";
 
 /**
  * Generates a random male or female american first name.
@@ -11,10 +11,10 @@ import { ColumnFirstNameOptionsDefault } from "./constants";
  * @param options Options to restrict the gender of the name, or not.
  * @returns a random male or female american first name.
  */
-export function getColumnFirstNameValue(
-  options?: ColumnFirstNameOptions
+export function getFirstNameColumnValue(
+  options?: FirstNameColumnOptions
 ): string {
-  const { gender } = { ...ColumnFirstNameOptionsDefault, ...options };
+  const { gender } = { ...FirstNameColumnOptionsDefault, ...options };
   switch (gender) {
     case Gender.female:
       return extractRandomItem(FemaleFirstNames);

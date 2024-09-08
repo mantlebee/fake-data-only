@@ -13,24 +13,24 @@ import {
 } from "@mantlebee/ts-core";
 
 import {
-  ColumnBoolean,
-  ColumnColor,
-  ColumnCustom,
-  ColumnDate,
-  ColumnEmail,
-  ColumnEnum,
-  ColumnFirstName,
-  ColumnId,
-  ColumnLastName,
-  ColumnLoremIpsum,
-  ColumnNumber,
-  ColumnPattern,
-  ColumnString,
+  BooleanColumn,
+  ColorColumn,
+  CustomColumn,
+  DateColumn,
+  EmailColumn,
+  EnumColumn,
+  FirstNameColumn,
+  IdColumn,
+  LastNameColumn,
+  LoremIpsumColumn,
+  NumberColumn,
+  PatternColumn,
+  StringColumn,
 } from "@/columns";
 import {
-  ColumnRelationCount,
-  ColumnRelationCustom,
-  ColumnRelationLookup,
+  CountRelationColumn,
+  CustomRelationColumn,
+  LookupRelationColumn,
 } from "@/relations";
 import { getDatabaseDataset, getTableRows } from "@/utils";
 
@@ -46,9 +46,9 @@ type Product = { categoryId: number; id: number; name: string };
 const productsTable = new Table<Product>(
   "products",
   [
-    new ColumnId("id"),
-    new ColumnString("name", () => ({ maxLength: 20 })),
-    new ColumnRelationLookup("categoryId", 0, productCategoriesKey, "id"),
+    new IdColumn("id"),
+    new StringColumn("name", () => ({ maxLength: 20 })),
+    new LookupRelationColumn("categoryId", 0, productCategoriesKey, "id"),
   ],
   productsKey
 );
@@ -58,7 +58,7 @@ const productsTable = new Table<Product>(
 type ProductCategory = { id: number; name: string };
 const productCategoriesTable = new Table<ProductCategory>(
   "product-categories",
-  [new ColumnId("id"), new ColumnString("name", () => ({ maxLength: 20 }))],
+  [new IdColumn("id"), new StringColumn("name", () => ({ maxLength: 20 }))],
   productCategoriesKey
 );
 //#endregion
@@ -68,8 +68,8 @@ type Order = { categoriesCount: number; id: number; productsCount: number };
 const ordersTable = new Table<Order>(
   "orders",
   [
-    new ColumnId("id"),
-    new ColumnRelationCustom(
+    new IdColumn("id"),
+    new CustomRelationColumn(
       "categoriesCount",
       0,
       orderProductsKey,
@@ -90,7 +90,7 @@ const ordersTable = new Table<Order>(
         return categoriesIds.size;
       }
     ),
-    new ColumnRelationCount(
+    new CountRelationColumn(
       "productsCount",
       orderProductsKey,
       (o, p) => o.id === p.orderId
@@ -105,8 +105,8 @@ type OrderProduct = { orderId: number; productId: number };
 const orderProductsTable = new Table<OrderProduct>(
   "order-products",
   [
-    new ColumnRelationLookup("orderId", 0, ordersKey, "id"),
-    new ColumnRelationLookup("productId", 0, productsKey, "id"),
+    new LookupRelationColumn("orderId", 0, ordersKey, "id"),
+    new LookupRelationColumn("productId", 0, productsKey, "id"),
   ],
   orderProductsKey
 );
@@ -164,7 +164,7 @@ describe("Table", () => {
         type Row = { name: string };
         const rows = getTableRows<Row>(
           [
-            new ColumnString<Row>("name", () => ({
+            new StringColumn<Row>("name", () => ({
               maxLength: 12,
               minLength: 4,
             })),
@@ -203,28 +203,28 @@ describe("Table", () => {
         };
         const rows = getTableRows<Row>(
           [
-            new ColumnId<Row>("id"),
-            new ColumnFirstName<Row>("name"),
-            new ColumnLastName<Row>("surname"),
-            new ColumnCustom<Row, string>(
+            new IdColumn<Row>("id"),
+            new FirstNameColumn<Row>("name"),
+            new LastNameColumn<Row>("surname"),
+            new CustomColumn<Row, string>(
               "fullname",
               (a) => `${a.name} ${a.surname}`
             ),
-            new ColumnNumber<Row>("age", () => ({ max: 90, nullable: true })),
-            new ColumnEmail<Row>("email", (a) => ({
+            new NumberColumn<Row>("age", () => ({ max: 90, nullable: true })),
+            new EmailColumn<Row>("email", (a) => ({
               firstNames: [a.name],
               lastNames: [a.surname],
             })),
-            new ColumnBoolean<Row>("active"),
-            new ColumnDate<Row>("registered"),
-            new ColumnDate<Row>("expires", (a) => ({ from: a.registered })),
-            new ColumnEnum<Row, RowType>("type", Object(RowType)),
-            new ColumnColor<Row>("color"),
-            new ColumnNumber<Row>("scoreMax", () => ({ max: 100 })),
-            new ColumnNumber<Row>("score", (a) => ({ max: a.scoreMax })),
-            new ColumnPattern<Row>("phone", "+000-00000"),
-            new ColumnPattern<Row>("username", "a{8,12}"),
-            new ColumnLoremIpsum("description", () => ({
+            new BooleanColumn<Row>("active"),
+            new DateColumn<Row>("registered"),
+            new DateColumn<Row>("expires", (a) => ({ from: a.registered })),
+            new EnumColumn<Row, RowType>("type", Object(RowType)),
+            new ColorColumn<Row>("color"),
+            new NumberColumn<Row>("scoreMax", () => ({ max: 100 })),
+            new NumberColumn<Row>("score", (a) => ({ max: a.scoreMax })),
+            new PatternColumn<Row>("phone", "+000-00000"),
+            new PatternColumn<Row>("username", "a{8,12}"),
+            new LoremIpsumColumn("description", () => ({
               nullable: true,
               paragraphs: { max: 5, min: 5 },
             })),

@@ -2,9 +2,9 @@ import { Gender } from "@/constants";
 import { ColumnOptions } from "@/types";
 
 /**
- * {@link ColumnFirstName} options.
+ * {@link FirstNameColumn} options.
  * @prop `gender` - to specify a gender, or not.
  */
-export type ColumnFirstNameOptions = ColumnOptions & {
+export type FirstNameColumnOptions = ColumnOptions & {
   gender?: Gender;
 };

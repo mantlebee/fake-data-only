@@ -1,6 +1,6 @@
 import { capitalizeFirstLetter } from "../utils";
 
-describe("ColumnLoremIpsum", () => {
+describe("LoremIpsumColumn", () => {
   describe("EssayBuilder", () => {
     describe("utils", () => {
       describe("capitalizeFirstLetter", () => {

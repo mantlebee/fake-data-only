@@ -1,9 +1,9 @@
 import { extractRandomItem } from "@mantlebee/ts-random";
 
-import { getColumnFirstNameValue, getColumnLastNameValue } from "@/columns";
+import { getFirstNameColumnValue, getLastNameColumnValue } from "@/columns";
 import { FirstLevelDomains, SecondLevelDomains } from "@/constants";
 
-import { ColumnEmailOptions } from "./types";
+import { EmailColumnOptions } from "./types";
 
 /**
  * Generates a random email two-levels domain, e.g. "outlook.com".
@@ -21,11 +21,11 @@ function generateRandomDomain(): string {
  * @param options Options to restrict the choice of the parameters first name, last name and domain.
  * @returns a random email formatted "[first-name].[last-name]@[domain]".
  */
-export function getColumnEmailValue(options?: ColumnEmailOptions): string {
+export function getEmailColumnValue(options?: EmailColumnOptions): string {
   const {
     domains = [generateRandomDomain()],
-    firstNames = [getColumnFirstNameValue()],
-    lastNames = [getColumnLastNameValue()],
+    firstNames = [getFirstNameColumnValue()],
+    lastNames = [getLastNameColumnValue()],
   } = { ...options };
   const domain = extractRandomItem(domains);
   const firstName = extractRandomItem(firstNames);

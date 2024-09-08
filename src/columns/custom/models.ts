@@ -6,7 +6,7 @@ import { Row } from "@/types";
 /**
  * Generic column. Generates a value using a delegate passed to the constructor.
  */
-export class ColumnCustom<TRow extends Row, TValue> extends Column<
+export class CustomColumn<TRow extends Row, TValue> extends Column<
   TRow,
   TValue
 > {

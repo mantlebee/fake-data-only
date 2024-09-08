@@ -1,10 +1,10 @@
-import { getColumnLoremIpsumValue } from "../utils";
+import { getLoremIpsumColumnValue } from "../utils";
 
-describe("ColumnLoremIpsum", () => {
+describe("LoremIpsumColumn", () => {
   describe("utils", () => {
-    describe("getColumnLoremIpsumValue", () => {
+    describe("getLoremIpsumColumnValue", () => {
       it("Generates a lorem ipsum text", () => {
-        const loremIpsum = getColumnLoremIpsumValue({
+        const loremIpsum = getLoremIpsumColumnValue({
           paragraphs: { max: 2, min: 1 },
           sentencesPerParagraph: { max: 4, min: 3 },
           wordsPerSentence: { max: 6, min: 5 },

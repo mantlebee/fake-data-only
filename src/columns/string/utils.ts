@@ -9,7 +9,7 @@ import {
   generateRandomStringFromChars,
 } from "@mantlebee/ts-random";
 
-import { ColumnStringOptions } from "./types";
+import { StringColumnOptions } from "./types";
 
 /**
  * Generates a random string.
@@ -18,7 +18,7 @@ import { ColumnStringOptions } from "./types";
  * @param options Options to restrict string length and which symbols must be included.
  * @returns a random string.
  */
-export function getColumnStringValue(options: ColumnStringOptions): string {
+export function getStringColumnValue(options: StringColumnOptions): string {
   const {
     include = {
       lowercase: true,

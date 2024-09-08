@@ -6,7 +6,7 @@ import { Row, TableKey } from "@/types";
 import { RelationCountCondition } from "./types";
 import { setRelationCountValues } from "./utils";
 
-export class ColumnRelationCount<
+export class CountRelationColumn<
   TRow extends Row,
   TTargetRow extends Row,
 > extends ColumnRelation<TRow, TTargetRow, number> {

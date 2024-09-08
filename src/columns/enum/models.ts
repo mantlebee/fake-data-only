@@ -3,13 +3,13 @@ import { KeyOf } from "@mantlebee/ts-core";
 import { Column } from "@/models";
 import { Row } from "@/types";
 
-import { getColumnEnumValue } from "./utils";
+import { getEnumColumnValue } from "./utils";
 
 /**
  * Extract a random value from the passed enumerative.
  * To pass and enumerative, use the `Object(MyEnum)` syntax.
  */
-export class ColumnEnum<TRow extends Row, TEnum> extends Column<TRow, TEnum> {
+export class EnumColumn<TRow extends Row, TEnum> extends Column<TRow, TEnum> {
   public readonly enumerative!: TEnum;
 
   /**
@@ -22,6 +22,6 @@ export class ColumnEnum<TRow extends Row, TEnum> extends Column<TRow, TEnum> {
   }
 
   public getValue(): TEnum {
-    return getColumnEnumValue(this.enumerative);
+    return getEnumColumnValue(this.enumerative);
   }
 }

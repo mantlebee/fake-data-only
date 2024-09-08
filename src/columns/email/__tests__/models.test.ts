@@ -1,4 +1,4 @@
-import { ColumnEmail } from "../models";
+import { EmailColumn } from "../models";
 
 type RowTest = {
   domain: string;
@@ -12,11 +12,11 @@ const row: RowTest = {
   lastName: "Doe",
 };
 
-describe("ColumnEmail", () => {
+describe("EmailColumn", () => {
   describe("models", () => {
-    describe("ColumnEmail", () => {
+    describe("EmailColumn", () => {
       it("Generates a random email, taking domain, firstName and lastname from the passed row", () => {
-        const dependantColumn = new ColumnEmail<RowTest>("domain", (a) => ({
+        const dependantColumn = new EmailColumn<RowTest>("domain", (a) => ({
           domains: [a.domain],
           firstNames: [a.firstName],
           lastNames: [a.lastName],

@@ -2,10 +2,10 @@ import { extractRandomItem } from "@mantlebee/ts-random";
 
 import { LoremIpsumWords, OptionsDefault } from "./constants";
 import { EssayBuilder, EssayBuilderOptions } from "./essay-builder";
-import { ColumnLoremIpsumOptions } from "./types";
+import { LoremIpsumColumnOptions } from "./types";
 
-export function getColumnLoremIpsumValue(
-  options: ColumnLoremIpsumOptions
+export function getLoremIpsumColumnValue(
+  options: LoremIpsumColumnOptions
 ): string {
   const essayBuilderOptions: EssayBuilderOptions = {
     ...OptionsDefault,

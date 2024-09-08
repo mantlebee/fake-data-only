@@ -7,7 +7,7 @@ import { Row } from "@/types";
  * Generates a unique and incremental positive number.
  * It is possible to choose the starting value.
  */
-export class ColumnId<TRow extends Row> extends Column<TRow, number> {
+export class IdColumn<TRow extends Row> extends Column<TRow, number> {
   private readonly identityManager!: NumericIdentityManager;
 
   /**

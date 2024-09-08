@@ -5,6 +5,6 @@ import { LastNames } from "@/constants";
 /**
  * Generates a random american last name.
  */
-export function getColumnLastNameValue(): string {
+export function getLastNameColumnValue(): string {
   return extractRandomItem(LastNames);
 }

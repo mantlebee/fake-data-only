@@ -1,14 +1,14 @@
-import { ColumnBoolean } from "../models";
+import { BooleanColumn } from "../models";
 
 type RowTest = {
   active: boolean;
 };
 
-describe("ColumnBoolean", () => {
+describe("BooleanColumn", () => {
   describe("models", () => {
-    describe("ColumnBoolean", () => {
+    describe("BooleanColumn", () => {
       it("Generates a random boolean", () => {
-        const column = new ColumnBoolean<RowTest>("active");
+        const column = new BooleanColumn<RowTest>("active");
         const value = column.getValue();
         expect([true, false]).toContain(value);
       });

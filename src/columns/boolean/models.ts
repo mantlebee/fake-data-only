@@ -6,7 +6,7 @@ import { Row } from "@/types";
 /**
  * Generates a random boolean value.
  */
-export class ColumnBoolean<TRow extends Row> extends Column<TRow, boolean> {
+export class BooleanColumn<TRow extends Row> extends Column<TRow, boolean> {
   public getValue(): boolean {
     return generateRandomBoolean();
   }

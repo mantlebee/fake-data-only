@@ -1,6 +1,6 @@
 import { numberIsInteger } from "@mantlebee/ts-core";
 
-import { getColumnNumberValue } from "../utils";
+import { getNumberColumnValue } from "../utils";
 
 type RowTest = {
   decimals: number;
@@ -14,17 +14,17 @@ const row: RowTest = {
   min: 5,
 };
 
-describe("ColumnNumber", () => {
+describe("NumberColumn", () => {
   describe("utils", () => {
-    describe("getColumnNumberValue", () => {
+    describe("getNumberColumnValue", () => {
       it("Generates an integer number between 0 and 10", () => {
-        const random = getColumnNumberValue({ max: 10 });
+        const random = getNumberColumnValue({ max: 10 });
         expect(numberIsInteger(random)).toBeTruthy();
         expect(random).toBeGreaterThanOrEqual(0);
         expect(random).toBeLessThanOrEqual(10);
       });
       it("Generates an integer number between 5 and 10", () => {
-        const random = getColumnNumberValue({
+        const random = getNumberColumnValue({
           max: 10,
           min: 5,
         });
@@ -33,7 +33,7 @@ describe("ColumnNumber", () => {
         expect(random).toBeLessThanOrEqual(10);
       });
       it("Generates a float number between 5 and 10, with 2 digits after the decimals point", () => {
-        const random = getColumnNumberValue({
+        const random = getNumberColumnValue({
           decimals: 2,
           max: 10,
           min: 5,

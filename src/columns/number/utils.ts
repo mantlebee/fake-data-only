@@ -1,6 +1,6 @@
 import { generateRandomNumber } from "@mantlebee/ts-random";
 
-import { ColumnNumberOptions } from "./types";
+import { NumberColumnOptions } from "./types";
 
 /**
  * Generates a random number.
@@ -8,7 +8,7 @@ import { ColumnNumberOptions } from "./types";
  * @param options Options to restrict min, max, and decimals
  * @returns a random number.
  */
-export function getColumnNumberValue(options?: ColumnNumberOptions): number {
+export function getNumberColumnValue(options?: NumberColumnOptions): number {
   let { decimals = 0, max = 100, min = 0 } = { ...options };
   return generateRandomNumber(max, min, decimals);
 }

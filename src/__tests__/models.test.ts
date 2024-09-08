@@ -1,8 +1,8 @@
 import { Any, createTypedKey, List } from "@mantlebee/ts-core";
 
-import { ColumnId } from "@/columns";
+import { IdColumn } from "@/columns";
 import { Database, Table } from "@/models";
-import { ColumnRelationLookup } from "@/relations";
+import { LookupRelationColumn } from "@/relations";
 
 type RowTest = { id: number };
 type Category = RowTest & { name: string };
@@ -14,14 +14,14 @@ describe("models", () => {
     const productsTableKey = createTypedKey<Product>();
     const categoriesTable = new Table<Category>(
       "categories",
-      [new ColumnId("id")],
+      [new IdColumn("id")],
       categoriesTableKey
     );
     const productsTable = new Table<Product>(
       "products",
       [
-        new ColumnId("id"),
-        new ColumnRelationLookup("category", 0, categoriesTableKey, "id"),
+        new IdColumn("id"),
+        new LookupRelationColumn("category", 0, categoriesTableKey, "id"),
       ],
       productsTableKey
     );
@@ -45,7 +45,7 @@ describe("models", () => {
   });
   describe("Table", () => {
     it("generates a specific amount of rows", () => {
-      const table = new Table("products", [new ColumnId("id")]);
+      const table = new Table("products", [new IdColumn("id")]);
       const rows = table.getRows(42);
       expect(rows).toHaveLength(42);
     });
