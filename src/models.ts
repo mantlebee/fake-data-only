@@ -19,7 +19,7 @@ import { getDatabaseDataset, getTableRows } from "./utils";
 /**
  * Abstract implementation of {@link IColumn}.
  */
-export abstract class Column<
+export abstract class ColumnAbstract<
   TRow extends Row,
   TValue = Any,
   TOptions extends ColumnOptions = ColumnOptions,
@@ -42,13 +42,13 @@ export abstract class Column<
 /**
  * Abstract implementation of {@link IColumnRelation}
  */
-export abstract class ColumnRelation<
+export abstract class ColumnRelationAbstract<
     TRow extends Row,
     TTargetRow extends Row,
     TValue = Any,
     TOptions extends ColumnOptions = ColumnOptions,
   >
-  extends Column<TRow, TValue, TOptions>
+  extends ColumnAbstract<TRow, TValue, TOptions>
   implements IColumnRelation<TRow, TTargetRow, TValue>
 {
   protected defaultValue: TValue;
@@ -98,13 +98,13 @@ export class Database implements IDatabase {
  * It uses the delegate {@link getTableRows} to generate the rows.
  */
 export class Table<TRow extends Row> implements ITable<TRow> {
-  public readonly columns: List<Column<TRow>>;
+  public readonly columns: List<ColumnAbstract<TRow>>;
   public readonly key: TableKey<TRow>;
   public readonly name: string;
 
   public constructor(
     name: string,
-    columns: List<Column<TRow>>,
+    columns: List<ColumnAbstract<TRow>>,
     key = createTypedKey<TRow>()
   ) {
     this.columns = columns;

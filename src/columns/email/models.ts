@@ -1,4 +1,4 @@
-import { Column } from "@/models";
+import { ColumnAbstract } from "@/models";
 import { Row } from "@/types";
 
 import { EmailColumnOptions } from "./types";
@@ -9,7 +9,7 @@ import { getEmailColumnValue } from "./utils";
  * It is possible to restrict the choice of these three parameters, using the options.
  * The random email format is "[first-name].[last-name]@[domain]".
  */
-export class EmailColumn<TRow extends Row> extends Column<
+export class EmailColumn<TRow extends Row> extends ColumnAbstract<
   TRow,
   string,
   EmailColumnOptions

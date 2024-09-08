@@ -1,12 +1,12 @@
 import { KeyOf } from "@mantlebee/ts-core";
 
-import { Column } from "@/models";
+import { ColumnAbstract } from "@/models";
 import { Row } from "@/types";
 
 /**
  * Generic column. Generates a value using a delegate passed to the constructor.
  */
-export class CustomColumn<TRow extends Row, TValue> extends Column<
+export class CustomColumn<TRow extends Row, TValue> extends ColumnAbstract<
   TRow,
   TValue
 > {

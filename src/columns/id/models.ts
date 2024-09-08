@@ -1,13 +1,13 @@
 import { KeyOf, NumericIdentityManager } from "@mantlebee/ts-core";
 
-import { Column } from "@/models";
+import { ColumnAbstract } from "@/models";
 import { Row } from "@/types";
 
 /**
  * Generates a unique and incremental positive number.
  * It is possible to choose the starting value.
  */
-export class IdColumn<TRow extends Row> extends Column<TRow, number> {
+export class IdColumn<TRow extends Row> extends ColumnAbstract<TRow, number> {
   private readonly identityManager!: NumericIdentityManager;
 
   /**

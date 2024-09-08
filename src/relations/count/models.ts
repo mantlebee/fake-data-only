@@ -1,6 +1,6 @@
 import { KeyOf, List } from "@mantlebee/ts-core";
 
-import { ColumnRelation } from "@/models";
+import { ColumnRelationAbstract } from "@/models";
 import { Row, TableKey } from "@/types";
 
 import { RelationCountCondition } from "./types";
@@ -9,7 +9,7 @@ import { setRelationCountValues } from "./utils";
 export class CountRelationColumn<
   TRow extends Row,
   TTargetRow extends Row,
-> extends ColumnRelation<TRow, TTargetRow, number> {
+> extends ColumnRelationAbstract<TRow, TTargetRow, number> {
   public constructor(
     name: KeyOf<TRow>,
     targetTableKey: TableKey<TTargetRow>,

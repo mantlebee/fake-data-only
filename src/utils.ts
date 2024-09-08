@@ -2,7 +2,7 @@ import { Dictionary, Any, List, KeyOf } from "@mantlebee/ts-core";
 import { generateRandomBoolean } from "@mantlebee/ts-random";
 
 import { ColumnOptions, Dataset, Row } from "./types";
-import { Column, ColumnRelation, Table } from "./models";
+import { ColumnAbstract, ColumnRelationAbstract, Table } from "./models";
 
 /**
  * Default values of rows to generate.
@@ -36,7 +36,7 @@ export function getDatabaseDataset(
   }, {} as Dataset);
   tables.forEach((table) => {
     table.columns
-      .filter((a) => a instanceof ColumnRelation)
+      .filter((a) => a instanceof ColumnRelationAbstract)
       .forEach((column) => {
         const sourceRows = rowsMap[table.key as symbol];
         const targetRows = rowsMap[column.targetTableKey as symbol];
@@ -55,7 +55,7 @@ export function getDatabaseDataset(
  * @returns Rows generated where the keys are the columns names.
  */
 export function getTableRows<TRow extends Row>(
-  columns: List<Column<TRow, Any>>,
+  columns: List<ColumnAbstract<TRow, Any>>,
   count: number
 ): List<TRow> {
   const items: List<TRow> = [];
@@ -78,12 +78,12 @@ export function getTableRows<TRow extends Row>(
  * @returns A boolean value indicating if to generate a value for the current column or to set the `null` value.
  */
 function shouldBeNull<TRow extends Row>(
-  column: Column<TRow>,
+  column: ColumnAbstract<TRow>,
   options: ColumnOptions
 ): boolean {
   const { nullable } = options;
   return Boolean(
-    (column instanceof ColumnRelation && nullable) ||
+    (column instanceof ColumnRelationAbstract && nullable) ||
       (nullable && generateRandomBoolean())
   );
 }

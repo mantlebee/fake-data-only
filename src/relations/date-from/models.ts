@@ -1,6 +1,6 @@
 import { KeyOf, List } from "@mantlebee/ts-core";
 
-import { ColumnRelation } from "@/models";
+import { ColumnRelationAbstract } from "@/models";
 import { Row, TableKey } from "@/types";
 
 import {
@@ -19,7 +19,7 @@ import { setRelationDateFromValues } from "./utils";
 export class DateFromRelationColumn<
   TRow extends Row,
   TTargetRow extends Row,
-> extends ColumnRelation<
+> extends ColumnRelationAbstract<
   TRow,
   TTargetRow,
   Date,
