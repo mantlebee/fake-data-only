@@ -8,6 +8,15 @@ import {
 } from "./types";
 import { ColumnDateOptions, getColumnDateValue } from "@/columns";
 
+/**
+ * Generates a random date that starts from the date picked from a target row of a different table.
+ * @param sourceColumnName Column name of the source row.
+ * @param targetColumnName Columns name of the target row.
+ * @param findTargetRow Delegate to find the target related row.
+ * @param sourceRows List of source rows.
+ * @param targetRows List of target rows.
+ * @param getOptions Column options getter.
+ */
 export function setRelationDateFromValues<
   TSourceRow extends Row,
   TTargetRow extends Row,
