@@ -3,6 +3,7 @@ import {
   Dictionary,
   KeyOf,
   List,
+  TypedKey,
   createTypedKey,
 } from "@mantlebee/ts-core";
 
@@ -102,14 +103,15 @@ export class Table<TRow extends Row> implements ITable<TRow> {
   public readonly key: TableKey<TRow>;
   public readonly name: string;
 
-  public constructor(
-    name: string,
-    columns: List<ColumnAbstract<TRow>>,
-    key = createTypedKey<TRow>()
-  ) {
+  /**
+   *
+   * @param key TypedKey, created with {@link createTableKey}. Description must be exists.
+   * @param columns List of table columns.
+   */
+  public constructor(key: TypedKey<TRow>, columns: List<ColumnAbstract<TRow>>) {
     this.columns = columns;
     this.key = key;
-    this.name = name;
+    this.name = key.description!;
   }
 
   public getRows(count: number): List<TRow> {

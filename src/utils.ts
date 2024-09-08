@@ -1,14 +1,15 @@
-import { Dictionary, Any, List, KeyOf } from "@mantlebee/ts-core";
+import { Dictionary, Any, List, KeyOf, TypedKey } from "@mantlebee/ts-core";
 import { generateRandomBoolean } from "@mantlebee/ts-random";
 
 import { ColumnOptions, Dataset, Row } from "./types";
 import { ColumnAbstract, ColumnRelationAbstract, Table } from "./models";
 
 /**
- * Default values of rows to generate.
- * It is used by the delegate {@link getDatabaseDataset} if the counts map doesn't include a key of the current table processing.
+ * Creates a typed key for the {@link Table} model.
+ * The `description` property of the key is the name of the table.
  */
-const DefaultRowsCount = 0;
+export const createTableKey = <TRow>(tableName: string) =>
+  Symbol(tableName) as TypedKey<TRow>;
 
 /**
  * Generates a database dataset using the given tables and relations.
@@ -28,7 +29,7 @@ export function getDatabaseDataset(
   const rowsMap = {} as Record<symbol, List<Any>>;
   const dataset = tables.reduce((result, current) => {
     const { key, name } = current;
-    const count = countsMap[name] || DefaultRowsCount;
+    const count = countsMap[name] || 0;
     const rows = current.getRows(count);
     result[name] = { table: current, rows };
     rowsMap[key as symbol] = rows;

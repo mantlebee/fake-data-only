@@ -1,34 +1,29 @@
-import { Any, createTypedKey, List } from "@mantlebee/ts-core";
+import { Any, List } from "@mantlebee/ts-core";
 
 import { IdColumn } from "@/columns";
 import { Database, Table } from "@/models";
 import { LookupRelationColumn } from "@/relations";
+import { createTableKey } from "@/utils";
 
-type RowTest = { id: number };
-type Category = RowTest & { name: string };
-type Product = RowTest & { name: string; category: number };
+type Category = { id: number; name: string };
+type Product = { id: number; name: string; category: number };
+const categoriesTableKey = createTableKey<Category>("categories");
+const productsTableKey = createTableKey<Product>("products");
 
 describe("models", () => {
   describe("Database", () => {
-    const categoriesTableKey = createTypedKey<Category>();
-    const productsTableKey = createTypedKey<Product>();
-    const categoriesTable = new Table<Category>(
-      "categories",
-      [new IdColumn("id")],
-      categoriesTableKey
-    );
-    const productsTable = new Table<Product>(
-      "products",
-      [
-        new IdColumn("id"),
-        new LookupRelationColumn("category", 0, categoriesTableKey, "id"),
-      ],
-      productsTableKey
-    );
+    const categoriesTable = new Table<Category>(categoriesTableKey, [
+      new IdColumn("id"),
+    ]);
+    const productsTable = new Table<Product>(productsTableKey, [
+      new IdColumn("id"),
+      new LookupRelationColumn("category", 0, categoriesTableKey, "id"),
+    ]);
     const tables: List<Table<Any>> = [productsTable, categoriesTable];
     it("generates a dataset with specific amount of rows for each table", () => {
       const database = new Database(tables);
       const dataset = database.getDataset({ categories: 5, products: 20 });
+      console.log(categoriesTable.name, productsTable.name, dataset);
       expect(dataset.categories.rows).toHaveLength(5);
       expect(dataset.products.rows).toHaveLength(20);
     });
@@ -45,7 +40,7 @@ describe("models", () => {
   });
   describe("Table", () => {
     it("generates a specific amount of rows", () => {
-      const table = new Table("products", [new IdColumn("id")]);
+      const table = new Table(productsTableKey, [new IdColumn("id")]);
       const rows = table.getRows(42);
       expect(rows).toHaveLength(42);
     });

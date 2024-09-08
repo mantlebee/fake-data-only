@@ -32,84 +32,72 @@ import {
   CustomRelationColumn,
   LookupRelationColumn,
 } from "@/relations";
-import { getDatabaseDataset, getTableRows } from "@/utils";
+import { createTableKey, getDatabaseDataset, getTableRows } from "@/utils";
 
 import { Table } from "../models";
 
-const ordersKey = createTypedKey<Order>();
-const orderProductsKey = createTypedKey<OrderProduct>();
-const productsKey = createTypedKey<Product>();
-const productCategoriesKey = createTypedKey<ProductCategory>();
+const ordersKey = createTableKey<Order>("orders");
+const orderProductsKey = createTableKey<OrderProduct>("order-products");
+const productsKey = createTableKey<Product>("products");
+const productCategoriesKey =
+  createTableKey<ProductCategory>("product-categories");
 
 //#region Products
 type Product = { categoryId: number; id: number; name: string };
-const productsTable = new Table<Product>(
-  "products",
-  [
-    new IdColumn("id"),
-    new StringColumn("name", () => ({ maxLength: 20 })),
-    new LookupRelationColumn("categoryId", 0, productCategoriesKey, "id"),
-  ],
-  productsKey
-);
+const productsTable = new Table<Product>(productsKey, [
+  new IdColumn("id"),
+  new StringColumn("name", () => ({ maxLength: 20 })),
+  new LookupRelationColumn("categoryId", 0, productCategoriesKey, "id"),
+]);
 //#endregion
 
 //#region Product Categories
 type ProductCategory = { id: number; name: string };
 const productCategoriesTable = new Table<ProductCategory>(
-  "product-categories",
-  [new IdColumn("id"), new StringColumn("name", () => ({ maxLength: 20 }))],
-  productCategoriesKey
+  productCategoriesKey,
+  [new IdColumn("id"), new StringColumn("name", () => ({ maxLength: 20 }))]
 );
 //#endregion
 
 //#region Orders
 type Order = { categoriesCount: number; id: number; productsCount: number };
-const ordersTable = new Table<Order>(
-  "orders",
-  [
-    new IdColumn("id"),
-    new CustomRelationColumn(
-      "categoriesCount",
-      0,
-      orderProductsKey,
-      (order, orderProducts, dataset) => {
-        // Product ids of the order
-        const productsIds = orderProducts
-          .filter((a) => a.orderId === order.id)
-          .map((a) => a.productId);
-        // Products of the order
-        const products = dataset[productsTable.name].rows;
-        // Categories ids list (without duplicate values)
-        const categoriesIds = new Set(
-          products
-            .filter((a) => productsIds.includes(a.id))
-            .map((a) => a.categoryId)
-        );
-        // Count of the categories of the order
-        return categoriesIds.size;
-      }
-    ),
-    new CountRelationColumn(
-      "productsCount",
-      orderProductsKey,
-      (o, p) => o.id === p.orderId
-    ),
-  ],
-  ordersKey
-);
+const ordersTable = new Table<Order>(ordersKey, [
+  new IdColumn("id"),
+  new CustomRelationColumn(
+    "categoriesCount",
+    0,
+    orderProductsKey,
+    (order, orderProducts, dataset) => {
+      // Product ids of the order
+      const productsIds = orderProducts
+        .filter((a) => a.orderId === order.id)
+        .map((a) => a.productId);
+      // Products of the order
+      const products = dataset[productsTable.name].rows;
+      // Categories ids list (without duplicate values)
+      const categoriesIds = new Set(
+        products
+          .filter((a) => productsIds.includes(a.id))
+          .map((a) => a.categoryId)
+      );
+      // Count of the categories of the order
+      return categoriesIds.size;
+    }
+  ),
+  new CountRelationColumn(
+    "productsCount",
+    orderProductsKey,
+    (o, p) => o.id === p.orderId
+  ),
+]);
 //#endregion
 
 //#region Order Products
 type OrderProduct = { orderId: number; productId: number };
-const orderProductsTable = new Table<OrderProduct>(
-  "order-products",
-  [
-    new LookupRelationColumn("orderId", 0, ordersKey, "id"),
-    new LookupRelationColumn("productId", 0, productsKey, "id"),
-  ],
-  orderProductsKey
-);
+const orderProductsTable = new Table<OrderProduct>(orderProductsKey, [
+  new LookupRelationColumn("orderId", 0, ordersKey, "id"),
+  new LookupRelationColumn("productId", 0, productsKey, "id"),
+]);
 //#endregion
 
 const tables = [
