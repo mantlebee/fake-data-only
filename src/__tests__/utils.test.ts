@@ -1,6 +1,5 @@
 import {
   Color,
-  createTypedKey,
   Dictionary,
   isBoolean,
   isDate,
@@ -32,7 +31,12 @@ import {
   CustomRelationColumn,
   LookupRelationColumn,
 } from "@/relations";
-import { createTableKey, getDatabaseDataset, getTableRows } from "@/utils";
+import {
+  createTableKey,
+  getDatabaseDataset,
+  getDatasetRows,
+  getTableRows,
+} from "@/utils";
 
 import { Table } from "../models";
 
@@ -73,7 +77,7 @@ const ordersTable = new Table<Order>(ordersKey, [
         .filter((a) => a.orderId === order.id)
         .map((a) => a.productId);
       // Products of the order
-      const products = dataset[productsTable.name].rows;
+      const products = dataset[productsTable.key];
       // Categories ids list (without duplicate values)
       const categoriesIds = new Set(
         products
@@ -120,18 +124,10 @@ describe("Table", () => {
         const dataset = getDatabaseDataset(tables, rowsNumberMap);
         const datasetValues = Object.values(dataset);
         expect(datasetValues.length).toBe(4);
-        datasetValues.forEach((datasetItem, index) => {
-          expect(datasetItem.table).toBe(tables[index]);
-          expect(datasetItem.rows.length).toBe(
-            rowsNumberMap[datasetItem.table.name]
-          );
-        });
-        const productCategories = dataset[productCategoriesTable.name]
-          .rows as List<ProductCategory>;
-        const products = dataset[productsTable.name].rows as List<Product>;
-        const orderProducts = dataset[orderProductsTable.name]
-          .rows as List<OrderProduct>;
-        const orders = dataset[ordersTable.name].rows as List<Order>;
+        const productCategories = getDatasetRows(dataset, productCategoriesKey);
+        const products = getDatasetRows(dataset, productsKey);
+        const orderProducts = getDatasetRows(dataset, orderProductsKey);
+        const orders = getDatasetRows(dataset, ordersKey);
         const categoriesIds = productCategories.map((a) => a.id);
         products.forEach((a) => {
           expect(categoriesIds).toContain(a.categoryId);

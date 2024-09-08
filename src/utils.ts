@@ -1,7 +1,7 @@
-import { Dictionary, Any, List, KeyOf, TypedKey } from "@mantlebee/ts-core";
+import { Any, List, KeyOf } from "@mantlebee/ts-core";
 import { generateRandomBoolean } from "@mantlebee/ts-random";
 
-import { ColumnOptions, Dataset, Row } from "./types";
+import { ColumnOptions, CountsMap, Dataset, Row, TableKey } from "./types";
 import { ColumnAbstract, ColumnRelationAbstract, Table } from "./models";
 
 /**
@@ -9,44 +9,47 @@ import { ColumnAbstract, ColumnRelationAbstract, Table } from "./models";
  * The `description` property of the key is the name of the table.
  */
 export const createTableKey = <TRow>(tableName: string) =>
-  Symbol(tableName) as TypedKey<TRow>;
+  Symbol(tableName) as TableKey<TRow>;
 
 /**
  * Generates a database dataset using the given tables and relations.
  * It is separated into two steps:
  *  1. it generates the table rows.
- *  2. process the relations to update the rows values.
+ *  2. process the relation columnss to update the rows values.
  * Columns of type relation of the tables are processed during the second step if and only if a relation referring that column is present. If not, the default value is not updated.
  * @param tables List of tables forming part of the database.
- * @param countsMap Dictionary with the tables counts, used to generate a specific amount of rows for each table. It is a dictionary where the keys are the tables names and the values the row counts to generate.
- * @returns the database dataset, it is a dictionary, where the keys are the tables names and the values are objects with the table instance and its generated rows.
+ * @param countsMap Dictionary with the tables counts, used to generate a specific amount of rows for each table. It is a dictionary where the keys are the tables keys and the values the row counts to generate.
+ * @returns the database dataset, it is a dictionary, where the keys are the tables names and keys, and the values are the generated rows.
  */
 export function getDatabaseDataset(
   tables: List<Table<Any>>,
-  countsMap: Dictionary<number>
+  countsMap: CountsMap
 ): Dataset {
-  // The rowsMap dictionary is populated during the dataset creation and will be used to retrieve rows for the relations
-  const rowsMap = {} as Record<symbol, List<Any>>;
   const dataset = tables.reduce((result, current) => {
     const { key, name } = current;
-    const count = countsMap[name] || 0;
+    const count = countsMap[key] || countsMap[name] || 0;
     const rows = current.getRows(count);
-    result[name] = { table: current, rows };
-    rowsMap[key as symbol] = rows;
+    result[key] = rows;
+    result[name] = rows;
     return result;
   }, {} as Dataset);
   tables.forEach((table) => {
     table.columns
       .filter((a) => a instanceof ColumnRelationAbstract)
       .forEach((column) => {
-        const sourceRows = rowsMap[table.key as symbol];
-        const targetRows = rowsMap[column.targetTableKey as symbol];
+        const sourceRows = dataset[table.key];
+        const targetRows = dataset[column.targetTableKey];
         if (sourceRows && targetRows)
           column.setValues(sourceRows, targetRows, dataset);
       });
   });
   return dataset;
 }
+
+export const getDatasetRows = <TRow extends Row>(
+  dataset: Dataset,
+  tableKey: TableKey<TRow>
+) => dataset[tableKey] as List<TRow>;
 
 /**
  * Generates rows for a table where the keys are the columns names.

@@ -1,6 +1,6 @@
-import { Any, Dictionary, KeyOf, List } from "@mantlebee/ts-core";
+import { Any, KeyOf, List } from "@mantlebee/ts-core";
 
-import { Dataset, Row } from "./types";
+import { CountsMap, Dataset, Row } from "./types";
 
 /**
  * Represents the column of a table ({@link ITable}).
@@ -48,7 +48,7 @@ export interface IColumnRelation<
 /**
  * Represents a database with its own tables ({@link ITable}) and relations {@link Relation}.
  * Its purpose is to generate the database dataset.
- * The {@link Dataset} object is a dictionary, where the keys are the tables names and the values are objects with the table instance and its generated rows.
+ * The {@link Dataset} object is a dictionary, where the keys are the tables names and the values are the generated rows.
  */
 export interface IDatabase {
   /**
@@ -56,10 +56,10 @@ export interface IDatabase {
    */
   readonly tables: List<ITable<Any>>;
   /**
-   * Generates the database dataset, it is a dictionary, where the keys are the tables names and the values are objects with the table instance and its generated rows.
+   * Generates the database dataset, it is a dictionary, where the keys are the tables names and the values are the generated rows.
    * @param countsMap Dictionary with the tables counts, used to generate a specific amount of rows for each table. It is a dictionary where the keys are the tables names and the values the row counts to generate.
    */
-  getDataset(countsMap: Dictionary<number>): Dataset;
+  getDataset(countsMap: CountsMap): Dataset;
 }
 
 /**

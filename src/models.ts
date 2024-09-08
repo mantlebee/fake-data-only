@@ -1,11 +1,4 @@
-import {
-  Any,
-  Dictionary,
-  KeyOf,
-  List,
-  TypedKey,
-  createTypedKey,
-} from "@mantlebee/ts-core";
+import { Any, KeyOf, List } from "@mantlebee/ts-core";
 
 import { IColumn, IDatabase, ITable, IColumnRelation } from "./interfaces";
 import {
@@ -13,6 +6,7 @@ import {
   Dataset,
   Row,
   ColumnOptions,
+  CountsMap,
   TableKey,
 } from "./types";
 import { getDatabaseDataset, getTableRows } from "./utils";
@@ -80,6 +74,7 @@ export abstract class ColumnRelationAbstract<
 /**
  * Implementation of {@link IDatabase}.
  * It uses the delegate {@link getDatabaseDataset} to generate the dataset.
+ * The resulting {@link Dataset} can be accessed both through the table's name and key.
  */
 export class Database implements IDatabase {
   public readonly tables: List<Table<Any>>;
@@ -88,7 +83,12 @@ export class Database implements IDatabase {
     this.tables = tables;
   }
 
-  public getDataset(countsMap: Dictionary<number>): Dataset {
+  /**
+   * Generates the database dataset, it is a dictionary, where the keys are the tables names and keys, and the values are the generated rows.
+   * @param countsMap Dictionary with the tables counts, used to generate a specific amount of rows for each table. It is a dictionary where the keys are the tables names and keys, and the values the row counts to generate.
+   * @returns a {@link Dataset} that can be accessed both through the table's name and key
+   */
+  public getDataset(countsMap: CountsMap): Dataset {
     const { tables } = this;
     return getDatabaseDataset(tables, countsMap);
   }
@@ -105,10 +105,10 @@ export class Table<TRow extends Row> implements ITable<TRow> {
 
   /**
    *
-   * @param key TypedKey, created with {@link createTableKey}. Description must be exists.
+   * @param key {@link TableKey}, created with {@link createTableKey}. Description must be exists.
    * @param columns List of table columns.
    */
-  public constructor(key: TypedKey<TRow>, columns: List<ColumnAbstract<TRow>>) {
+  public constructor(key: TableKey<TRow>, columns: List<ColumnAbstract<TRow>>) {
     this.columns = columns;
     this.key = key;
     this.name = key.description!;

@@ -24,18 +24,18 @@ describe("models", () => {
       const database = new Database(tables);
       const dataset = database.getDataset({ categories: 5, products: 20 });
       console.log(categoriesTable.name, productsTable.name, dataset);
-      expect(dataset.categories.rows).toHaveLength(5);
-      expect(dataset.products.rows).toHaveLength(20);
+      expect(dataset.categories).toHaveLength(5);
+      expect(dataset.products).toHaveLength(20);
     });
     it("generates 0 rows for a table not defined in the countsMap", () => {
       const database = new Database(tables);
       const dataset = database.getDataset({ categories: 5 });
-      expect(dataset.products.rows).toHaveLength(0);
+      expect(dataset.products).toHaveLength(0);
     });
     it("updates the relation columns values if there are relation columns", () => {
       const database = new Database(tables);
       const dataset = database.getDataset({ categories: 5, products: 20 });
-      expect(dataset.products.rows.every((a) => a.category !== 0)).toBeTruthy();
+      expect(dataset.products.every((a) => a.category !== 0)).toBeTruthy();
     });
   });
   describe("Table", () => {

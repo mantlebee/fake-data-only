@@ -18,14 +18,20 @@ export type ColumnOptionsGetter<
 > = (row: TRow, ...args: Any) => TOptions;
 
 /**
- * Database ({@link IDatabase}) dataset. It is a dictionary where the key is the table ({@link ITable}) name and the value the table rows generated.
+ * Define a map of table name (or key) and amount of rows to generate.
+ * It is used by {@link Database} to know how many rows to generate for each table.
+ */
+export type CountsMap = Record<string | symbol, number>;
+
+/**
+ * Database ({@link IDatabase}) dataset. It is a dictionary where the key is the table ({@link ITable}) name (or key) and the value the table rows generated.
  * Like the {@link Row} type, this type is defined to simplify return types.
  */
-export type Dataset = Dictionary<{ table: ITable<Row>; rows: List<Row> }>;
+export type Dataset = Record<string | symbol, List<Row>>;
 
 /**
  * The Row type is only defined to simplified the used of generic type TRow when it is passed between different entities.
  */
 export type Row = Dictionary<Any>;
 
-export type TableKey<TRow> = TypedKey<TRow>;
+export type TableKey<TRow> = symbol & TypedKey<TRow>;
