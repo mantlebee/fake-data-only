@@ -217,7 +217,7 @@ describe("Table", () => {
             })),
             new ColumnBoolean<Row>("active"),
             new ColumnDate<Row>("registered"),
-            new ColumnDate<Row>("expires", (a) => ({ dateFrom: a.registered })),
+            new ColumnDate<Row>("expires", (a) => ({ from: a.registered })),
             new ColumnEnum<Row, RowType>("type", Object(RowType)),
             new ColumnColor<Row>("color"),
             new ColumnNumber<Row>("scoreMax", () => ({ max: 100 })),

@@ -15,8 +15,8 @@ describe("ColumnDate", () => {
     describe("ColumnDate", () => {
       it("Generates a random date, using startFrom e startTo from passed row", () => {
         const dependantColumn = new ColumnDate<RowTest>("dateFrom", (a) => ({
-          dateFrom: a.dateFrom,
-          dateTo: a.dateTo,
+          from: a.dateFrom,
+          to: a.dateTo,
         }));
         const random = dependantColumn.getValue(row);
         expect(random.getTime()).toBeGreaterThanOrEqual(row.dateFrom.getTime());
