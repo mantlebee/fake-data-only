@@ -1,8 +1,9 @@
 import { Any, List, KeyOf } from "@mantlebee/ts-core";
 import { generateRandomBoolean } from "@mantlebee/ts-random";
 
-import { ColumnOptions, CountsMap, Dataset, Row, TableKey } from "./types";
+import { ColumnOptions, RowsCountsMap, Dataset, Row, TableKey } from "./types";
 import { ColumnAbstract, ColumnRelationAbstract, Table } from "./models";
+import { ITable } from "./interfaces";
 
 /**
  * Creates a typed key for the {@link Table} model.
@@ -18,16 +19,16 @@ export const createTableKey = <TRow>(tableName: string) =>
  *  2. process the relation columnss to update the rows values.
  * Columns of type relation of the tables are processed during the second step if and only if a relation referring that column is present. If not, the default value is not updated.
  * @param tables List of tables forming part of the database.
- * @param countsMap Dictionary with the tables counts, used to generate a specific amount of rows for each table. It is a dictionary where the keys are the tables keys and the values the row counts to generate.
- * @returns the database dataset, it is a dictionary, where the keys are the tables names and keys, and the values are the generated rows.
+ * @param rowsCountsMap Dictionary with the tables counts, used to generate a specific amount of rows for each table. It is a dictionary where the keys are the tables keys and the values the row counts to generate.
+ * @returns the database dataset, it is a dictionary, where the keys are the tables' keys, and the values are the generated rows.
  */
 export function getDatabaseDataset(
-  tables: List<Table<Any>>,
-  countsMap: CountsMap
+  tables: List<ITable<Row>>,
+  rowsCountsMap: RowsCountsMap
 ): Dataset {
   const dataset = tables.reduce((result, current) => {
     const key = current.getKey();
-    const count = countsMap[key] || 0;
+    const count = rowsCountsMap[key] || 0;
     current.seed(count);
     const rows = current.getRows();
     result[key] = rows;

@@ -6,7 +6,7 @@ import {
   Dataset,
   Row,
   ColumnOptions,
-  CountsMap,
+  RowsCountsMap,
   TableKey,
 } from "./types";
 import { getDatabaseDataset, getTableRows } from "./utils";
@@ -77,20 +77,29 @@ export abstract class ColumnRelationAbstract<
  * The resulting {@link Dataset} can be accessed both through the table's name and key.
  */
 export class Database implements IDatabase {
-  public readonly tables: List<Table<Any>>;
+  private _dataset: Dataset = {};
+  private _tables: List<ITable<Any>>;
 
-  public constructor(tables: List<Table<Any>>) {
-    this.tables = tables;
+  public constructor(tables: List<ITable<Any>>) {
+    this._tables = tables;
+  }
+
+  public getTable<TRow extends Row>(tableKey: TableKey<TRow>): ITable<TRow> {
+    return this._tables.find((a) => a.getKey() === tableKey)!;
   }
 
   /**
-   * Generates the database dataset, it is a dictionary, where the keys are the tables names and keys, and the values are the generated rows.
-   * @param countsMap Dictionary with the tables counts, used to generate a specific amount of rows for each table. It is a dictionary where the keys are the tables names and keys, and the values the row counts to generate.
-   * @returns a {@link Dataset} that can be accessed both through the table's name and key
+   * Generates the database dataset, it is a dictionary, where the keys are the tables' keys, and the values are the generated rows.
+   * @param rowsCountsMap Dictionary with the tables counts, used to generate a specific amount of rows for each table. It is a dictionary where the keys are the tables' keys, and the values the row counts to generate.
+   * @returns the database instance. Useful to concatenate operations.
    */
-  public getDataset(countsMap: CountsMap): Dataset {
-    const { tables } = this;
-    return getDatabaseDataset(tables, countsMap);
+  public seed(rowsCountsMap: RowsCountsMap): IDatabase {
+    this._dataset = getDatabaseDataset(this._tables, rowsCountsMap);
+    return this;
+  }
+
+  public toJSON(): Dataset {
+    return this._dataset;
   }
 }
 
@@ -113,7 +122,7 @@ export class Table<TRow extends Row> implements ITable<TRow> {
     this._key = key;
   }
 
-  public getColumns(): List<IColumn<TRow, any>> {
+  public getColumns(): List<IColumn<TRow>> {
     return this._columns;
   }
   public getKey(): TableKey<TRow> {

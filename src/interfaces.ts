@@ -1,6 +1,6 @@
 import { Any, KeyOf, List } from "@mantlebee/ts-core";
 
-import { CountsMap, Dataset, Row, TableKey } from "./types";
+import { RowsCountsMap, Dataset, Row, TableKey } from "./types";
 
 /**
  * Represents the column of a table ({@link ITable}).
@@ -46,20 +46,14 @@ export interface IColumnRelation<
 }
 
 /**
- * Represents a database with its own tables ({@link ITable}) and relations {@link Relation}.
- * Its purpose is to generate the database dataset.
- * The {@link Dataset} object is a dictionary, where the keys are the tables names and the values are the generated rows.
+ * Represents a database with its own tables ({@link ITable}).
+ * Its purpose is to generate the table's rows, if needed, and to convert the result into a JSON or a more human-readable.
+ * The {@link Dataset} object is a dictionary, where the keys are the tables' keys and the values are the generated rows.
  */
 export interface IDatabase {
-  /**
-   * List of tables that must be used to generate rows.
-   */
-  readonly tables: List<ITable<Any>>;
-  /**
-   * Generates the database dataset, it is a dictionary, where the keys are the tables names and the values are the generated rows.
-   * @param countsMap Dictionary with the tables counts, used to generate a specific amount of rows for each table. It is a dictionary where the keys are the tables names and the values the row counts to generate.
-   */
-  getDataset(countsMap: CountsMap): Dataset;
+  getTable<TRow extends Row>(tableKey: TableKey<TRow>): ITable<TRow>;
+  seed(rowsCountMap: RowsCountsMap): IDatabase;
+  toJSON(): Dataset;
 }
 
 /**
@@ -84,6 +78,7 @@ export interface ITable<TRow extends Row> {
   /**
    * Generates a specific amount of rows.
    * @param rowsCount Number of rows to generate.
+   * @returns the table instance. Useful to concatenate operations.
    */
   seed(rowsCount: number): ITable<TRow>;
 }

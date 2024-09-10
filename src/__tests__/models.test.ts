@@ -21,25 +21,28 @@ describe("models", () => {
     ]);
     const tables: List<Table<Any>> = [productsTable, categoriesTable];
     it("generates a dataset with specific amount of rows for each table", () => {
-      const database = new Database(tables);
-      const dataset = database.getDataset({
-        [categoriesTableKey]: 5,
-        [productsTableKey]: 20,
-      });
+      const dataset = new Database(tables)
+        .seed({
+          [categoriesTableKey]: 5,
+          [productsTableKey]: 20,
+        })
+        .toJSON();
       expect(dataset[categoriesTableKey]).toHaveLength(5);
       expect(dataset[productsTableKey]).toHaveLength(20);
     });
     it("generates 0 rows for a table not defined in the countsMap", () => {
-      const database = new Database(tables);
-      const dataset = database.getDataset({ [categoriesTableKey]: 5 });
+      const dataset = new Database(tables)
+        .seed({ [categoriesTableKey]: 5 })
+        .toJSON();
       expect(dataset[productsTableKey]).toHaveLength(0);
     });
     it("updates the relation columns values if there are relation columns", () => {
-      const database = new Database(tables);
-      const dataset = database.getDataset({
-        [categoriesTableKey]: 5,
-        [productsTableKey]: 20,
-      });
+      const dataset = new Database(tables)
+        .seed({
+          [categoriesTableKey]: 5,
+          [productsTableKey]: 20,
+        })
+        .toJSON();
       expect(
         dataset[productsTableKey].every((a) => a.category !== 0)
       ).toBeTruthy();
@@ -47,14 +50,13 @@ describe("models", () => {
   });
   describe("Table", () => {
     it("has no rows, on create", () => {
-      const table = new Table(productsTableKey, [new IdColumn("id")]);
-      const rows = table.getRows();
+      const rows = new Table(productsTableKey, [new IdColumn("id")]).getRows();
       expect(rows).toHaveLength(0);
     });
     it("generates a specific amount of rows", () => {
-      const table = new Table(productsTableKey, [new IdColumn("id")]);
-      table.seed(42);
-      const rows = table.getRows();
+      const rows = new Table(productsTableKey, [new IdColumn("id")])
+        .seed(42)
+        .getRows();
       expect(rows).toHaveLength(42);
     });
   });

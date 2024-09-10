@@ -1,4 +1,5 @@
 import {
+  Any,
   Color,
   Dictionary,
   isBoolean,
@@ -39,6 +40,8 @@ import {
 } from "@/utils";
 
 import { Table } from "../models";
+import { ITable } from "@/interfaces";
+import { Row } from "@/types";
 
 const ordersKey = createTableKey<Order>("orders");
 const orderProductsKey = createTableKey<OrderProduct>("order-products");
@@ -47,7 +50,7 @@ const productCategoriesKey =
   createTableKey<ProductCategory>("product-categories");
 
 //#region Products
-type Product = { categoryId: number; id: number; name: string };
+type Product = Row & { categoryId: number; id: number; name: string };
 const productsTable = new Table<Product>(productsKey, [
   new IdColumn("id"),
   new StringColumn("name", () => ({ maxLength: 20 })),
@@ -56,7 +59,7 @@ const productsTable = new Table<Product>(productsKey, [
 //#endregion
 
 //#region Product Categories
-type ProductCategory = { id: number; name: string };
+type ProductCategory = Row & { id: number; name: string };
 const productCategoriesTable = new Table<ProductCategory>(
   productCategoriesKey,
   [new IdColumn("id"), new StringColumn("name", () => ({ maxLength: 20 }))]
@@ -64,7 +67,11 @@ const productCategoriesTable = new Table<ProductCategory>(
 //#endregion
 
 //#region Orders
-type Order = { categoriesCount: number; id: number; productsCount: number };
+type Order = Row & {
+  categoriesCount: number;
+  id: number;
+  productsCount: number;
+};
 const ordersTable = new Table<Order>(ordersKey, [
   new IdColumn("id"),
   new CustomRelationColumn(
@@ -97,14 +104,14 @@ const ordersTable = new Table<Order>(ordersKey, [
 //#endregion
 
 //#region Order Products
-type OrderProduct = { orderId: number; productId: number };
+type OrderProduct = Row & { orderId: number; productId: number };
 const orderProductsTable = new Table<OrderProduct>(orderProductsKey, [
   new LookupRelationColumn("orderId", 0, ordersKey, "id"),
   new LookupRelationColumn("productId", 0, productsKey, "id"),
 ]);
 //#endregion
 
-const tables = [
+const tables: List<ITable<Any>> = [
   productCategoriesTable,
   productsTable,
   orderProductsTable,
