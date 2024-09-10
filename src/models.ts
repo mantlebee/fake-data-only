@@ -99,9 +99,9 @@ export class Database implements IDatabase {
  * It uses the delegate {@link getTableRows} to generate the rows.
  */
 export class Table<TRow extends Row> implements ITable<TRow> {
-  public readonly columns: List<ColumnAbstract<TRow>>;
-  public readonly key: TableKey<TRow>;
-  public readonly name: string;
+  private _columns: List<ColumnAbstract<TRow>>;
+  private _key: TableKey<TRow>;
+  private _rows: List<TRow> = [];
 
   /**
    *
@@ -109,13 +109,22 @@ export class Table<TRow extends Row> implements ITable<TRow> {
    * @param columns List of table columns.
    */
   public constructor(key: TableKey<TRow>, columns: List<ColumnAbstract<TRow>>) {
-    this.columns = columns;
-    this.key = key;
-    this.name = key.description!;
+    this._columns = columns;
+    this._key = key;
   }
 
-  public getRows(count: number): List<TRow> {
-    const { columns } = this;
-    return getTableRows(columns, count);
+  public getColumns(): List<IColumn<TRow, any>> {
+    return this._columns;
+  }
+  public getKey(): TableKey<TRow> {
+    return this._key;
+  }
+  public getRows(): List<TRow> {
+    return this._rows;
+  }
+
+  public seed(rowsCount: number): ITable<TRow> {
+    this._rows = getTableRows(this._columns, rowsCount);
+    return this;
   }
 }

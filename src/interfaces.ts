@@ -1,6 +1,6 @@
 import { Any, KeyOf, List } from "@mantlebee/ts-core";
 
-import { CountsMap, Dataset, Row } from "./types";
+import { CountsMap, Dataset, Row, TableKey } from "./types";
 
 /**
  * Represents the column of a table ({@link ITable}).
@@ -69,16 +69,21 @@ export interface IDatabase {
  */
 export interface ITable<TRow extends Row> {
   /**
-   * The table's columns used to generate values for the rows.
+   * Return the table's columns used to generate values for the rows.
    */
-  readonly columns: List<IColumn<TRow>>;
+  getColumns(): List<IColumn<TRow>>;
   /**
-   * Table's name.
+   * Return the table's key.
    */
-  readonly name: string;
+  getKey(): TableKey<TRow>;
+  /**
+   * Returns the tables rows.
+   * Returns an empty list, if {@link seed} hasn't be called, first.
+   */
+  getRows(): List<TRow>;
   /**
    * Generates a specific amount of rows.
-   * @param count Number of rows to generate.
+   * @param rowsCount Number of rows to generate.
    */
-  getRows(count: number): List<TRow>;
+  seed(rowsCount: number): ITable<TRow>;
 }

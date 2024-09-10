@@ -77,7 +77,7 @@ const ordersTable = new Table<Order>(ordersKey, [
         .filter((a) => a.orderId === order.id)
         .map((a) => a.productId);
       // Products of the order
-      const products = dataset[productsTable.key];
+      const products = dataset[productsKey];
       // Categories ids list (without duplicate values)
       const categoriesIds = new Set(
         products
@@ -116,14 +116,13 @@ describe("Table", () => {
     describe("getDatabaseDataset", () => {
       it("Generates a map where the keys are the tables names and the values the generated rows.", () => {
         const rowsNumberMap: Dictionary<number> = {
-          [productCategoriesTable.name]: 10,
-          [productsTable.name]: 50,
-          [orderProductsTable.name]: 5,
-          [ordersTable.name]: 1,
+          [productCategoriesKey]: 10,
+          [productsKey]: 50,
+          [orderProductsKey]: 5,
+          [ordersKey]: 1,
         };
         const dataset = getDatabaseDataset(tables, rowsNumberMap);
-        const datasetValues = Object.values(dataset);
-        expect(datasetValues.length).toBe(4);
+        expect(Object.keys(dataset)).toHaveLength(4);
         const productCategories = getDatasetRows(dataset, productCategoriesKey);
         const products = getDatasetRows(dataset, productsKey);
         const orderProducts = getDatasetRows(dataset, orderProductsKey);

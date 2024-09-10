@@ -34,4 +34,5 @@ export type Dataset = Record<string | symbol, List<Row>>;
  */
 export type Row = Dictionary<Any>;
 
-export type TableKey<TRow> = symbol & TypedKey<TRow>;
+export type TableKey<TRow> = symbol &
+  TypedKey<TRow> & { readonly description: string };
