@@ -83,6 +83,9 @@ export class Database implements IDatabase {
     this._tables = tables;
   }
 
+  public getDataset(): Dataset {
+    return this._dataset;
+  }
   public getTable<TRow>(tableKey: TableKey<TRow>): ITable<TRow> {
     return this._tables.find((a) => a.getKey() === tableKey)!;
   }
@@ -95,10 +98,6 @@ export class Database implements IDatabase {
   public seed(rowsCountsMap: RowsCountsMap): IDatabase {
     this._dataset = getDatabaseDataset(this._tables, rowsCountsMap);
     return this;
-  }
-
-  public toJSON(): Dataset {
-    return this._dataset;
   }
 }
 

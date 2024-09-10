@@ -48,9 +48,9 @@ export interface IColumnRelation<TRow, TTargetRow, TValue = Any>
  * The {@link Dataset} object is a dictionary, where the keys are the tables' keys and the values are the generated rows.
  */
 export interface IDatabase {
+  getDataset(): Dataset;
   getTable<TRow>(tableKey: TableKey<TRow>): ITable<TRow>;
   seed(rowsCountMap: RowsCountsMap): IDatabase;
-  toJSON(): Dataset;
 }
 
 /**
