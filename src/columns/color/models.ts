@@ -2,7 +2,6 @@ import { IColor } from "@mantlebee/ts-core";
 import { generateRandomColor } from "@mantlebee/ts-random";
 
 import { ColumnAbstract } from "@/models";
-import { Row } from "@/types";
 
 import { ColorColumnOptions } from "./types";
 
@@ -11,7 +10,7 @@ import { ColorColumnOptions } from "./types";
  * It is possible restrict the color generation giving a range defined by options `from` and `to`.
  * It is possible to choose if the color could be partially transparent, using the `transparent` option. In this case, the opacity level is generated randomly.
  */
-export class ColorColumn<TRow extends Row> extends ColumnAbstract<
+export class ColorColumn<TRow> extends ColumnAbstract<
   TRow,
   IColor,
   ColorColumnOptions

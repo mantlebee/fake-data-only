@@ -4,7 +4,6 @@ import { IColumn, IDatabase, ITable, IColumnRelation } from "./interfaces";
 import {
   ColumnOptionsGetter,
   Dataset,
-  Row,
   ColumnOptions,
   RowsCountsMap,
   TableKey,
@@ -15,7 +14,7 @@ import { getDatabaseDataset, getTableRows } from "./utils";
  * Abstract implementation of {@link IColumn}.
  */
 export abstract class ColumnAbstract<
-  TRow extends Row,
+  TRow,
   TValue = Any,
   TOptions extends ColumnOptions = ColumnOptions,
 > implements IColumn<TRow, TValue>
@@ -38,8 +37,8 @@ export abstract class ColumnAbstract<
  * Abstract implementation of {@link IColumnRelation}
  */
 export abstract class ColumnRelationAbstract<
-    TRow extends Row,
-    TTargetRow extends Row,
+    TRow,
+    TTargetRow,
     TValue = Any,
     TOptions extends ColumnOptions = ColumnOptions,
   >
@@ -84,7 +83,7 @@ export class Database implements IDatabase {
     this._tables = tables;
   }
 
-  public getTable<TRow extends Row>(tableKey: TableKey<TRow>): ITable<TRow> {
+  public getTable<TRow>(tableKey: TableKey<TRow>): ITable<TRow> {
     return this._tables.find((a) => a.getKey() === tableKey)!;
   }
 
@@ -107,7 +106,7 @@ export class Database implements IDatabase {
  * Implementation of {@link ITable}.
  * It uses the delegate {@link getTableRows} to generate the rows.
  */
-export class Table<TRow extends Row> implements ITable<TRow> {
+export class Table<TRow> implements ITable<TRow> {
   private _columns: List<ColumnAbstract<TRow>>;
   private _key: TableKey<TRow>;
   private _rows: List<TRow> = [];

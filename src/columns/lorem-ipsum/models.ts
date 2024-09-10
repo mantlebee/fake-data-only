@@ -1,10 +1,9 @@
 import { ColumnAbstract } from "@/models";
-import { Row } from "@/types";
 
 import { LoremIpsumColumnOptions } from "./types";
 import { getLoremIpsumColumnValue } from "./utils";
 
-export class LoremIpsumColumn<TRow extends Row> extends ColumnAbstract<
+export class LoremIpsumColumn<TRow> extends ColumnAbstract<
   TRow,
   string,
   LoremIpsumColumnOptions

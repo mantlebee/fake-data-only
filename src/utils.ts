@@ -1,7 +1,7 @@
 import { Any, List, KeyOf } from "@mantlebee/ts-core";
 import { generateRandomBoolean } from "@mantlebee/ts-random";
 
-import { ColumnOptions, RowsCountsMap, Dataset, Row, TableKey } from "./types";
+import { ColumnOptions, RowsCountsMap, Dataset, TableKey } from "./types";
 import { ColumnAbstract, ColumnRelationAbstract, Table } from "./models";
 import { ITable } from "./interfaces";
 
@@ -23,7 +23,7 @@ export const createTableKey = <TRow>(tableName: string) =>
  * @returns the database dataset, it is a dictionary, where the keys are the tables' keys, and the values are the generated rows.
  */
 export function getDatabaseDataset(
-  tables: List<ITable<Row>>,
+  tables: List<ITable<Any>>,
   rowsCountsMap: RowsCountsMap
 ): Dataset {
   const dataset = tables.reduce((result, current) => {
@@ -49,7 +49,7 @@ export function getDatabaseDataset(
   return dataset;
 }
 
-export const getDatasetRows = <TRow extends Row>(
+export const getDatasetRows = <TRow>(
   dataset: Dataset,
   tableKey: TableKey<TRow>
 ) => dataset[tableKey] as List<TRow>;
@@ -61,7 +61,7 @@ export const getDatasetRows = <TRow extends Row>(
  * @param rowsCount Number of rows to generated.
  * @returns Rows generated where the keys are the columns names.
  */
-export function getTableRows<TRow extends Row>(
+export function getTableRows<TRow>(
   columns: List<ColumnAbstract<TRow, Any>>,
   rowsCount: number
 ): List<TRow> {
@@ -84,7 +84,7 @@ export function getTableRows<TRow extends Row>(
  * @param column Column processing during the table rows generation.
  * @returns A boolean value indicating if to generate a value for the current column or to set the `null` value.
  */
-function shouldBeNull<TRow extends Row>(
+function shouldBeNull<TRow>(
   column: ColumnAbstract<TRow>,
   options: ColumnOptions
 ): boolean {

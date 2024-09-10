@@ -1,6 +1,6 @@
 import { Any, KeyOf, List } from "@mantlebee/ts-core";
 
-import { RowsCountsMap, Dataset, Row, TableKey } from "./types";
+import { RowsCountsMap, Dataset, TableKey } from "./types";
 
 /**
  * Represents the column of a table ({@link ITable}).
@@ -8,7 +8,7 @@ import { RowsCountsMap, Dataset, Row, TableKey } from "./types";
  * @typeParam TRow - Type of the row.
  * @typeParam TValue - Type of the column's value.
  */
-export interface IColumn<TRow extends Row, TValue = Any> {
+export interface IColumn<TRow, TValue = Any> {
   /**
    * Column's name. It must be unique for a {@link ITable}.
    */
@@ -27,11 +27,8 @@ export interface IColumn<TRow extends Row, TValue = Any> {
  * @typeParam TTargetRow - Type of the row of the related table.
  * @typeParam TValue - Type of the column's value.
  */
-export interface IColumnRelation<
-  TRow extends Row,
-  TTargetRow extends Row,
-  TValue = Any,
-> extends IColumn<TRow, TValue> {
+export interface IColumnRelation<TRow, TTargetRow, TValue = Any>
+  extends IColumn<TRow, TValue> {
   /**
    * Update source table rows using a target table rows or the entire dataset.
    * @param sourceRows List of rows to update of the source table.
@@ -51,7 +48,7 @@ export interface IColumnRelation<
  * The {@link Dataset} object is a dictionary, where the keys are the tables' keys and the values are the generated rows.
  */
 export interface IDatabase {
-  getTable<TRow extends Row>(tableKey: TableKey<TRow>): ITable<TRow>;
+  getTable<TRow>(tableKey: TableKey<TRow>): ITable<TRow>;
   seed(rowsCountMap: RowsCountsMap): IDatabase;
   toJSON(): Dataset;
 }
@@ -61,7 +58,7 @@ export interface IDatabase {
  * Its purpose is to generate rows.
  * @typeParam TRow - Type of the row.
  */
-export interface ITable<TRow extends Row> {
+export interface ITable<TRow> {
   /**
    * Return the table's columns used to generate values for the rows.
    */

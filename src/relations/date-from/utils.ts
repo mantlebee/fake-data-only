@@ -1,12 +1,12 @@
 import { KeyOf, List } from "@mantlebee/ts-core";
 
-import { ColumnOptionsGetter, Row } from "@/types";
+import { DateColumnOptions, getDateColumnValue } from "@/columns";
+import { ColumnOptionsGetter } from "@/types";
 
 import {
   DateFromRelationColumnOptions,
   RelationDateFromCondition,
 } from "./types";
-import { DateColumnOptions, getDateColumnValue } from "@/columns";
 
 /**
  * Generates a random date that starts from the date picked from a target row of a different table.
@@ -17,10 +17,7 @@ import { DateColumnOptions, getDateColumnValue } from "@/columns";
  * @param targetRows List of target rows.
  * @param getOptions Column options getter.
  */
-export function setRelationDateFromValues<
-  TSourceRow extends Row,
-  TTargetRow extends Row,
->(
+export function setRelationDateFromValues<TSourceRow, TTargetRow>(
   sourceColumnName: KeyOf<TSourceRow>,
   targetColumnName: KeyOf<TTargetRow>,
   findTargetRow: RelationDateFromCondition<TSourceRow, TTargetRow>,

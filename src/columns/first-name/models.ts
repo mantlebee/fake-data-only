@@ -1,5 +1,4 @@
 import { ColumnAbstract } from "@/models";
-import { Row } from "@/types";
 
 import { FirstNameColumnOptions } from "./types";
 import { getFirstNameColumnValue } from "./utils";
@@ -8,7 +7,7 @@ import { getFirstNameColumnValue } from "./utils";
  * Generates a random male or female american first name.
  * It is possible to restrict the gender of the name to generate, using the options.
  */
-export class FirstNameColumn<TRow extends Row> extends ColumnAbstract<
+export class FirstNameColumn<TRow> extends ColumnAbstract<
   TRow,
   string,
   FirstNameColumnOptions

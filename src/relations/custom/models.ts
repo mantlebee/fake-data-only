@@ -1,20 +1,14 @@
 import { Any, KeyOf, List } from "@mantlebee/ts-core";
 
 import { ColumnRelationAbstract } from "@/models";
-import {
-  ColumnOptions,
-  ColumnOptionsGetter,
-  Dataset,
-  Row,
-  TableKey,
-} from "@/types";
+import { ColumnOptions, ColumnOptionsGetter, Dataset, TableKey } from "@/types";
 
 import { RelationCustomValueGetter } from "./types";
 import { setRelationCustomValues } from "./utils";
 
 export class CustomRelationColumn<
-  TRow extends Row,
-  TTargetRow extends Row,
+  TRow,
+  TTargetRow,
   TValue = Any,
   TOptions extends ColumnOptions = ColumnOptions,
 > extends ColumnRelationAbstract<TRow, TTargetRow, TValue, TOptions> {

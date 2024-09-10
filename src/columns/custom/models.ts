@@ -1,15 +1,11 @@
 import { KeyOf } from "@mantlebee/ts-core";
 
 import { ColumnAbstract } from "@/models";
-import { Row } from "@/types";
 
 /**
  * Generic column. Generates a value using a delegate passed to the constructor.
  */
-export class CustomColumn<TRow extends Row, TValue> extends ColumnAbstract<
-  TRow,
-  TValue
-> {
+export class CustomColumn<TRow, TValue> extends ColumnAbstract<TRow, TValue> {
   /**
    * Delegate used to generate the value.
    * The row passed as param has the values of the previous columns already processed.

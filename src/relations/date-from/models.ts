@@ -1,7 +1,7 @@
 import { KeyOf, List } from "@mantlebee/ts-core";
 
 import { ColumnRelationAbstract } from "@/models";
-import { Row, TableKey } from "@/types";
+import { TableKey } from "@/types";
 
 import {
   DateFromRelationColumnOptions,
@@ -17,8 +17,8 @@ import { setRelationDateFromValues } from "./utils";
  * specifing a `to` option, to limit the right-range.
  */
 export class DateFromRelationColumn<
-  TRow extends Row,
-  TTargetRow extends Row,
+  TRow,
+  TTargetRow,
 > extends ColumnRelationAbstract<
   TRow,
   TTargetRow,

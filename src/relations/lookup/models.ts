@@ -1,13 +1,13 @@
 import { Any, KeyOf, List } from "@mantlebee/ts-core";
 
 import { ColumnRelationAbstract } from "@/models";
-import { ColumnOptions, ColumnOptionsGetter, Row, TableKey } from "@/types";
+import { ColumnOptions, ColumnOptionsGetter, TableKey } from "@/types";
 
 import { setRelationLookupValues } from "./utils";
 
 export class LookupRelationColumn<
-  TRow extends Row,
-  TTargetRow extends Row,
+  TRow,
+  TTargetRow,
   TValue = Any,
   TOptions extends ColumnOptions = ColumnOptions,
 > extends ColumnRelationAbstract<TRow, TTargetRow, TValue, TOptions> {

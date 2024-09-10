@@ -1,12 +1,8 @@
 import { List } from "@mantlebee/ts-core";
 
-import { Dataset, Row } from "@/types";
+import { Dataset } from "@/types";
 
-export type RelationCustomValueGetter<
-  TSourceRow extends Row,
-  TTargetRow extends Row,
-  TValue,
-> = (
+export type RelationCustomValueGetter<TSourceRow, TTargetRow, TValue> = (
   sourceRow: TSourceRow,
   targetRows: List<TTargetRow>,
   dataset: Dataset

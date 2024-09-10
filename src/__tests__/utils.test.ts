@@ -27,6 +27,7 @@ import {
   PatternColumn,
   StringColumn,
 } from "@/columns";
+import { ITable } from "@/interfaces";
 import {
   CountRelationColumn,
   CustomRelationColumn,
@@ -40,8 +41,6 @@ import {
 } from "@/utils";
 
 import { Table } from "../models";
-import { ITable } from "@/interfaces";
-import { Row } from "@/types";
 
 const ordersKey = createTableKey<Order>("orders");
 const orderProductsKey = createTableKey<OrderProduct>("order-products");
@@ -50,7 +49,7 @@ const productCategoriesKey =
   createTableKey<ProductCategory>("product-categories");
 
 //#region Products
-type Product = Row & { categoryId: number; id: number; name: string };
+type Product = { categoryId: number; id: number; name: string };
 const productsTable = new Table<Product>(productsKey, [
   new IdColumn("id"),
   new StringColumn("name", () => ({ maxLength: 20 })),
@@ -59,7 +58,7 @@ const productsTable = new Table<Product>(productsKey, [
 //#endregion
 
 //#region Product Categories
-type ProductCategory = Row & { id: number; name: string };
+type ProductCategory = { id: number; name: string };
 const productCategoriesTable = new Table<ProductCategory>(
   productCategoriesKey,
   [new IdColumn("id"), new StringColumn("name", () => ({ maxLength: 20 }))]
@@ -67,7 +66,7 @@ const productCategoriesTable = new Table<ProductCategory>(
 //#endregion
 
 //#region Orders
-type Order = Row & {
+type Order = {
   categoriesCount: number;
   id: number;
   productsCount: number;
@@ -104,7 +103,7 @@ const ordersTable = new Table<Order>(ordersKey, [
 //#endregion
 
 //#region Order Products
-type OrderProduct = Row & { orderId: number; productId: number };
+type OrderProduct = { orderId: number; productId: number };
 const orderProductsTable = new Table<OrderProduct>(orderProductsKey, [
   new LookupRelationColumn("orderId", 0, ordersKey, "id"),
   new LookupRelationColumn("productId", 0, productsKey, "id"),
@@ -152,9 +151,9 @@ describe("Table", () => {
     describe("getTableRows", () => {
       it("Generates 5 rows of {name: string}", () => {
         type Row = { name: string };
-        const rows = getTableRows<Row>(
+        const rows = getTableRows<Any>(
           [
-            new StringColumn<Row>("name", () => ({
+            new StringColumn<Any>("name", () => ({
               maxLength: 12,
               minLength: 4,
             })),
@@ -191,29 +190,29 @@ describe("Table", () => {
           username: string;
           description: string;
         };
-        const rows = getTableRows<Row>(
+        const rows = getTableRows<Any>(
           [
-            new IdColumn<Row>("id"),
-            new FirstNameColumn<Row>("name"),
-            new LastNameColumn<Row>("surname"),
-            new CustomColumn<Row, string>(
+            new IdColumn<Any>("id"),
+            new FirstNameColumn<Any>("name"),
+            new LastNameColumn<Any>("surname"),
+            new CustomColumn<Any, string>(
               "fullname",
               (a) => `${a.name} ${a.surname}`
             ),
-            new NumberColumn<Row>("age", () => ({ max: 90, nullable: true })),
-            new EmailColumn<Row>("email", (a) => ({
+            new NumberColumn<Any>("age", () => ({ max: 90, nullable: true })),
+            new EmailColumn<Any>("email", (a) => ({
               firstNames: [a.name],
               lastNames: [a.surname],
             })),
-            new BooleanColumn<Row>("active"),
-            new DateColumn<Row>("registered"),
-            new DateColumn<Row>("expires", (a) => ({ from: a.registered })),
-            new EnumColumn<Row, RowType>("type", Object(RowType)),
-            new ColorColumn<Row>("color"),
-            new NumberColumn<Row>("scoreMax", () => ({ max: 100 })),
-            new NumberColumn<Row>("score", (a) => ({ max: a.scoreMax })),
-            new PatternColumn<Row>("phone", "+000-00000"),
-            new PatternColumn<Row>("username", "a{8,12}"),
+            new BooleanColumn<Any>("active"),
+            new DateColumn<Any>("registered"),
+            new DateColumn<Any>("expires", (a) => ({ from: a.registered })),
+            new EnumColumn<Any, RowType>("type", Object(RowType)),
+            new ColorColumn<Any>("color"),
+            new NumberColumn<Any>("scoreMax", () => ({ max: 100 })),
+            new NumberColumn<Any>("score", (a) => ({ max: a.scoreMax })),
+            new PatternColumn<Any>("phone", "+000-00000"),
+            new PatternColumn<Any>("username", "a{8,12}"),
             new LoremIpsumColumn("description", () => ({
               nullable: true,
               paragraphs: { max: 5, min: 5 },
@@ -222,7 +221,7 @@ describe("Table", () => {
           100
         );
         expect(rows.length).toBe(100);
-        let lastRow: Nullable<Row> = null;
+        let lastRow: Nullable<Any> = null;
         rows.forEach((a) => {
           if (lastRow) expect(a.id).toBe(lastRow.id + 1);
           expect(isNumber(a.id)).toBeTruthy();

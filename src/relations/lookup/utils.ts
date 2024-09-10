@@ -1,8 +1,6 @@
 import { KeyOf, List } from "@mantlebee/ts-core";
 import { extractRandomItems } from "@mantlebee/ts-random";
 
-import { Row } from "@/types";
-
 function createChunks<T>(list: List<T>, size: number): List<List<T>> {
   const chunks: List<List<T>> = [];
   const listClone = [...list];
@@ -14,10 +12,7 @@ function createChunks<T>(list: List<T>, size: number): List<List<T>> {
   return chunks;
 }
 
-export function setRelationLookupValues<
-  TSourceRow extends Row,
-  TTargetRow extends Row,
->(
+export function setRelationLookupValues<TSourceRow, TTargetRow>(
   sourceColumnName: KeyOf<TSourceRow>,
   targetColumnName: KeyOf<TTargetRow>,
   sourceRows: List<TSourceRow>,
