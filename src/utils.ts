@@ -27,7 +27,7 @@ export function getDatabaseDataset(
   rowsCountsMap: RowsCountsMap
 ): Dataset {
   const dataset = tables.reduce((result, current) => {
-    const key = current.getKey();
+    const key = current.key;
     const count = rowsCountsMap[key] || 0;
     current.seed(count);
     const rows = current.getRows();
@@ -36,11 +36,10 @@ export function getDatabaseDataset(
     return result;
   }, {} as Dataset);
   tables.forEach((table) => {
-    table
-      .getColumns()
+    table.columns
       .filter((a) => a instanceof ColumnRelationAbstract)
       .forEach((column) => {
-        const sourceRows = dataset[table.getKey()];
+        const sourceRows = dataset[table.key];
         const targetRows = dataset[column.targetTableKey];
         if (sourceRows && targetRows)
           column.setValues(sourceRows, targetRows, dataset);

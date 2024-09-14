@@ -69,17 +69,14 @@ export abstract class ColumnRelationAbstract<
  */
 export class Database implements IDatabase {
   private _dataset: Dataset = {};
-  private _tables: List<ITable<Any>>;
 
-  public constructor(tables: List<ITable<Any>>) {
-    this._tables = tables;
-  }
+  public constructor(public readonly tables: List<ITable<Any>>) {}
 
   public getDataset(): Dataset {
     return this._dataset;
   }
   public getTable<TRow>(tableKey: TableKey<TRow>): ITable<TRow> {
-    return this._tables.find((a) => a.getKey() === tableKey)!;
+    return this.tables.find((a) => a.key === tableKey)!;
   }
 
   /**
@@ -88,7 +85,7 @@ export class Database implements IDatabase {
    * @returns the database instance. Useful to concatenate operations.
    */
   public seed(rowsCountsMap: RowsCountsMap): IDatabase {
-    this._dataset = getDatabaseDataset(this._tables, rowsCountsMap);
+    this._dataset = getDatabaseDataset(this.tables, rowsCountsMap);
     return this;
   }
 }
@@ -98,8 +95,6 @@ export class Database implements IDatabase {
  * It uses the delegate {@link getTableRows} to generate the rows.
  */
 export class Table<TRow> implements ITable<TRow> {
-  private _columns: List<ColumnAbstract<TRow>>;
-  private _key: TableKey<TRow>;
   private _rows: List<TRow> = [];
 
   /**
@@ -107,23 +102,17 @@ export class Table<TRow> implements ITable<TRow> {
    * @param key {@link TableKey}, created with {@link createTableKey}. Description must be exists.
    * @param columns List of table columns.
    */
-  public constructor(key: TableKey<TRow>, columns: List<ColumnAbstract<TRow>>) {
-    this._columns = columns;
-    this._key = key;
-  }
+  public constructor(
+    public readonly key: TableKey<TRow>,
+    public readonly columns: List<ColumnAbstract<TRow>>
+  ) {}
 
-  public getColumns(): List<IColumn<TRow>> {
-    return this._columns;
-  }
-  public getKey(): TableKey<TRow> {
-    return this._key;
-  }
   public getRows(): List<TRow> {
     return this._rows;
   }
 
   public seed(rowsCount: number): ITable<TRow> {
-    this._rows = getTableRows(this._columns, rowsCount);
+    this._rows = getTableRows(this.columns, rowsCount);
     return this;
   }
 }

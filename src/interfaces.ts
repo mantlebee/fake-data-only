@@ -62,6 +62,7 @@ export interface IColumnRelation<TRow, TTargetRow, TValue = Any>
  * The {@link Dataset} object is a dictionary, where the keys are the tables' keys and the values are the generated rows.
  */
 export interface IDatabase {
+  readonly tables: List<ITable<Any>>;
   getDataset(): Dataset;
   getTable<TRow>(tableKey: TableKey<TRow>): ITable<TRow>;
   seed(rowsCountMap: RowsCountsMap): IDatabase;
@@ -74,13 +75,13 @@ export interface IDatabase {
  */
 export interface ITable<TRow> {
   /**
-   * Return the table's columns used to generate values for the rows.
+   * The table's columns used to generate values for the rows.
    */
-  getColumns(): List<IColumn<TRow>>;
+  readonly columns: List<IColumn<TRow>>;
   /**
-   * Return the table's key.
+   * The table's key.
    */
-  getKey(): TableKey<TRow>;
+  readonly key: TableKey<TRow>;
   /**
    * Returns the tables rows.
    * Returns an empty list, if {@link seed} hasn't be called, first.
