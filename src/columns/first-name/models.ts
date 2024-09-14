@@ -1,3 +1,5 @@
+import { getValue } from "@mantlebee/ts-core";
+
 import { ColumnAbstract } from "@/models";
 
 import { FirstNameColumnOptions } from "./types";
@@ -13,7 +15,7 @@ export class FirstNameColumn<TRow> extends ColumnAbstract<
   FirstNameColumnOptions
 > {
   public getValue(row: TRow): string {
-    const options = this.getOptions(row);
+    const options = getValue(this.options, row);
     return getFirstNameColumnValue(options);
   }
 }

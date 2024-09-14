@@ -9,15 +9,6 @@ import { ITable } from "./interfaces";
 export type ColumnOptions = { nullable?: boolean };
 
 /**
- * Getter of the column options.
- * Options are created every time a column must generate a value.
- */
-export type ColumnOptionsGetter<TRow, TOptions extends ColumnOptions> = (
-  row: TRow,
-  ...args: Any
-) => TOptions;
-
-/**
  * Database ({@link IDatabase}) dataset. It is a dictionary where the key is the table ({@link ITable}) key and the value the table rows generated.
  * Like the {@link Row} type, this type is defined to simplify return types.
  */

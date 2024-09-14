@@ -1,7 +1,7 @@
-import { Any, KeyOf, List } from "@mantlebee/ts-core";
+import { Any, KeyOf, List, ValueOrGetter } from "@mantlebee/ts-core";
 
 import { ColumnRelationAbstract } from "@/models";
-import { ColumnOptions, ColumnOptionsGetter, Dataset, TableKey } from "@/types";
+import { ColumnOptions, Dataset, TableKey } from "@/types";
 
 import { RelationCustomValueGetter } from "./types";
 import { setRelationCustomValues } from "./utils";
@@ -21,9 +21,9 @@ export class CustomRelationColumn<
       TTargetRow,
       TValue
     >,
-    getOptions: ColumnOptionsGetter<TRow, TOptions> = () => ({}) as TOptions
+    options: ValueOrGetter<TOptions, TRow> = {} as TOptions
   ) {
-    super(name, defaultValue, targetTableKey, getOptions);
+    super(name, defaultValue, targetTableKey, options);
   }
 
   public setValues(

@@ -1,3 +1,5 @@
+import { getValue } from "@mantlebee/ts-core";
+
 import { ColumnAbstract } from "@/models";
 
 import { DateColumnOptions } from "./types";
@@ -13,7 +15,7 @@ export class DateColumn<TRow> extends ColumnAbstract<
   DateColumnOptions
 > {
   public getValue(row: TRow): Date {
-    const options = this.getOptions(row);
+    const options = getValue(this.options, row);
     return getDateColumnValue(options);
   }
 }

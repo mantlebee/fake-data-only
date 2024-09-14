@@ -1,13 +1,7 @@
-import { Any, KeyOf, List } from "@mantlebee/ts-core";
+import { Any, KeyOf, List, ValueOrGetter } from "@mantlebee/ts-core";
 
 import { IColumn, IDatabase, ITable, IColumnRelation } from "./interfaces";
-import {
-  ColumnOptionsGetter,
-  Dataset,
-  ColumnOptions,
-  RowsCountsMap,
-  TableKey,
-} from "./types";
+import { Dataset, ColumnOptions, RowsCountsMap, TableKey } from "./types";
 import { getDatabaseDataset, getTableRows } from "./utils";
 
 /**
@@ -20,14 +14,12 @@ export abstract class ColumnAbstract<
 > implements IColumn<TRow, TValue>
 {
   public readonly name: KeyOf<TRow>;
-  public readonly getOptions: ColumnOptionsGetter<TRow, TOptions>;
 
   public constructor(
     name: KeyOf<TRow>,
-    getOptions: ColumnOptionsGetter<TRow, TOptions> = () => ({}) as TOptions
+    public readonly options: ValueOrGetter<TOptions, TRow> = {} as TOptions
   ) {
     this.name = name;
-    this.getOptions = getOptions;
   }
 
   public abstract getValue(row: TRow): TValue;
@@ -52,9 +44,9 @@ export abstract class ColumnRelationAbstract<
     name: KeyOf<TRow>,
     defaultValue: TValue,
     targetTableKey: TableKey<TTargetRow>,
-    getOptions: ColumnOptionsGetter<TRow, TOptions> = () => ({}) as TOptions
+    options: ValueOrGetter<TOptions, TRow> = {} as TOptions
   ) {
-    super(name, getOptions);
+    super(name, options);
     this.defaultValue = defaultValue;
     this.targetTableKey = targetTableKey;
   }

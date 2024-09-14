@@ -1,10 +1,9 @@
 import { KeyOf, List } from "@mantlebee/ts-core";
 
 import { DateColumnOptions, getDateColumnValue } from "@/columns";
-import { ColumnOptionsGetter } from "@/types";
 
 import {
-  DateFromRelationColumnOptions,
+  DateFromRelationColumnOptionsGetter,
   RelationDateFromCondition,
 } from "./types";
 
@@ -23,7 +22,7 @@ export function setRelationDateFromValues<TSourceRow, TTargetRow>(
   findTargetRow: RelationDateFromCondition<TSourceRow, TTargetRow>,
   sourceRows: List<TSourceRow>,
   targetRows: List<TTargetRow>,
-  getOptions?: ColumnOptionsGetter<TSourceRow, DateFromRelationColumnOptions>
+  getOptions?: DateFromRelationColumnOptionsGetter<TSourceRow, TTargetRow>
 ): void {
   sourceRows.forEach((sourceRow) => {
     const targetRow = targetRows.find((a) => findTargetRow(sourceRow, a));

@@ -1,4 +1,4 @@
-import { IColor } from "@mantlebee/ts-core";
+import { getValue, IColor } from "@mantlebee/ts-core";
 import { generateRandomColor } from "@mantlebee/ts-random";
 
 import { ColumnAbstract } from "@/models";
@@ -16,7 +16,7 @@ export class ColorColumn<TRow> extends ColumnAbstract<
   ColorColumnOptions
 > {
   public getValue(row: TRow): IColor {
-    const { from, to, transparent } = this.getOptions(row);
+    const { from, to, transparent } = getValue(this.options, row);
     return generateRandomColor(transparent, from, to);
   }
 }

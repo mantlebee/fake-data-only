@@ -1,3 +1,5 @@
+import { getValue } from "@mantlebee/ts-core";
+
 import { ColumnAbstract } from "@/models";
 
 import { EmailColumnOptions } from "./types";
@@ -14,7 +16,7 @@ export class EmailColumn<TRow> extends ColumnAbstract<
   EmailColumnOptions
 > {
   public getValue(row: TRow): string {
-    const options = this.getOptions(row);
+    const options = getValue(this.options, row);
     return getEmailColumnValue(options);
   }
 }

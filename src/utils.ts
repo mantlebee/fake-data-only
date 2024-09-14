@@ -1,4 +1,4 @@
-import { Any, List, KeyOf } from "@mantlebee/ts-core";
+import { Any, List, KeyOf, getValue } from "@mantlebee/ts-core";
 import { generateRandomBoolean } from "@mantlebee/ts-random";
 
 import { ColumnOptions, RowsCountsMap, Dataset, TableKey } from "./types";
@@ -69,9 +69,9 @@ export function getTableRows<TRow>(
   for (let i = 0; i < rowsCount; i++) {
     const row: TRow = {} as TRow;
     columns.forEach((a) => {
-      const options = a.getOptions(row);
+      const options = getValue(a.options, row);
       if (shouldBeNull(a, options)) row[a.name] = null as TRow[KeyOf<TRow>];
-      else row[a.name] = a.getValue({ ...row });
+      else row[a.name] = a.getValue(row);
     });
     items.push(row);
   }

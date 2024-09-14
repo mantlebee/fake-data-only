@@ -40,9 +40,12 @@ export class DateFromRelationColumn<
       TRow,
       TTargetRow
     >,
-    getOptions?: DateFromRelationColumnOptionsGetter<TRow, TTargetRow>
+    protected readonly getOptions?: DateFromRelationColumnOptionsGetter<
+      TRow,
+      TTargetRow
+    >
   ) {
-    super(name, new Date(), targetTableKey, getOptions);
+    super(name, new Date(), targetTableKey);
   }
 
   public setValues(sourceRows: List<TRow>, targetRows: List<TTargetRow>): void {
