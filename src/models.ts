@@ -104,9 +104,14 @@ export class Table<TRow> implements ITable<TRow> {
    */
   public constructor(
     public readonly key: TableKey<TRow>,
-    public readonly columns: List<ColumnAbstract<TRow>>
+    public readonly columns: List<ColumnAbstract<TRow>>,
+    protected readonly getRowLabelDelegate?: (row: TRow) => string
   ) {}
 
+  public getRowLabel(row: TRow): string {
+    if (this.getRowLabelDelegate) return this.getRowLabelDelegate(row);
+    else return `${row[this.columns[0].name]}`;
+  }
   public getRows(): List<TRow> {
     return this._rows;
   }

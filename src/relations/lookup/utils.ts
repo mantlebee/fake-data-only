@@ -1,5 +1,10 @@
-import { KeyOf, List } from "@mantlebee/ts-core";
+import { KeyOf, List, Nullable } from "@mantlebee/ts-core";
 import { extractRandomItems } from "@mantlebee/ts-random";
+
+import { IDatabase } from "@/interfaces";
+
+import { LookupRelationColumn } from "./models";
+import { TargetRowInfo } from "./types";
 
 function createChunks<T>(list: List<T>, size: number): List<List<T>> {
   const chunks: List<List<T>> = [];
@@ -12,6 +17,27 @@ function createChunks<T>(list: List<T>, size: number): List<List<T>> {
   return chunks;
 }
 
+export function getTargetRowInfo<TSourceRow, TTargetRow>(
+  sourceColumn: LookupRelationColumn<TSourceRow, TTargetRow>,
+  sourceRow: TSourceRow,
+  database: IDatabase
+): Nullable<TargetRowInfo<TTargetRow>> {
+  const table = database.tables.find(
+    (a) => a.key === sourceColumn.targetTableKey
+  );
+  if (table) {
+    const row = table
+      .getRows()
+      .find(
+        (a) => a[sourceColumn.targetColumnName] === sourceRow[sourceColumn.name]
+      );
+    if (row) {
+      const label = table.getRowLabel(row);
+      return { label, row, table };
+    }
+  }
+  return null;
+}
 export function setRelationLookupValues<TSourceRow, TTargetRow>(
   sourceColumnName: KeyOf<TSourceRow>,
   targetColumnName: KeyOf<TTargetRow>,

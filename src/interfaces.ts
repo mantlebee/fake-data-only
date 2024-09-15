@@ -83,6 +83,11 @@ export interface ITable<TRow> {
    */
   readonly key: TableKey<TRow>;
   /**
+   * Returns a label that identifies and summarizes a row.
+   * @param row row to identify through a label.
+   */
+  getRowLabel(row: TRow): string;
+  /**
    * Returns the tables rows.
    * Returns an empty list, if {@link seed} hasn't be called, first.
    */
