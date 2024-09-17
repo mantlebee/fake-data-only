@@ -8,8 +8,8 @@ type RowTest = {
 
 const row: RowTest = {
   decimals: 2,
-  max: 12,
-  min: 5,
+  max: 1.9,
+  min: 1.1,
 };
 
 describe("NumberColumn", () => {
@@ -23,7 +23,7 @@ describe("NumberColumn", () => {
         }));
         const random = dependantColumn.getValue(row);
         expect(`${random}`.length).toBeGreaterThanOrEqual(2);
-        expect(`${random}`.length).toBeLessThanOrEqual(5);
+        expect(`${random}`.length).toBeLessThanOrEqual(4);
         expect(random).toBeGreaterThanOrEqual(row.min);
         expect(random).toBeLessThanOrEqual(row.max);
       });
