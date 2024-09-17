@@ -10,4 +10,5 @@ export * from "./last-name";
 export * from "./lorem-ipsum";
 export * from "./number";
 export * from "./pattern";
+export * from "./probability";
 export * from "./string";
