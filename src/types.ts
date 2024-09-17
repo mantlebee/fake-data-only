@@ -4,9 +4,9 @@ import { ITable } from "./interfaces";
 
 /**
  * Default column ({@link Column}) options.
- * @prop `nullable` - The column value can be casually `null`.
+ * @prop `nullable` - The column value can be casually `null`. The `nullable` option can be a boolean or a probability percentage (0-100).
  */
-export type ColumnOptions = { nullable?: boolean };
+export type ColumnOptions = { nullable?: boolean | number };
 
 /**
  * Database ({@link IDatabase}) dataset. It is a dictionary where the key is the table ({@link ITable}) key and the value the table rows generated.

@@ -38,6 +38,7 @@ import {
   getDatabaseDataset,
   getDatasetRows,
   getTableRows,
+  shouldBeNull,
 } from "@/utils";
 
 import { Table } from "../models";
@@ -282,6 +283,37 @@ describe("Table", () => {
           .forEach((a) => {
             expect(a.description.split("\n\n")).toHaveLength(5);
           });
+      });
+    });
+    describe("shouldBeNull", () => {
+      it("false, if nullable is undefined, false, or 0", () => {
+        expect(shouldBeNull(new IdColumn(""), {})).toBeFalsy();
+        expect(shouldBeNull(new IdColumn(""), { nullable: 0 })).toBeFalsy();
+        expect(shouldBeNull(new IdColumn(""), { nullable: false })).toBeFalsy();
+      });
+      it("false, if column is a nullable relation column, ignoring the nullable probability", () => {
+        const relationColumn = new CountRelationColumn(
+          "",
+          createTableKey(""),
+          () => true
+        );
+        expect(shouldBeNull(relationColumn, { nullable: true })).toBeTruthy();
+        expect(shouldBeNull(relationColumn, { nullable: 1 })).toBeTruthy();
+      });
+      it("true in most case, because nullable is an high probability percentage", () => {
+        const probability = 80;
+        let falseCount = 0;
+        let trueCount = 0;
+        for (let i = 0; i < 100; i++) {
+          const value = shouldBeNull(new IdColumn(""), {
+            nullable: probability,
+          });
+          if (value) trueCount++;
+          else falseCount++;
+        }
+        const delta = 5;
+        expect(falseCount).toBeLessThanOrEqual(100 - probability + delta);
+        expect(trueCount).toBeGreaterThanOrEqual(probability - delta);
       });
     });
   });

@@ -1,5 +1,15 @@
-import { Any, List, KeyOf, getValue } from "@mantlebee/ts-core";
-import { generateRandomBoolean } from "@mantlebee/ts-random";
+import {
+  Any,
+  List,
+  KeyOf,
+  getValue,
+  isBoolean,
+  isNumber,
+} from "@mantlebee/ts-core";
+import {
+  generateRandomBoolean,
+  generateRandomNumber,
+} from "@mantlebee/ts-random";
 
 import { ColumnOptions, RowsCountsMap, Dataset, TableKey } from "./types";
 import { ColumnAbstract, ColumnRelationAbstract, Table } from "./models";
@@ -78,18 +88,28 @@ export function getTableRows<TRow>(
 }
 
 /**
- * Returns a random boolean value indicating if to generate a value for the current column or to set the `null` value.
- * If the column is a relation column and it is nullable, the method returns `true`.
+ * Defines if the column value must be set on `null`.
+ * The output depends on the following cases:
+ * - the column is not nullable => false.
+ * - the column is a relation column and it is nullable => true (ignoring that the nullable option could be a probability percentage).
+ * - the nullable option is a probability percentage => generates a random percentage and returns true if it is less or equal the nullable option value..
+ * - the nullable option is a boolean => generates a random boolean.
  * @param column Column processing during the table rows generation.
- * @returns A boolean value indicating if to generate a value for the current column or to set the `null` value.
+ * @param options The column options, where the nullable option can be a boolean or a probability percentage.
+ * @returns A boolean value indicating if the row value of the current column must be set on `null`.
  */
-function shouldBeNull<TRow>(
+export function shouldBeNull<TRow>(
   column: ColumnAbstract<TRow>,
   options: ColumnOptions
 ): boolean {
   const { nullable } = options;
-  return Boolean(
-    (column instanceof ColumnRelationAbstract && nullable) ||
-      (nullable && generateRandomBoolean())
-  );
+  // Value is not `null` if nullable is `false` or `0`.
+  if (!nullable) return false;
+  // Value is `null` if the column is a nullable relation column (ignoring any probability percentage).
+  if (column instanceof ColumnRelationAbstract && nullable) return true;
+  // Value could be `null` if the nullable option is a number and a random generated percentage is less or equal its value.
+  if (isNumber(nullable))
+    return generateRandomNumber(100) <= (nullable as number);
+  // Value could be `null`, based on a random generated boolean.
+  return generateRandomBoolean();
 }
