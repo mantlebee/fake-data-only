@@ -14,6 +14,7 @@ export function getProbabilityColumnValue<TValue>(
   const probabilities = Object.keys(options.values).reverse();
   for (const [index, entry] of probabilities.entries()) {
     const probability = parseInt(entry);
+    if (!probability) continue;
     const value = options.values[probability];
     if (!index) moreProbableValue = value;
     if (generateRandomNumber(100) <= probability) return value;
