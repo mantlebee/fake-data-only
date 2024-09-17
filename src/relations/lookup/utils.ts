@@ -22,15 +22,12 @@ export function getTargetRowInfo<TSourceRow, TTargetRow>(
   sourceRow: TSourceRow,
   database: IDatabase
 ): Nullable<TargetRowInfo<TTargetRow>> {
-  const table = database.tables.find(
-    (a) => a.key === sourceColumn.targetTableKey
-  );
+  const table = database.getTable(sourceColumn.targetTableKey);
   if (table) {
+    const sourceValue = sourceRow[sourceColumn.name] as unknown;
     const row = table
       .getRows()
-      .find(
-        (a) => a[sourceColumn.targetColumnName] === sourceRow[sourceColumn.name]
-      );
+      .find((a) => a[sourceColumn.targetColumnName] === sourceValue);
     if (row) {
       const label = table.getRowLabel(row);
       return { label, row, table };
