@@ -20,7 +20,7 @@ import { StringColumnOptions } from "./types";
  */
 export function getStringColumnValue(options: StringColumnOptions): string {
   const {
-    include = {
+    allow = {
       lowercase: true,
       numbers: true,
       special: true,
@@ -34,10 +34,10 @@ export function getStringColumnValue(options: StringColumnOptions): string {
   if (maxLength !== minLength)
     length = generateRandomNumber(minLength, maxLength);
   let chars: string = "";
-  if (include.lowercase) chars += getLowercaseChars();
-  if (include.numbers) chars += getNumberChars();
-  if (include.special) chars += getSpecialChars();
-  if (include.uppercase) chars += getUppercaseChars();
-  if (include.whitespace) chars += " ";
+  if (allow.lowercase) chars += getLowercaseChars();
+  if (allow.numbers) chars += getNumberChars();
+  if (allow.special) chars += getSpecialChars();
+  if (allow.uppercase) chars += getUppercaseChars();
+  if (allow.whitespace) chars += " ";
   return generateRandomStringFromChars(chars, length);
 }

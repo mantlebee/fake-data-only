@@ -11,7 +11,7 @@ describe("StringColumn", () => {
       });
       it("Generates 5 lowercase chars", () => {
         const random = getStringColumnValue({
-          include: { lowercase: true },
+          allow: { lowercase: true },
           maxLength: 5,
           minLength: 5,
         });
@@ -19,7 +19,7 @@ describe("StringColumn", () => {
       });
       it("Generates a lowercase and uppercase string of length between 10 and 12 chars", () => {
         const random = getStringColumnValue({
-          include: { lowercase: true, uppercase: true },
+          allow: { lowercase: true, uppercase: true },
           maxLength: 12,
           minLength: 10,
         });
