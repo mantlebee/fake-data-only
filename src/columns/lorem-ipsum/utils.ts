@@ -1,7 +1,8 @@
 import { extractRandomItem } from "@mantlebee/ts-random";
 
+import { EssayBuilder, EssayBuilderOptions } from "@/builders";
+
 import { LoremIpsumWords, OptionsDefault } from "./constants";
-import { EssayBuilder, EssayBuilderOptions } from "./essay-builder";
 import { LoremIpsumColumnOptions } from "./types";
 
 export function getLoremIpsumColumnValue(

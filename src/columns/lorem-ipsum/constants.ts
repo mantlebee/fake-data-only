@@ -1,6 +1,6 @@
 import { List } from "@mantlebee/ts-core";
 
-import { EssayBuilderOptions } from "./essay-builder";
+import { EssayBuilderOptions } from "@/builders";
 
 export const OptionsDefault: EssayBuilderOptions = {
   paragraphs: { max: 5, min: 1 },

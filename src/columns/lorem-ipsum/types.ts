@@ -1,8 +1,7 @@
 import { OptionalKeysOf } from "@mantlebee/ts-core";
 
+import { EssayBuilderOptions } from "@/builders";
 import { ColumnOptions } from "@/types";
-
-import { EssayBuilderOptions } from "./essay-builder";
 
 export type LoremIpsumColumnOptions = ColumnOptions &
   OptionalKeysOf<EssayBuilderOptions>;
