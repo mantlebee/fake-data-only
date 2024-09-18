@@ -1,4 +1,4 @@
-import { capitalizeFirstLetter } from "../utils";
+import { capitalizeFirstLetter } from "@/support";
 
 describe("LoremIpsumColumn", () => {
   describe("EssayBuilder", () => {

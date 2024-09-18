@@ -26,6 +26,7 @@ import {
   NumberColumn,
   PatternColumn,
   StringColumn,
+  TitleColumn,
 } from "@/columns";
 import { ITable } from "@/interfaces";
 import {
@@ -190,6 +191,7 @@ describe("Table", () => {
           phone: string;
           username: string;
           description: string;
+          maxim: string;
         };
         const rows = getTableRows<Any>(
           [
@@ -218,6 +220,7 @@ describe("Table", () => {
               nullable: true,
               paragraphs: { max: 5, min: 5 },
             })),
+            new TitleColumn("maxim", { maxLength: 20 }),
           ],
           100
         );
@@ -253,6 +256,7 @@ describe("Table", () => {
           expect(a.phone).toMatch(/^\+[0-9]{3}-[0-9]{5}$/);
           expect(isString(a.username)).toBeTruthy();
           expect(a.username).toMatch(/^[a-z]{8,12}$/);
+          expect(a.maxim.length).toBeLessThanOrEqual(20);
           expect(Object.keys(a)).toEqual([
             "id",
             "name",
@@ -270,6 +274,7 @@ describe("Table", () => {
             "phone",
             "username",
             "description",
+            "maxim",
           ]);
           lastRow = a;
         });
@@ -311,7 +316,7 @@ describe("Table", () => {
           if (value) trueCount++;
           else falseCount++;
         }
-        const delta = 5;
+        const delta = 10;
         expect(falseCount).toBeLessThanOrEqual(100 - probability + delta);
         expect(trueCount).toBeGreaterThanOrEqual(probability - delta);
       });

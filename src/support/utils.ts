@@ -1,6 +1,7 @@
 import { isNumber } from "@mantlebee/ts-core";
-import { EssayBuilderOption } from "./types";
 import { generateRandomNumber } from "@mantlebee/ts-random";
+
+import { NumberOrRange } from "./types";
 
 /**
  * Capitalizes the first letter of a text.
@@ -13,11 +14,11 @@ export function capitalizeFirstLetter(text: string): string {
 
 /**
  * Returns the option as number. If it is a range, a random number from that range.
- * @param option The option to return, that can be a number or an object, defining a range.
+ * @param numberOrRange The option to return, that can be a number or an object, defining a range.
  * @returns the option as number. If it is a range, a random number from that range.
  */
-export function getEssayBuilderOption(option: EssayBuilderOption): number {
-  if (isNumber(option)) return option as number;
-  const { max, min } = option as { max: number; min: number };
+export function getNumberFromRange(numberOrRange: NumberOrRange): number {
+  if (isNumber(numberOrRange)) return numberOrRange as number;
+  const { max, min } = numberOrRange as { max: number; min: number };
   return generateRandomNumber(max, min);
 }

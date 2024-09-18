@@ -1,8 +1,8 @@
 import { List } from "@mantlebee/ts-core";
 
+import { capitalizeFirstLetter, getNumberFromRange } from "../utils";
 import { IEssayBuilder } from "./interfaces";
 import { EssayBuilderOptions } from "./types";
-import { capitalizeFirstLetter, getEssayBuilderOption } from "./utils";
 
 /**
  * Base essay builder. Its purpose is:
@@ -51,7 +51,7 @@ export class EssayBuilder extends EssayBuilderBase {
   public constructor(options: EssayBuilderOptions) {
     super("\n\n", options);
     this._paragraphBuilder = new ParagraphBuilder(options);
-    this._paragraphsCount = getEssayBuilderOption(options.paragraphs);
+    this._paragraphsCount = getNumberFromRange(options.paragraphs);
   }
 
   public get complete(): boolean {
@@ -78,7 +78,7 @@ export class ParagraphBuilder extends EssayBuilderBase {
   public constructor(options: EssayBuilderOptions) {
     super(" ", options);
     this._sentenceBuilder = new SentenceBuilder(options);
-    this._sentencesCount = getEssayBuilderOption(options.sentencesPerParagraph);
+    this._sentencesCount = getNumberFromRange(options.sentencesPerParagraph);
   }
 
   public get complete(): boolean {
@@ -103,7 +103,7 @@ export class SentenceBuilder extends EssayBuilderBase {
 
   public constructor(options: EssayBuilderOptions) {
     super(" ", options);
-    this._wordsCount = getEssayBuilderOption(options.wordsPerSentence);
+    this._wordsCount = getNumberFromRange(options.wordsPerSentence);
   }
 
   public get complete(): boolean {

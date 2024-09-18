@@ -12,3 +12,4 @@ export * from "./number";
 export * from "./pattern";
 export * from "./probability";
 export * from "./string";
+export * from "./title";
