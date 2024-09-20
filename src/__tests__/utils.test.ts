@@ -25,6 +25,7 @@ import {
   LoremIpsumColumn,
   NumberColumn,
   PatternColumn,
+  SlugColumn,
   StringColumn,
   TitleColumn,
 } from "@/columns";
@@ -192,6 +193,7 @@ describe("Table", () => {
           username: string;
           description: string;
           maxim: string;
+          slug: string;
         };
         const rows = getTableRows<Any>(
           [
@@ -221,6 +223,7 @@ describe("Table", () => {
               paragraphs: { max: 5, min: 5 },
             })),
             new TitleColumn("maxim", { maxLength: 20 }),
+            new SlugColumn("slug", { sourceField: "fullname" }),
           ],
           100
         );
@@ -257,6 +260,7 @@ describe("Table", () => {
           expect(isString(a.username)).toBeTruthy();
           expect(a.username).toMatch(/^[a-z]{8,12}$/);
           expect(a.maxim.length).toBeLessThanOrEqual(20);
+          expect(a.slug).toBe(a.fullname.toLowerCase().replace(" ", "-"));
           expect(Object.keys(a)).toEqual([
             "id",
             "name",
@@ -275,6 +279,7 @@ describe("Table", () => {
             "username",
             "description",
             "maxim",
+            "slug",
           ]);
           lastRow = a;
         });
