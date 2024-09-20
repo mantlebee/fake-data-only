@@ -5,6 +5,7 @@ export * from "./date";
 export * from "./email";
 export * from "./enum";
 export * from "./first-name";
+export * from "./guid";
 export * from "./id";
 export * from "./last-name";
 export * from "./lorem-ipsum";
