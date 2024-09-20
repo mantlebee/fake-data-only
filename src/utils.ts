@@ -13,7 +13,7 @@ import {
 
 import { ColumnOptions, RowsCountsMap, Dataset, TableKey } from "./types";
 import { ColumnAbstract, ColumnRelationAbstract, Table } from "./models";
-import { ITable } from "./interfaces";
+import { IColumnRelation, ITable } from "./interfaces";
 
 /**
  * Creates a typed key for the {@link Table} model.
