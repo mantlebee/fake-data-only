@@ -83,6 +83,10 @@ export interface ITable<TRow> {
    */
   readonly key: TableKey<TRow>;
   /**
+   * The table's name.
+   */
+  readonly name: string;
+  /**
    * Returns a label that identifies and summarizes a row.
    * @param row row to identify through a label.
    */

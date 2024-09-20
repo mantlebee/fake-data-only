@@ -108,6 +108,10 @@ export class Table<TRow> implements ITable<TRow> {
     protected readonly getRowLabelDelegate?: (row: TRow) => string
   ) {}
 
+  public get name(): string {
+    return this.key.description;
+  }
+
   public getRowLabel(row: TRow): string {
     if (this.getRowLabelDelegate) return this.getRowLabelDelegate(row);
     else return `${row[this.columns[0].name]}`;
