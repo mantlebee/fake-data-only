@@ -4,10 +4,9 @@ import {
   getSpecialChars,
   getUppercaseChars,
 } from "@mantlebee/ts-core";
-import {
-  generateRandomNumber,
-  generateRandomStringFromChars,
-} from "@mantlebee/ts-random";
+import { generateRandomStringFromChars } from "@mantlebee/ts-random";
+
+import { getNumberFromRange } from "@/support";
 
 import { StringColumnOptions } from "./types";
 
@@ -27,12 +26,8 @@ export function getStringColumnValue(options: StringColumnOptions): string {
       uppercase: true,
       whitespace: true,
     },
-    maxLength,
-    minLength = 0,
   } = options;
-  let length = maxLength;
-  if (maxLength !== minLength)
-    length = generateRandomNumber(minLength, maxLength);
+  const length = getNumberFromRange(options.length);
   let chars: string = "";
   if (allow.lowercase) chars += getLowercaseChars();
   if (allow.numbers) chars += getNumberChars();

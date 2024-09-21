@@ -55,7 +55,7 @@ const productCategoriesKey =
 type Product = { categoryId: number; id: number; name: string };
 const productsTable = new Table<Product>(productsKey, [
   new IdColumn("id"),
-  new StringColumn("name", () => ({ maxLength: 20 })),
+  new StringColumn("name", () => ({ length: 20 })),
   new LookupRelationColumn("categoryId", 0, productCategoriesKey, "id"),
 ]);
 //#endregion
@@ -64,7 +64,7 @@ const productsTable = new Table<Product>(productsKey, [
 type ProductCategory = { id: number; name: string };
 const productCategoriesTable = new Table<ProductCategory>(
   productCategoriesKey,
-  [new IdColumn("id"), new StringColumn("name", () => ({ maxLength: 20 }))]
+  [new IdColumn("id"), new StringColumn("name", () => ({ length: 20 }))]
 );
 //#endregion
 
@@ -157,7 +157,7 @@ describe("Table", () => {
         const rows = getTableRows<Any>(
           [
             new StringColumn<Any>("name", () => ({
-              maxLength: 12,
+              length: 12,
               minLength: 4,
             })),
           ],
@@ -260,7 +260,12 @@ describe("Table", () => {
           expect(isString(a.username)).toBeTruthy();
           expect(a.username).toMatch(/^[a-z]{8,12}$/);
           expect(a.maxim.length).toBeLessThanOrEqual(20);
-          expect(a.slug).toBe(a.fullname.toLowerCase().replace(" ", "-"));
+          expect(a.slug).toBe(
+            a.fullname
+              .toLowerCase()
+              .replace(" ", "-")
+              .replace(/[^\w-]+/g, "")
+          );
           expect(Object.keys(a)).toEqual([
             "id",
             "name",

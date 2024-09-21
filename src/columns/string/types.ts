@@ -1,3 +1,4 @@
+import { NumberOrRange } from "@/support";
 import { ColumnOptions } from "@/types";
 
 /**
@@ -14,6 +15,5 @@ export type StringColumnOptions = ColumnOptions & {
     uppercase?: boolean;
     whitespace?: boolean;
   };
-  maxLength: number;
-  minLength?: number;
+  length: NumberOrRange;
 };
