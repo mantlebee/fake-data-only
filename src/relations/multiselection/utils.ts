@@ -32,7 +32,7 @@ export function setRelationMultiselectionValues<TSourceRow, TTargetRow>(
   targetRows: List<TTargetRow>
 ): void {
   sourceRows.forEach((sourceRow) => {
-    sourceRow[sourceColumnName] = extractRandomItems(targetRows).map(
+    sourceRow[sourceColumnName] = extractRandomItems([...targetRows], true).map(
       (targetRow) => targetRow[targetColumnName]
     ) as Any;
   });
