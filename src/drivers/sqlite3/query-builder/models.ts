@@ -9,7 +9,6 @@ import { createDeleteQuery, createInsertQuery } from "./utils";
 export class Sqlite3TableQueryBuilder<TRow> implements ITableQueryBuilder {
   private readonly columnNames: List<string>;
   private readonly relations: List<QueryRelation<TRow>>;
-  public readonly tableName: string;
 
   public constructor(
     private readonly table: ITable<TRow>,
@@ -31,7 +30,10 @@ export class Sqlite3TableQueryBuilder<TRow> implements ITableQueryBuilder {
         sourceColumn: a,
         targetTable: database.getTable(a.targetTableKey),
       }));
-    this.tableName = table.name;
+  }
+
+  public get tableName(): string {
+    return this.table.name;
   }
 
   public getDeleteQuery(): string {
@@ -42,13 +44,15 @@ export class Sqlite3TableQueryBuilder<TRow> implements ITableQueryBuilder {
     );
   }
   public getInsertQuery(): string {
+    const rows = this.table.getRows();
+    if (!rows.length) return "";
     return createInsertQuery(
       this.tableName,
       this.columnNames,
       this.relations,
       this.getRelationTableName,
       this.getRelationRows,
-      this.table.getRows()
+      rows
     );
   }
 }
