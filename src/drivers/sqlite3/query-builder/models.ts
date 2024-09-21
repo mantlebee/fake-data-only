@@ -9,7 +9,7 @@ import { createDeleteQuery, createInsertQuery } from "./utils";
 export class Sqlite3TableQueryBuilder<TRow> implements ITableQueryBuilder {
   private readonly columnNames: List<string>;
   private readonly relations: List<QueryRelation<TRow>>;
-  private readonly tableName: string;
+  public readonly tableName: string;
 
   public constructor(
     private readonly table: ITable<TRow>,
