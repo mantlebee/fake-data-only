@@ -1,4 +1,4 @@
-import { isNullOrUndefined, List } from "@mantlebee/ts-core";
+import { Any, isNullOrUndefined, List } from "@mantlebee/ts-core";
 
 import { BooleanColumn, DateColumn } from "@/columns";
 import { IColumn } from "@/interfaces";
@@ -13,9 +13,10 @@ export function adaptRowsValues<TRow>(
   const convertersMap = createValueConvertersMap(columns);
   rows.forEach((row) => {
     columns.forEach((column) => {
-      let value = row[column.name];
-      if (!isNullOrUndefined(value))
-        row[column.name] = convertersMap[column.name](value);
+      let value = row[column.name] as Any;
+      if (value === null) value = "null";
+      else value = convertersMap[column.name](value);
+      row[column.name] = value;
     });
   });
 }
