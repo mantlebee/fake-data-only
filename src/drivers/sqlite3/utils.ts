@@ -1,14 +1,14 @@
 import { Any, isNullOrUndefined, List } from "@mantlebee/ts-core";
 
-import { BooleanColumn, DateColumn } from "@/columns";
+import { BooleanColumn, DateColumn, IdColumn, NumberColumn } from "@/columns";
 import { IColumn } from "@/interfaces";
 
 import { ValueConverterDefault } from "./constants";
 import { ValueConverter } from "./types";
 
 export function adaptRowsValues<TRow>(
-  rows: List<TRow>,
-  columns: List<IColumn<TRow>>
+  columns: List<IColumn<TRow>>,
+  ...rows: List<TRow>
 ): void {
   const convertersMap = createValueConvertersMap(columns);
   rows.forEach((row) => {
@@ -33,6 +33,8 @@ function createValueConvertersMap<TRow>(
           ValueConverterDefault(
             a.toISOString().replace("T", " ").replace("Z", "000")
           );
+      else if (current instanceof IdColumn || current instanceof NumberColumn)
+        converter = (a) => a;
       result[current.name] = converter;
       return result;
     },

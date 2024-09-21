@@ -158,12 +158,17 @@ export class TableDetail<TRow, TMasterRow>
   }
 
   public seed(rowsCount: number): ITable<TRow> {
-    this._rows.push(...getTableRows(this.columns, rowsCount));
+    const rows = getTableRows(this.columns, rowsCount);
+    rows.forEach((a) => this._addRow(a));
     return this;
   }
 
   public setMasterRow(masterRow: TMasterRow): ITable<TRow> {
     this._columns = this.getColumns(masterRow);
     return this;
+  }
+
+  protected _addRow(row: TRow): void {
+    this._rows.push(row);
   }
 }
