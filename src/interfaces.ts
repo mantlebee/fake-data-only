@@ -1,5 +1,6 @@
 import { Any, KeyOf, List, ValueOrGetter } from "@mantlebee/ts-core";
 
+import { NumberOrRange } from "./support";
 import { RowsCountsMap, Dataset, TableKey, ColumnOptions } from "./types";
 
 /**
@@ -101,5 +102,5 @@ export interface ITable<TRow> {
    * @param rowsCount Number of rows to generate.
    * @returns the table instance. Useful to concatenate operations.
    */
-  seed(rowsCount: number): ITable<TRow>;
+  seed(rowsCount: NumberOrRange): ITable<TRow>;
 }

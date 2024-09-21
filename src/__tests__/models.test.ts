@@ -44,7 +44,7 @@ describe("models", () => {
     it("updates the relation columns values if there are relation columns", () => {
       const dataset = new Database(tables)
         .seed({
-          [categoriesTableKey]: 5,
+          [categoriesTableKey]: { max: 5, min: 2 },
           [productsTableKey]: 20,
         })
         .getDataset();

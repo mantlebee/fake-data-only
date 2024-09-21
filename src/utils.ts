@@ -5,12 +5,8 @@ import {
 } from "@mantlebee/ts-random";
 
 import { IColumn, ITable } from "./interfaces";
-import {
-  ColumnAbstract,
-  ColumnRelationAbstract,
-  Table,
-  TableDetail,
-} from "./models";
+import { ColumnRelationAbstract, Table, TableDetail } from "./models";
+import { getNumberFromRange, NumberOrRange } from "./support";
 import { ColumnOptions, RowsCountsMap, Dataset, TableKey } from "./types";
 
 /**
@@ -38,7 +34,7 @@ export function getDatabaseDataset(
 
   const updateDataset = (table: ITable<Any>) => {
     const key = table.key;
-    const count = rowsCountsMap[key] || 0;
+    const count = getNumberFromRange(rowsCountsMap[key] || 0);
     table.seed(count);
     const rows = table.getRows();
     dataset[key] = rows;
@@ -94,8 +90,9 @@ export const getDatasetRows = <TRow>(
  */
 export function getTableRows<TRow>(
   columns: List<IColumn<TRow, Any>>,
-  rowsCount: number
+  rowsCount: NumberOrRange
 ): List<TRow> {
+  rowsCount = getNumberFromRange(rowsCount);
   const items: List<TRow> = [];
   for (let i = 0; i < rowsCount; i++) {
     const row: TRow = {} as TRow;

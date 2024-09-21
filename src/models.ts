@@ -1,6 +1,7 @@
 import { Any, KeyOf, List, ValueOrGetter } from "@mantlebee/ts-core";
 
 import { IColumn, IDatabase, ITable, IColumnRelation } from "./interfaces";
+import { NumberOrRange } from "./support";
 import { Dataset, ColumnOptions, RowsCountsMap, TableKey } from "./types";
 import { getDatabaseDataset, getTableRows } from "./utils";
 
@@ -126,7 +127,7 @@ export class Table<TRow> implements ITable<TRow> {
     return this._rows;
   }
 
-  public seed(rowsCount: number): ITable<TRow> {
+  public seed(rowsCount: NumberOrRange): ITable<TRow> {
     this._rows = getTableRows(this.columns, rowsCount);
     return this;
   }
@@ -157,7 +158,7 @@ export class TableDetail<TRow, TMasterRow>
     this._rows = [];
   }
 
-  public seed(rowsCount: number): ITable<TRow> {
+  public seed(rowsCount: NumberOrRange): ITable<TRow> {
     const rows = getTableRows(this.columns, rowsCount);
     rows.forEach((a) => this._addRow(a));
     return this;
