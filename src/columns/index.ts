@@ -1,5 +1,6 @@
 export * from "./boolean";
 export * from "./color";
+export * from "./constant";
 export * from "./custom";
 export * from "./date";
 export * from "./email";

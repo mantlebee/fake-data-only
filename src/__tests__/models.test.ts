@@ -1,6 +1,6 @@
 import { Any, List } from "@mantlebee/ts-core";
 
-import { CustomColumn, IdColumn } from "@/columns";
+import { ConstantColumn, IdColumn } from "@/columns";
 import { Database, Table, TableDetail } from "@/models";
 import { LookupRelationColumn } from "@/relations";
 import { createTableKey } from "@/utils";
@@ -22,7 +22,7 @@ describe("models", () => {
     const productsTableDetail = new TableDetail(
       productsTableKey,
       categoriesTableKey,
-      (a) => [new IdColumn("id"), new CustomColumn("category", () => a.id)]
+      (a) => [new IdColumn("id"), new ConstantColumn("category", a.id)]
     );
     const tables: List<Table<Any>> = [productsTable, categoriesTable];
     it("generates a dataset with specific amount of rows for each table", () => {
@@ -102,7 +102,7 @@ describe("models", () => {
       const detailTable = new TableDetail(
         productsTableKey,
         categoriesTableKey,
-        (a) => [new IdColumn("id"), new CustomColumn("category", () => a.id)]
+        (a) => [new IdColumn("id"), new ConstantColumn("category", a.id)]
       );
       categories.forEach((a) => detailTable.setMasterRow(a).seed(1));
       expect(detailTable.getRows().map((a) => a.category)).toEqual([
