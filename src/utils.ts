@@ -1,19 +1,17 @@
-import {
-  Any,
-  List,
-  KeyOf,
-  getValue,
-  isBoolean,
-  isNumber,
-} from "@mantlebee/ts-core";
+import { Any, List, KeyOf, getValue, isNumber } from "@mantlebee/ts-core";
 import {
   generateRandomBoolean,
   generateRandomNumber,
 } from "@mantlebee/ts-random";
 
+import { IColumn, ITable } from "./interfaces";
+import {
+  ColumnAbstract,
+  ColumnRelationAbstract,
+  Table,
+  TableDetail,
+} from "./models";
 import { ColumnOptions, RowsCountsMap, Dataset, TableKey } from "./types";
-import { ColumnAbstract, ColumnRelationAbstract, Table } from "./models";
-import { IColumnRelation, ITable } from "./interfaces";
 
 /**
  * Creates a typed key for the {@link Table} model.
@@ -36,16 +34,18 @@ export function getDatabaseDataset(
   tables: List<ITable<Any>>,
   rowsCountsMap: RowsCountsMap
 ): Dataset {
-  const dataset = tables.reduce((result, current) => {
-    const key = current.key;
+  const dataset: Dataset = {};
+
+  const updateDataset = (table: ITable<Any>) => {
+    const key = table.key;
     const count = rowsCountsMap[key] || 0;
-    current.seed(count);
-    const rows = current.getRows();
-    result[key] = rows;
-    result[key.description] = rows;
-    return result;
-  }, {} as Dataset);
-  tables.forEach((table) => {
+    table.seed(count);
+    const rows = table.getRows();
+    dataset[key] = rows;
+    dataset[key.description] = rows;
+  };
+
+  const updateRelationValues = (table: ITable<Any>) => {
     table.columns
       .filter((a) => a instanceof ColumnRelationAbstract)
       .forEach((column) => {
@@ -54,7 +54,29 @@ export function getDatabaseDataset(
         if (sourceRows && targetRows)
           column.setValues(sourceRows, targetRows, dataset);
       });
+  };
+
+  const masterTables = tables.filter((a) => !(a instanceof TableDetail));
+  masterTables.forEach(updateDataset);
+  masterTables.forEach(updateRelationValues);
+
+  const detailTables = tables.filter((a) => a instanceof TableDetail);
+  detailTables.forEach((table) => {
+    table.reset();
+    const masterRows = dataset[table.targetTableKey];
+    masterRows.forEach((a) => {
+      table.setMasterRow(a);
+      updateDataset(table);
+    });
   });
+  detailTables.forEach((table) => {
+    const masterRows = dataset[table.targetTableKey];
+    masterRows.forEach((a) => {
+      table.setMasterRow(a);
+      updateRelationValues(table);
+    });
+  });
+
   return dataset;
 }
 
@@ -71,14 +93,14 @@ export const getDatasetRows = <TRow>(
  * @returns Rows generated where the keys are the columns names.
  */
 export function getTableRows<TRow>(
-  columns: List<ColumnAbstract<TRow, Any>>,
+  columns: List<IColumn<TRow, Any>>,
   rowsCount: number
 ): List<TRow> {
   const items: List<TRow> = [];
   for (let i = 0; i < rowsCount; i++) {
     const row: TRow = {} as TRow;
     columns.forEach((a) => {
-      const options = getValue(a.options, row);
+      const options = getValue(a.options, row)!;
       if (shouldBeNull(a, options)) row[a.name] = null as TRow[KeyOf<TRow>];
       else row[a.name] = a.getValue(row);
     });
@@ -99,7 +121,7 @@ export function getTableRows<TRow>(
  * @returns A boolean value indicating if the row value of the current column must be set on `null`.
  */
 export function shouldBeNull<TRow>(
-  column: ColumnAbstract<TRow>,
+  column: IColumn<TRow>,
   options: ColumnOptions
 ): boolean {
   const { nullable } = options;

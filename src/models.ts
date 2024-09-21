@@ -37,7 +37,7 @@ export abstract class ColumnRelationAbstract<
   extends ColumnAbstract<TRow, TValue, TOptions>
   implements IColumnRelation<TRow, TTargetRow, TValue>
 {
-  protected defaultValue: TValue;
+  private defaultValue: TValue;
   public targetTableKey: TableKey<TTargetRow>;
 
   public constructor(
@@ -95,7 +95,8 @@ export class Database implements IDatabase {
  * It uses the delegate {@link getTableRows} to generate the rows.
  */
 export class Table<TRow> implements ITable<TRow> {
-  private _rows: List<TRow> = [];
+  protected _columns: List<IColumn<TRow>>;
+  protected _rows: List<TRow> = [];
 
   /**
    *
@@ -104,10 +105,15 @@ export class Table<TRow> implements ITable<TRow> {
    */
   public constructor(
     public readonly key: TableKey<TRow>,
-    public readonly columns: List<ColumnAbstract<TRow>>,
-    protected readonly getRowLabelDelegate?: (row: TRow) => string
-  ) {}
+    columns: List<IColumn<TRow>>,
+    private readonly getRowLabelDelegate?: (row: TRow) => string
+  ) {
+    this._columns = columns;
+  }
 
+  public get columns(): List<IColumn<TRow>> {
+    return this._columns;
+  }
   public get name(): string {
     return this.key.description;
   }
@@ -122,6 +128,42 @@ export class Table<TRow> implements ITable<TRow> {
 
   public seed(rowsCount: number): ITable<TRow> {
     this._rows = getTableRows(this.columns, rowsCount);
+    return this;
+  }
+}
+
+/**
+ * Represents a detail table that depends on a row of another table.
+ * Useful for generating detail rows based on values of a master row of a different table.
+ * It works like a normal table, but the {@link setMasterRow} method must be called before the {@link seed} one.
+ * @typeParam TRow - Type of the detail row.
+ * @typeParam TMasterRow - Type of the master row.
+ */
+export class TableDetail<TRow, TMasterRow>
+  extends Table<TRow>
+  implements ITable<TRow>
+{
+  public constructor(
+    key: TableKey<TRow>,
+    public readonly targetTableKey: TableKey<TMasterRow>,
+    private readonly getColumns: (masterRow: TMasterRow) => List<IColumn<TRow>>,
+    getRowLabelDelegate?: (row: TRow) => string
+  ) {
+    super(key, [], getRowLabelDelegate);
+  }
+
+  public reset(): void {
+    this._columns = [];
+    this._rows = [];
+  }
+
+  public seed(rowsCount: number): ITable<TRow> {
+    this._rows.push(...getTableRows(this.columns, rowsCount));
+    return this;
+  }
+
+  public setMasterRow(masterRow: TMasterRow): ITable<TRow> {
+    this._columns = this.getColumns(masterRow);
     return this;
   }
 }
